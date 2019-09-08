@@ -20,8 +20,6 @@
 #include "flashgg/DataFormats/interface/SingleVertexView.h"
 #include "flashgg/DataFormats/interface/TTHHadronicTag.h"
 #include "flashgg/DataFormats/interface/TTHLeptonicTag.h"
-#include "flashgg/DataFormats/interface/THQLeptonicTag.h"
-#include "flashgg/DataFormats/interface/THQLeptonicTagTruth.h"
 #include "flashgg/DataFormats/interface/TTHDiLeptonTag.h"
 #include "flashgg/DataFormats/interface/VBFDiPhoDiJetMVAResult.h"
 #include "flashgg/DataFormats/interface/VBFMVAResult.h"
@@ -46,6 +44,7 @@
 #include "flashgg/DataFormats/interface/TagCandidate.h"
 #include "flashgg/DataFormats/interface/TagAndProbeCandidate.h" //spigazzi
 #include "flashgg/DataFormats/interface/DoubleHTag.h"
+#include "flashgg/DataFormats/interface/H4GCandidate.h"
 
 #include <vector>
 #include <map>
@@ -206,14 +205,6 @@ namespace  {
         std::vector<flashgg::TTHLeptonicTag> vec_tthl;
         edm::Wrapper<std::vector<flashgg::TTHLeptonicTag> > wrp_vec_tthl;
 
-        flashgg::THQLeptonicTag thql;
-        std::vector<flashgg::THQLeptonicTag> vec_thql;
-        edm::Wrapper<std::vector<flashgg::THQLeptonicTag> > wrp_vec_thql;
-
-        flashgg::THQLeptonicTagTruth thqlt;
-        std::vector<flashgg::THQLeptonicTagTruth> vec_thqlt;
-        edm::Wrapper<std::vector<flashgg::THQLeptonicTagTruth> > wrp_vec_thqlt;
-
         flashgg::DoubleHTag hh;
         std::vector<flashgg::DoubleHTag> vec_hh;
         edm::Wrapper<std::vector<flashgg::DoubleHTag> > wrp_vec_hh;
@@ -335,6 +326,10 @@ namespace  {
         std::vector<edm::Ptr<flashgg::TagAndProbeCandidate> >                  vec_ptr_fgg_tnp;
         edm::Wrapper<std::vector<edm::Ptr<flashgg::TagAndProbeCandidate> > >   wrp_vec_ptr_fgg_tnp;
 
+        flashgg::H4GCandidate h4g;
+        std::vector<flashgg::H4GCandidate> vec_h4g;
+        edm::Wrapper<std::vector<flashgg::H4GCandidate> > wrp_vec_h4g; 
+
     };
 }
 // Local Variables:
@@ -344,4 +339,3 @@ namespace  {
 // c-basic-offset:4
 // End:
 // vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
-

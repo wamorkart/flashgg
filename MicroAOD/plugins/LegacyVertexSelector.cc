@@ -10,6 +10,12 @@
 #include "TMath.h"
 #include "TLorentzVector.h"
 #include "TMVA/Reader.h"
+#include "TTree.h"
+#include "CommonTools/UtilAlgos/interface/TFileService.h"
+#include "FWCore/ServiceRegistry/interface/Service.h"
+//--H4G includes
+// #include "flashgg/DataFormats/interface/H4GCandidate.h"
+
 
 namespace flashgg {
 
@@ -43,9 +49,35 @@ namespace flashgg {
                                        bool
                                        ) override;
 
+        // for H4G studies
+        std::vector<std::vector<float>> select_h2g( const edm::Ptr<flashgg::Photon> &, const edm::Ptr<flashgg::Photon> &, const std::vector<edm::Ptr<reco::Vertex> > &,
+                                      const VertexCandidateMap &vertexCandidateMap,
+                                      const std::vector<edm::Ptr<reco::Conversion> > &,
+                                      const std::vector<edm::Ptr<reco::Conversion> > &,
+                                      const math::XYZPoint &,
+                                      bool
+                                    ) ;
+
+       std::vector<std::vector<float>> select_h3g( const edm::Ptr<flashgg::Photon> &, const edm::Ptr<flashgg::Photon> &,const edm::Ptr<flashgg::Photon> &, const std::vector<edm::Ptr<reco::Vertex> > &,
+                                     const VertexCandidateMap &vertexCandidateMap,
+                                     const std::vector<edm::Ptr<reco::Conversion> > &,
+                                     const std::vector<edm::Ptr<reco::Conversion> > &,
+                                     const math::XYZPoint &,
+                                     bool
+                                   ) ;
+
+        std::vector<std::vector<float>> select_h4g( const edm::Ptr<flashgg::Photon> &, const edm::Ptr<flashgg::Photon> &,const edm::Ptr<flashgg::Photon> &,const edm::Ptr<flashgg::Photon> &, const std::vector<edm::Ptr<reco::Vertex> > &,
+                                      const VertexCandidateMap &vertexCandidateMap,
+                                      const std::vector<edm::Ptr<reco::Conversion> > &,
+                                      const std::vector<edm::Ptr<reco::Conversion> > &,
+                                      const math::XYZPoint &,
+                                      bool
+                                    ) override;
+
 
         void writeInfoFromLastSelectionTo( flashgg::DiPhotonCandidate & ) override;
         void writeInfoFromLastSelectionTo( flashgg::PhotonJetCandidate & ) override;
+        void writeInfoFromLastSelectionTo( flashgg::H4GCandidate & ) override;
 
         double vtxZFromConvOnly( const edm::Ptr<flashgg::Photon> &, const edm::Ptr<reco::Conversion> &, const math::XYZPoint & ) const;
         double vtxZFromConvSuperCluster( const edm::Ptr<flashgg::Photon> &, const edm::Ptr<reco::Conversion> &, const math::XYZPoint & ) const;
@@ -63,6 +95,29 @@ namespace flashgg {
                                const std::vector<edm::Ptr<reco::Conversion> > &,
                                const std::vector<edm::Ptr<reco::Conversion> > & ) const;
 
+
+        double zFromConvPair_h3g( const edm::Ptr<flashgg::Photon> &, const edm::Ptr<flashgg::Photon> &, const edm::Ptr<flashgg::Photon> &,
+                              const int , const int, const int, const int, const int, const int,
+                              const std::vector<edm::Ptr<reco::Conversion> > &,
+                              const std::vector<edm::Ptr<reco::Conversion> > &,
+                              const math::XYZPoint & ) const;
+
+        double sZFromConvPair_h3g( const edm::Ptr<flashgg::Photon> &, const edm::Ptr<flashgg::Photon> &, const edm::Ptr<flashgg::Photon> &,
+                                const int , const int, const int, const int, const int, const int,
+                                const std::vector<edm::Ptr<reco::Conversion> > &,
+                                const std::vector<edm::Ptr<reco::Conversion> > & ) const;
+
+        double zFromConvPair_h4g( const edm::Ptr<flashgg::Photon> &, const edm::Ptr<flashgg::Photon> &, const edm::Ptr<flashgg::Photon> &, const edm::Ptr<flashgg::Photon> &,
+                              const int , const int, const int, const int, const int, const int, const int, const int,
+                              const std::vector<edm::Ptr<reco::Conversion> > &,
+                              const std::vector<edm::Ptr<reco::Conversion> > &,
+                              const math::XYZPoint & ) const;
+
+        double sZFromConvPair_h4g( const edm::Ptr<flashgg::Photon> &, const edm::Ptr<flashgg::Photon> &, const edm::Ptr<flashgg::Photon> &, const edm::Ptr<flashgg::Photon> &,
+                                const int , const int, const int, const int, const int, const int, const int, const int,
+                                const std::vector<edm::Ptr<reco::Conversion> > &,
+                                const std::vector<edm::Ptr<reco::Conversion> > & ) const;
+
         std::vector<int> IndexMatchedConversion( const edm::Ptr<flashgg::Photon> &, const std::vector<edm::Ptr<reco::Conversion> > &,
                 const std::vector<edm::Ptr<reco::Conversion> > &, bool ) const;
 
@@ -72,6 +127,8 @@ namespace flashgg {
 
         edm::FileInPath vertexIdMVAweightfile_;
         edm::FileInPath vertexProbMVAweightfile_;
+
+        edm::FileInPath vertexIdMVAweightfileH4G_;
 
         unsigned int nVtxSaveInfo;
         bool trackHighPurity;
@@ -103,6 +160,7 @@ namespace flashgg {
         double singlelegsigma2Tec;
 
     protected:
+
         TMVA::Reader *VertexIdMva_;
         bool initialized_;
         float logsumpt2_;
@@ -110,6 +168,8 @@ namespace flashgg {
         float ptasym_;
         float nConv_;
         float pull_conv_;
+
+        TMVA::Reader *VertexIdMvaH4G_;
 
         float logsumpt2selected_;
         float ptbalselected_;
@@ -133,6 +193,7 @@ namespace flashgg {
         std::vector<float> vmva_value_;
         std::vector<unsigned int> vmva_sortedindex_;
         std::vector<edm::Ptr<reco::Vertex> >  vVtxPtr_;
+
     };
 
     LegacyVertexSelector::LegacyVertexSelector( const edm::ParameterSet &iConfig ) :
@@ -140,6 +201,7 @@ namespace flashgg {
     {
         vertexIdMVAweightfile_ = iConfig.getParameter<edm::FileInPath>( "vertexIdMVAweightfile" );
         vertexProbMVAweightfile_ = iConfig.getParameter<edm::FileInPath>( "vertexProbMVAweightfile" );
+        vertexIdMVAweightfileH4G_ = iConfig.getParameter<edm::FileInPath>( "vertexIdMVAweightfile" );
 
         nVtxSaveInfo          = iConfig.getUntrackedParameter<unsigned int>( "nVtxSaveInfo" );
         trackHighPurity       = iConfig.getParameter<bool>( "trackHighPurity" );
@@ -197,6 +259,13 @@ namespace flashgg {
 
         VertexProbMva_->BookMVA( "BDT", vertexProbMVAweightfile_.fullPath() );
 
+        VertexIdMvaH4G_ = new TMVA::Reader( "!Color:Silent" );
+        // VertexIdMvaH4G_->AddVariable( "ptasym", &ptasym_ );
+        // VertexIdMvaH4G_->AddVariable( "ptbal", &ptbal_ );
+        VertexIdMvaH4G_->AddVariable( "logsumpt2", &logsumpt2_ );
+
+        VertexIdMvaH4G_->BookMVA( "BDT", vertexIdMVAweightfileH4G_.fullPath() );
+
         initialized_ = true;
     }
 
@@ -204,6 +273,7 @@ namespace flashgg {
     {
         delete VertexIdMva_;
         delete VertexProbMva_;
+        delete VertexIdMvaH4G_;
     }
 
     double LegacyVertexSelector::vtxZFromConvOnly( const edm::Ptr<flashgg::Photon> &pho, const edm::Ptr<reco:: Conversion> &conversion,
@@ -449,6 +519,820 @@ namespace flashgg {
         return zconv;
     }
 
+    double LegacyVertexSelector::zFromConvPair_h3g( const edm::Ptr<flashgg::Photon> &p1,
+            const edm::Ptr<flashgg::Photon> &p2, const edm::Ptr<flashgg::Photon> &p3,
+            const int index_conversionLead,
+            const int index_conversionSecond,
+            const int index_conversionThird,
+            const int nConvLegs_LeadPhoton,
+            const int nConvLegs_SecondPhoton,
+            const int nConvLegs_ThirdPhoton,
+            const std::vector<edm::Ptr<reco::Conversion> > &conversionsVector,
+            const std::vector<edm::Ptr<reco::Conversion> > &conversionsVectorSingleLeg,
+            const math::XYZPoint &beamSpot ) const
+    {
+        double zconv = 0;
+        float z1 = 0;
+        float sz1 = 0;
+        float z2 = 0;
+        float sz2 = 0;
+        float z3 = 0;
+        float sz3 = 0;
+
+        if( index_conversionLead != -1  && index_conversionSecond == -1  && index_conversionThird == -1) {
+            if( nConvLegs_LeadPhoton == 2 ) { zconv = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot ); }
+            if( nConvLegs_LeadPhoton == 1 ) { zconv = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );}
+        }
+
+        if( index_conversionLead == -1 && index_conversionSecond != -1 && index_conversionThird == -1 ) {
+            if( nConvLegs_SecondPhoton == 2 ) { zconv = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot ); }
+            if( nConvLegs_SecondPhoton == 1 ) { zconv = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot ); }
+        }
+
+        if( index_conversionLead == -1 && index_conversionSecond == -1 && index_conversionThird != -1 ) {
+            if( nConvLegs_ThirdPhoton == 2 ) { zconv = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot ); }
+            if( nConvLegs_ThirdPhoton == 1 ) { zconv = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot ); }
+        }
+
+        if( index_conversionLead != -1 && index_conversionSecond != -1 && index_conversionThird == -1 ) {
+
+            if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 2 ) {
+                z1  = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                z2  = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+            }
+            if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 1 ) {
+                z1  = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                z2  = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+            }
+            if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 1 ) {
+                z1  = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                z2  = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+            }
+            if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 2 ) {
+                z1  = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                z2  = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+            }
+            if( sz1 != 0 && sz2 != 0 ) {
+                zconv  = ( z1 / sz1 / sz1 + z2 / sz2 / sz2 ) / ( 1. / sz1 / sz1 + 1. / sz2 / sz2 );
+            }
+        }
+
+        if( index_conversionLead != -1 && index_conversionSecond == -1 && index_conversionThird != -1 ) {
+
+            if( nConvLegs_LeadPhoton == 2 && nConvLegs_ThirdPhoton == 2 ) {
+                z1  = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                z3  = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+            }
+            if( nConvLegs_LeadPhoton == 1 && nConvLegs_ThirdPhoton == 1 ) {
+                z1  = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                z3  = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+            }
+            if( nConvLegs_LeadPhoton == 2 && nConvLegs_ThirdPhoton == 1 ) {
+                z1  = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                z3  = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+            }
+            if( nConvLegs_LeadPhoton == 1 && nConvLegs_ThirdPhoton == 2 ) {
+                z1  = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                z3  = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+            }
+            if( sz1 != 0 && sz3 != 0 ) {
+                zconv  = ( z1 / sz1 / sz1 + z3 / sz3 / sz3 ) / ( 1. / sz1 / sz1 + 1. / sz3 / sz3 );
+            }
+        }
+        if( index_conversionLead == -1 && index_conversionSecond != -1 && index_conversionThird != -1 ) {
+
+            if( nConvLegs_ThirdPhoton == 2 && nConvLegs_SecondPhoton == 2 ) {
+                z3  = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+                z2  = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+            }
+            if( nConvLegs_ThirdPhoton == 1 && nConvLegs_SecondPhoton == 1 ) {
+                z3  = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+                z2  = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+            }
+            if( nConvLegs_ThirdPhoton == 2 && nConvLegs_SecondPhoton == 1 ) {
+                z3  = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+                z2  = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+            }
+            if( nConvLegs_ThirdPhoton == 1 && nConvLegs_SecondPhoton == 2 ) {
+                z3  = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+                z2  = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+            }
+            if( sz3 != 0 && sz2 != 0 ) {
+                zconv  = ( z3 / sz3 / sz3 + z2 / sz2 / sz2 ) / ( 1. / sz3 / sz3 + 1. / sz2 / sz2 );
+            }
+        }
+        if( index_conversionLead != -1 && index_conversionSecond != -1 && index_conversionThird != -1 ) {
+          if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 1 ) {
+            z1  = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+            sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+            z2  = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+            sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+            z3  = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+            sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+          }
+          if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 2 ) {
+            z1  = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+            sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+            z2  = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+            sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+            z3  = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+            sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+          }
+          if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 1 ) {
+            z1  = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+            sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+            z2  = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+            sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+            z3  = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+            sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+          }
+          if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 1 ) {
+            z1  = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+            sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+            z2  = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+            sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+            z3  = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+            sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+          }
+          if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 2 ) {
+            z1  = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+            sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+            z2  = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+            sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+            z3  = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+            sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+          }
+          if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 1 ) {
+            z1  = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+            sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+            z2  = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+            sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+            z3  = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+            sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+          }
+          if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 2 ) {
+            z1  = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+            sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+            z2  = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+            sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+            z3  = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+            sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+          }
+          if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 2 ) {
+            z1  = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+            sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+            z2  = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+            sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+            z3  = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+            sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+          }
+          if( sz1 != 0 && sz2 != 0  && sz3 != 0 ) {
+              zconv  = ( z1 / sz1 / sz1 + z2 / sz2 / sz2 + z3 / sz3 / sz3 ) / ( 1. / sz1 / sz1 + 1. / sz2 / sz2 + 1. / sz3 / sz3 );
+          }
+        }
+        return zconv;
+    }
+
+    double LegacyVertexSelector::zFromConvPair_h4g( const edm::Ptr<flashgg::Photon> &p1,
+            const edm::Ptr<flashgg::Photon> &p2, const edm::Ptr<flashgg::Photon> &p3, const edm::Ptr<flashgg::Photon> &p4,
+            const int index_conversionLead,
+            const int index_conversionSecond,
+            const int index_conversionThird,
+            const int index_conversionFourth,
+            const int nConvLegs_LeadPhoton,
+            const int nConvLegs_SecondPhoton,
+            const int nConvLegs_ThirdPhoton,
+            const int nConvLegs_FourthPhoton,
+            const std::vector<edm::Ptr<reco::Conversion> > &conversionsVector,
+            const std::vector<edm::Ptr<reco::Conversion> > &conversionsVectorSingleLeg,
+            const math::XYZPoint &beamSpot ) const
+    {
+        double zconv = 0;
+        float z1 = 0;
+        float sz1 = 0;
+        float z2 = 0;
+        float sz2 = 0;
+        float z3 = 0;
+        float sz3 = 0;
+        float z4 = 0;
+        float sz4 = 0;
+
+        if( index_conversionLead != -1  && index_conversionSecond == -1 && index_conversionThird == -1 && index_conversionFourth == -1) {
+            if( nConvLegs_LeadPhoton == 2 ) { zconv = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot ); }
+            if( nConvLegs_LeadPhoton == 1 ) { zconv = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );}
+        }
+
+        if( index_conversionLead == -1 && index_conversionSecond != -1 && index_conversionThird == -1 && index_conversionFourth == -1 ) {
+
+            if( nConvLegs_SecondPhoton == 2 ) { zconv = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot ); }
+            if( nConvLegs_SecondPhoton == 1 ) { zconv = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot ); }
+        }
+
+        if( index_conversionLead == -1 && index_conversionSecond == -1 && index_conversionThird != -1 && index_conversionFourth == -1 ) {
+
+            if( nConvLegs_ThirdPhoton == 2 ) { zconv = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot ); }
+            if( nConvLegs_ThirdPhoton == 1 ) { zconv = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot ); }
+        }
+
+        if( index_conversionLead == -1 && index_conversionSecond == -1 && index_conversionThird == -1 && index_conversionFourth != -1 ) {
+
+            if( nConvLegs_FourthPhoton == 2 ) { zconv = vtxZFromConv( p4, conversionsVector[index_conversionFourth], beamSpot ); }
+            if( nConvLegs_FourthPhoton == 1 ) { zconv = vtxZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth], beamSpot ); }
+        }
+
+        if( index_conversionLead != -1 && index_conversionSecond != -1 && index_conversionThird == -1 && index_conversionFourth == -1) {
+
+            if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 2 ) {
+                z1  = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                z2  = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+            }
+            if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 1 ) {
+                z1  = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                z2  = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+            }
+            if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 1 ) {
+                z1  = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                z2  = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+            }
+            if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 2 ) {
+                z1  = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                z2  = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+            }
+            if( sz1 != 0 && sz2 != 0 ) {
+                zconv  = ( z1 / sz1 / sz1 + z2 / sz2 / sz2 ) / ( 1. / sz1 / sz1 + 1. / sz2 / sz2  );
+            }
+        }
+
+        if( index_conversionLead == -1 && index_conversionSecond == -1 && index_conversionThird != -1 && index_conversionFourth != -1) {
+
+            if( nConvLegs_ThirdPhoton == 2 && nConvLegs_FourthPhoton == 2 ) {
+                z3  = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+                z4  = vtxZFromConv( p4, conversionsVector[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+            }
+            if( nConvLegs_ThirdPhoton == 1 && nConvLegs_FourthPhoton == 1 ) {
+                z3  = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+                z4  = vtxZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+            }
+            if( nConvLegs_ThirdPhoton == 2 && nConvLegs_FourthPhoton == 1 ) {
+                z3  = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+                z4  = vtxZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+            }
+            if( nConvLegs_ThirdPhoton == 1 && nConvLegs_FourthPhoton == 2 ) {
+                z3  = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+                z4  = vtxZFromConv( p4, conversionsVector[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+            }
+            if( sz3 != 0 && sz4 != 0 ) {
+                zconv  = ( z3 / sz3 / sz3 + z4 / sz4 / sz4 ) / ( 1. / sz3 / sz3 + 1. / sz4 / sz4  );
+            }
+        }
+
+        if( index_conversionLead != -1 && index_conversionSecond == -1 && index_conversionThird == -1 && index_conversionFourth != -1) {
+
+            if( nConvLegs_LeadPhoton == 2 && nConvLegs_FourthPhoton == 2 ) {
+                z1  = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                z4  = vtxZFromConv( p4, conversionsVector[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+            }
+            if( nConvLegs_LeadPhoton == 1 && nConvLegs_FourthPhoton == 1 ) {
+                z1  = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                z4  = vtxZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+            }
+            if( nConvLegs_LeadPhoton == 2 && nConvLegs_FourthPhoton == 1 ) {
+                z1  = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                z4  = vtxZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+            }
+            if( nConvLegs_LeadPhoton == 1 && nConvLegs_FourthPhoton == 2 ) {
+                z1  = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                z4  = vtxZFromConv( p4, conversionsVector[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+            }
+            if( sz1 != 0 && sz4 != 0 ) {
+                zconv  = ( z1 / sz1 / sz1 + z4 / sz4 / sz4 ) / ( 1. / sz1 / sz1 + 1. / sz4 / sz4  );
+            }
+        }
+
+        if( index_conversionLead == -1 && index_conversionSecond != -1 && index_conversionThird != -1 && index_conversionFourth == -1) {
+
+            if( nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 2 ) {
+                z2  = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                z3  = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+            }
+            if( nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 1 ) {
+                z2  = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                z3  = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+            }
+            if( nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 1 ) {
+                z2  = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                z3  = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+            }
+            if( nConvLegs_SecondPhoton == 1 && nConvLegs_SecondPhoton == 2 ) {
+                z2  = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                z3  = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+            }
+            if( sz2 != 0 && sz3!= 0 ) {
+                zconv  = ( z2 / sz2 / sz2 + z3 / sz3 / sz3 ) / ( 1. / sz2 / sz2 + 1. / sz3 / sz3  );
+            }
+        }
+
+        if( index_conversionLead != -1 && index_conversionSecond != -1 && index_conversionThird != -1 && index_conversionFourth == -1) {
+
+            if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 1 ) {
+                z1  = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                z2  = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                z3  = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+            }
+            if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 2 ) {
+                z1  = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                z2  = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                z3  = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+            }
+            if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 1 ) {
+                z1  = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                z2  = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                z3  = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+            }
+            if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 1 ) {
+                z1  = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                z2  = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                z3  = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+            }
+            if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 2 ) {
+                z1  = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                z2  = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                z3  = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+            }
+            if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 1 ) {
+                z1  = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                z2  = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                z3  = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+            }
+            if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 2 ) {
+                z1  = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                z2  = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                z3  = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+            }
+            if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 2 ) {
+                z1  = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                z2  = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                z3  = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+            }
+            if( sz1 != 0 && sz2!= 0 && sz3 != 0) {
+                zconv  = ( z1 / sz1 / sz1 + z2 / sz2 / sz2 + z3 / sz3 / sz3 ) / ( 1. / sz1 / sz1 + 1. / sz2 / sz2 + 1. / sz3 / sz3  );
+            }
+        }
+
+        if( index_conversionLead != -1 && index_conversionSecond != -1 && index_conversionThird == -1 && index_conversionFourth != -1) {
+
+            if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 1 && nConvLegs_FourthPhoton == 1 ) {
+                z1  = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                z2  = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                z4  = vtxZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+            }
+            if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 1 && nConvLegs_FourthPhoton == 2 ) {
+                z1  = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                z2  = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                z4  = vtxZFromConv( p4, conversionsVector[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+            }
+            if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 2 && nConvLegs_FourthPhoton == 1 ) {
+                z1  = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                z2  = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                z4  = vtxZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+            }
+            if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 1 && nConvLegs_FourthPhoton == 1 ) {
+                z1  = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                z2  = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                z4  = vtxZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+            }
+            if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 2 && nConvLegs_FourthPhoton == 2 ) {
+                z1  = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                z2  = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                z4  = vtxZFromConv( p4, conversionsVector[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+            }
+            if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 2 && nConvLegs_FourthPhoton == 1 ) {
+                z1  = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                z2  = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                z4  = vtxZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+            }
+            if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 1 && nConvLegs_FourthPhoton == 2 ) {
+                z1  = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                z2  = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                z4  = vtxZFromConv( p4, conversionsVector[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+            }
+            if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 2 && nConvLegs_FourthPhoton == 2 ) {
+                z1  = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                z2  = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                z4  = vtxZFromConv( p4, conversionsVector[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+            }
+            if( sz1 != 0 && sz2!= 0 && sz4 != 0) {
+                zconv  = ( z1 / sz1 / sz1 + z2 / sz2 / sz2 + z4 / sz4 / sz4 ) / ( 1. / sz1 / sz1 + 1. / sz2 / sz2 + 1. / sz4 / sz4  );
+            }
+        }
+
+        if( index_conversionLead != -1 && index_conversionSecond == -1 && index_conversionThird != -1 && index_conversionFourth != -1) {
+
+            if( nConvLegs_LeadPhoton == 1 && nConvLegs_FourthPhoton == 1 && nConvLegs_ThirdPhoton == 1 ) {
+                z1  = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                z4  = vtxZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+                z3  = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+            }
+            if( nConvLegs_LeadPhoton == 1 && nConvLegs_FourthPhoton == 1 && nConvLegs_ThirdPhoton == 2 ) {
+                z1  = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                z4  = vtxZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+                z3  = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+            }
+            if( nConvLegs_LeadPhoton == 1 && nConvLegs_FourthPhoton == 2 && nConvLegs_ThirdPhoton == 1 ) {
+                z1  = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                z4  = vtxZFromConv( p4, conversionsVector[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+                z3  = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+            }
+            if( nConvLegs_LeadPhoton == 2 && nConvLegs_FourthPhoton == 1 && nConvLegs_ThirdPhoton == 1 ) {
+                z1  = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                z4  = vtxZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+                z3  = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+            }
+            if( nConvLegs_LeadPhoton == 1 && nConvLegs_FourthPhoton == 2 && nConvLegs_ThirdPhoton == 2 ) {
+                z1  = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                z4  = vtxZFromConv( p4, conversionsVector[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+                z3  = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+            }
+            if( nConvLegs_LeadPhoton == 2 && nConvLegs_FourthPhoton == 2 && nConvLegs_ThirdPhoton == 1 ) {
+                z1  = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                z4  = vtxZFromConv( p4, conversionsVector[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+                z3  = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+            }
+            if( nConvLegs_LeadPhoton == 2 && nConvLegs_FourthPhoton == 1 && nConvLegs_ThirdPhoton == 2 ) {
+                z1  = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                z4  = vtxZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+                z3  = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+            }
+            if( nConvLegs_LeadPhoton == 2 && nConvLegs_FourthPhoton == 2 && nConvLegs_ThirdPhoton == 2 ) {
+                z1  = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                z4  = vtxZFromConv( p4, conversionsVector[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+                z3  = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+            }
+            if( sz1 != 0 && sz4!= 0 && sz3 != 0) {
+                zconv  = ( z1 / sz1 / sz1 + z4 / sz4 / sz4 + z3 / sz3 / sz3 ) / ( 1. / sz1 / sz1 + 1. / sz4 / sz4 + 1. / sz3 / sz3  );
+            }
+        }
+        if( index_conversionLead == -1 && index_conversionSecond != -1 && index_conversionThird != -1 && index_conversionFourth != -1) {
+
+            if( nConvLegs_FourthPhoton == 1 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 1 ) {
+                z4  = vtxZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+                z2  = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                z3  = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+            }
+            if( nConvLegs_FourthPhoton == 1 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 2 ) {
+                z4  = vtxZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+                z2  = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                z3  = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+            }
+            if( nConvLegs_FourthPhoton == 1 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 1 ) {
+                z4  = vtxZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+                z2  = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                z3  = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+            }
+            if( nConvLegs_FourthPhoton == 2 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 1 ) {
+                z4  = vtxZFromConv( p4, conversionsVector[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+                z2  = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                z3  = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+            }
+            if( nConvLegs_FourthPhoton == 1 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 2 ) {
+                z4  = vtxZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+                z2  = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                z3  = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+            }
+            if( nConvLegs_FourthPhoton == 2 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 1 ) {
+                z4  = vtxZFromConv( p4, conversionsVector[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+                z2  = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                z3  = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+            }
+            if( nConvLegs_FourthPhoton == 2 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 2 ) {
+                z4  = vtxZFromConv( p4, conversionsVector[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+                z2  = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                z3  = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+            }
+            if( nConvLegs_FourthPhoton == 2 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 2 ) {
+                z4  = vtxZFromConv( p4, conversionsVector[index_conversionFourth], beamSpot );
+                sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+                z2  = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                z3  = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+            }
+            if( sz4 != 0 && sz2!= 0 && sz3 != 0) {
+                zconv  = ( z4 / sz4 / sz4 + z2 / sz2 / sz2 + z3 / sz3 / sz3 ) / ( 1. / sz4 / sz4 + 1. / sz2 / sz2 + 1. / sz3 / sz3  );
+            }
+        }
+        if( index_conversionLead != -1 && index_conversionSecond != -1 && index_conversionThird != -1 && index_conversionFourth != -1) {
+
+          if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 1 && nConvLegs_FourthPhoton == 1) {
+
+            z1 = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+            sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+            z2 = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+            sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+            z3 = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+            sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+            z4 = vtxZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth], beamSpot );
+            sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+          }
+          if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 1 && nConvLegs_FourthPhoton == 2) {
+
+            z1 = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+            sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+            z2 = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+            sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+            z3 = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+            sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+            z4 = vtxZFromConv( p4, conversionsVector[index_conversionFourth], beamSpot );
+            sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+          }
+          if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 2 && nConvLegs_FourthPhoton == 1) {
+
+            z1 = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+            sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+            z2 = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+            sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+            z3 = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+            sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+            z4 = vtxZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth], beamSpot );
+            sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+          }
+          if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 1 && nConvLegs_FourthPhoton == 1) {
+
+            z1 = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+            sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+            z2 = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+            sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+            z3 = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+            sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+            z4 = vtxZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth], beamSpot );
+            sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+          }
+          if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 1 && nConvLegs_FourthPhoton == 1) {
+
+            z1 = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+            sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+            z2 = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+            sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+            z3 = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+            sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+            z4 = vtxZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth], beamSpot );
+            sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+          }
+          if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 2 && nConvLegs_FourthPhoton == 2) {
+
+            z1 = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+            sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+            z2 = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+            sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+            z3 = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+            sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+            z4 = vtxZFromConv( p4, conversionsVector[index_conversionFourth], beamSpot );
+            sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+          }
+          if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 2 && nConvLegs_FourthPhoton == 1) {
+
+            z1 = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+            sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+            z2 = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+            sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+            z3 = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+            sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+            z4 = vtxZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth], beamSpot );
+            sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+          }
+          if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 1 && nConvLegs_FourthPhoton == 1) {
+
+            z1 = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+            sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+            z2 = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+            sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+            z3 = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+            sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+            z4 = vtxZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth], beamSpot );
+            sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+          }
+          if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 1 && nConvLegs_FourthPhoton == 2) {
+
+            z1 = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+            sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+            z2 = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+            sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+            z3 = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+            sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+            z4 = vtxZFromConv( p4, conversionsVector[index_conversionFourth], beamSpot );
+            sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+          }
+          if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 2 && nConvLegs_FourthPhoton == 2) {
+
+            z1 = vtxZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead], beamSpot );
+            sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+            z2 = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+            sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+            z3 = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+            sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+            z4 = vtxZFromConv( p4, conversionsVector[index_conversionFourth], beamSpot );
+            sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+          }
+          if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 2 && nConvLegs_FourthPhoton == 1) {
+
+            z1 = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+            sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+            z2 = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+            sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+            z3 = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+            sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+            z4 = vtxZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth], beamSpot );
+            sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+          }
+          if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 1 && nConvLegs_FourthPhoton == 2) {
+
+            z1 = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+            sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+            z2 = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+            sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+            z3 = vtxZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird], beamSpot );
+            sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+            z4 = vtxZFromConv( p4, conversionsVector[index_conversionFourth], beamSpot );
+            sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+          }
+          if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 2 && nConvLegs_FourthPhoton == 2) {
+
+            z1 = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+            sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+            z2 = vtxZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond], beamSpot );
+            sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+            z3 = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+            sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+            z4 = vtxZFromConv( p4, conversionsVector[index_conversionFourth], beamSpot );
+            sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+          }
+          if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 2 && nConvLegs_FourthPhoton == 2) {
+
+            z1 = vtxZFromConv( p1, conversionsVector[index_conversionLead], beamSpot );
+            sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+            z2 = vtxZFromConv( p2, conversionsVector[index_conversionSecond], beamSpot );
+            sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+            z3 = vtxZFromConv( p3, conversionsVector[index_conversionThird], beamSpot );
+            sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+            z4 = vtxZFromConv( p4, conversionsVector[index_conversionFourth], beamSpot );
+            sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+          }
+          if( sz1 != 0 && sz2 != 0 && sz3 != 0 && sz4 != 0 ) {
+                zconv  = ( z1 / sz1 / sz1 + z2 / sz2 / sz2 + z3 / sz3 / sz3 + z4 / sz4 / sz4 ) / ( 1. / sz1 / sz1 + 1. / sz2 / sz2 + 1. / sz3 / sz3 + 1. / sz4 / sz4);
+            }
+        }
+        return zconv;
+    }
+
     double LegacyVertexSelector::sZFromConvPair( const edm::Ptr<flashgg::Photon> &p1,
             const edm::Ptr<flashgg::Photon> &p2,
             int index_conversionLead,
@@ -496,6 +1380,565 @@ namespace flashgg {
         return szconv;
     }
 
+    double LegacyVertexSelector::sZFromConvPair_h3g( const edm::Ptr<flashgg::Photon> &p1,
+            const edm::Ptr<flashgg::Photon> &p2, const edm::Ptr<flashgg::Photon> &p3,
+            const int index_conversionLead,
+            const int index_conversionSecond,
+            const int index_conversionThird,
+            const int nConvLegs_LeadPhoton,
+            const int nConvLegs_SecondPhoton,
+            const int nConvLegs_ThirdPhoton,
+            const std::vector<edm::Ptr<reco::Conversion> > &conversionsVector,
+            const std::vector<edm::Ptr<reco::Conversion> > &conversionsVectorSingleLeg) const
+    {
+        double szconv = 0;
+        float sz1 = 0;
+        float sz2 = 0;
+        float sz3 = 0;
+
+        if( index_conversionLead != -1  && index_conversionSecond == -1  && index_conversionThird == -1) {
+            if( nConvLegs_LeadPhoton == 2 ) { szconv = vtxDZFromConv( p1, conversionsVector[index_conversionLead] ); }
+            if( nConvLegs_LeadPhoton == 1 ) { szconv = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );}
+        }
+
+        if( index_conversionLead == -1 && index_conversionSecond != -1 && index_conversionThird == -1 ) {
+            if( nConvLegs_SecondPhoton == 2 ) { szconv = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] ); }
+            if( nConvLegs_SecondPhoton == 1 ) { szconv = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] ); }
+        }
+
+        if( index_conversionLead == -1 && index_conversionSecond == -1 && index_conversionThird != -1 ) {
+            if( nConvLegs_ThirdPhoton == 2 ) { szconv = vtxDZFromConv( p3, conversionsVector[index_conversionThird] ); }
+            if( nConvLegs_ThirdPhoton == 1 ) { szconv = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] ); }
+        }
+
+        if( index_conversionLead != -1 && index_conversionSecond != -1 && index_conversionThird == -1 ) {
+
+            if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 2 ) {
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+            }
+            if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 1 ) {
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+            }
+            if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 1 ) {
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+            }
+            if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 2 ) {
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+            }
+            if( sz1 != 0 && sz2 != 0 ) {
+                szconv  = sqrt( 1. / ( 1. / sz1 / sz1 + 1. / sz2 / sz2 ) ) ;
+            }
+        }
+
+        if( index_conversionLead != -1 && index_conversionSecond == -1 && index_conversionThird != -1 ) {
+
+            if( nConvLegs_LeadPhoton == 2 && nConvLegs_ThirdPhoton == 2 ) {
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+            }
+            if( nConvLegs_LeadPhoton == 1 && nConvLegs_ThirdPhoton == 1 ) {
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+            }
+            if( nConvLegs_LeadPhoton == 2 && nConvLegs_ThirdPhoton == 1 ) {
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+            }
+            if( nConvLegs_LeadPhoton == 1 && nConvLegs_ThirdPhoton == 2 ) {
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+            }
+            if( sz1 != 0 && sz3 != 0 ) {
+                szconv  = sqrt( 1. / ( 1. / sz1 / sz1 + 1. / sz3 / sz3 ) ) ;
+            }
+        }
+        if( index_conversionLead == -1 && index_conversionSecond != -1 && index_conversionThird != -1 ) {
+
+            if( nConvLegs_ThirdPhoton == 2 && nConvLegs_SecondPhoton == 2 ) {
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+            }
+            if( nConvLegs_ThirdPhoton == 1 && nConvLegs_SecondPhoton == 1 ) {
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+            }
+            if( nConvLegs_ThirdPhoton == 2 && nConvLegs_SecondPhoton == 1 ) {
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+            }
+            if( nConvLegs_ThirdPhoton == 1 && nConvLegs_SecondPhoton == 2 ) {
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+            }
+            if( sz3 != 0 && sz2 != 0 ) {
+                szconv  = sqrt( 1. / ( 1. / sz2 / sz2 + 1. / sz3 / sz3 ) ) ;
+            }
+        }
+        if( index_conversionLead != -1 && index_conversionSecond != -1 && index_conversionThird != -1 ) {
+          if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 1 ) {
+            sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+            sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+            sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+          }
+          if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 2 ) {
+            sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+            sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+            sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+          }
+          if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 1 ) {
+            sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+            sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+            sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+          }
+          if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 1 ) {
+            sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+            sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+            sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+          }
+          if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 2 ) {
+            sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+            sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+            sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+          }
+          if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 1 ) {
+            sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+            sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+            sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+          }
+          if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 2 ) {
+            sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+            sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+            sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+          }
+          if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 2 ) {
+            sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+            sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+            sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+          }
+          if( sz1 != 0 && sz2 != 0  && sz3 != 0 ) {
+            szconv  = sqrt( 1. / ( 1. / sz1 / sz1 + 1. / sz2 / sz2 + 1. / sz3 / sz3) ) ;
+          }
+        }
+        return szconv;
+    }
+
+
+        double LegacyVertexSelector::sZFromConvPair_h4g( const edm::Ptr<flashgg::Photon> &p1,
+                const edm::Ptr<flashgg::Photon> &p2, const edm::Ptr<flashgg::Photon> &p3, const edm::Ptr<flashgg::Photon> &p4,
+                const int index_conversionLead,
+                const int index_conversionSecond,
+                const int index_conversionThird,
+                const int index_conversionFourth,
+                const int nConvLegs_LeadPhoton,
+                const int nConvLegs_SecondPhoton,
+                const int nConvLegs_ThirdPhoton,
+                const int nConvLegs_FourthPhoton,
+                const std::vector<edm::Ptr<reco::Conversion> > &conversionsVector,
+                const std::vector<edm::Ptr<reco::Conversion> > &conversionsVectorSingleLeg
+                 ) const
+        {
+            double szconv = 0;
+            float sz1 = 0;
+            float sz2 = 0;
+            float sz3 = 0;
+            float sz4 = 0;
+
+            if( index_conversionLead != -1  && index_conversionSecond == -1 && index_conversionThird == -1 && index_conversionFourth == -1) {
+                if( nConvLegs_LeadPhoton == 2 ) { szconv = vtxDZFromConv( p1, conversionsVector[index_conversionLead] ); }
+                if( nConvLegs_LeadPhoton == 1 ) { szconv = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );}
+            }
+
+            if( index_conversionLead == -1 && index_conversionSecond != -1 && index_conversionThird == -1 && index_conversionFourth == -1 ) {
+                if( nConvLegs_SecondPhoton == 2 ) { szconv = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] ); }
+                if( nConvLegs_SecondPhoton == 1 ) { szconv = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] ); }
+            }
+
+            if( index_conversionLead == -1 && index_conversionSecond == -1 && index_conversionThird != -1 && index_conversionFourth == -1 ) {
+                if( nConvLegs_ThirdPhoton == 2 ) { szconv = vtxDZFromConv( p2, conversionsVector[index_conversionThird] ); }
+                if( nConvLegs_ThirdPhoton == 1 ) { szconv = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionThird] ); }
+            }
+
+            if( index_conversionLead == -1 && index_conversionSecond == -1 && index_conversionThird == -1 && index_conversionFourth != -1 ) {
+                if( nConvLegs_FourthPhoton == 2 ) { szconv = vtxDZFromConv( p2, conversionsVector[index_conversionFourth] ); }
+                if( nConvLegs_FourthPhoton == 1 ) { szconv = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionFourth] ); }
+            }
+
+            if( index_conversionLead != -1 && index_conversionSecond != -1 && index_conversionThird == -1 && index_conversionFourth == -1) {
+
+                if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 2 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                    sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                }
+                if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 1 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                    sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                }
+                if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 1 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                    sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                }
+                if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 2 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                    sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                }
+                if( sz1 != 0 && sz2 != 0 ) {
+                    szconv  = ( 1. / ( 1. / sz1 / sz1 + 1. / sz2 / sz2 )  );
+                }
+            }
+
+            if( index_conversionLead == -1 && index_conversionSecond == -1 && index_conversionThird != -1 && index_conversionFourth != -1) {
+
+                if( nConvLegs_ThirdPhoton == 2 && nConvLegs_FourthPhoton == 2 ) {
+                    sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+                    sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+                }
+                if( nConvLegs_ThirdPhoton == 1 && nConvLegs_FourthPhoton == 1 ) {
+                    sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+                    sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+                }
+                if( nConvLegs_ThirdPhoton == 2 && nConvLegs_FourthPhoton == 1 ) {
+                    sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+                    sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+                }
+                if( nConvLegs_ThirdPhoton == 1 && nConvLegs_FourthPhoton == 2 ) {
+                    sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+                    sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+                }
+                if( sz3 != 0 && sz4 != 0 ) {
+                    szconv  = ( 1. / ( 1. / sz3 / sz3 + 1. / sz4 / sz4 )  );
+                }
+            }
+
+            if( index_conversionLead != -1 && index_conversionSecond == -1 && index_conversionThird == -1 && index_conversionFourth != -1) {
+
+                if( nConvLegs_LeadPhoton == 2 && nConvLegs_FourthPhoton == 2 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                    sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+                }
+                if( nConvLegs_LeadPhoton == 1 && nConvLegs_FourthPhoton == 1 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                    sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+                }
+                if( nConvLegs_LeadPhoton == 2 && nConvLegs_FourthPhoton == 1 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                    sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+                }
+                if( nConvLegs_LeadPhoton == 1 && nConvLegs_FourthPhoton == 2 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                    sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+                }
+                if( sz1 != 0 && sz4 != 0 ) {
+                    szconv  = ( 1. / ( 1. / sz1 / sz1 + 1. / sz4 / sz4 )  );
+                }
+            }
+
+            if( index_conversionLead == -1 && index_conversionSecond != -1 && index_conversionThird != -1 && index_conversionFourth == -1) {
+
+                if( nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 2 ) {
+                    sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                    sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+                }
+                if( nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 1 ) {
+                    sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                    sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+                }
+                if( nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 1 ) {
+                    sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                    sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+                }
+                if( nConvLegs_SecondPhoton == 1 && nConvLegs_SecondPhoton == 2 ) {
+                    sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                    sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+                }
+                if( sz2 != 0 && sz3!= 0 ) {
+                    szconv  = ( 1. / ( 1. / sz2 / sz2 + 1. / sz3 / sz3 )  );
+                }
+            }
+
+            if( index_conversionLead != -1 && index_conversionSecond != -1 && index_conversionThird != -1 && index_conversionFourth == -1) {
+
+                if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 1 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                    sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                    sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+                }
+                if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 2 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                    sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                    sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+                }
+                if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 1 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                    sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                    sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+                }
+                if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 1 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                    sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                    sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+                }
+                if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 2 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                    sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                    sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+                }
+                if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 1 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                    sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                    sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+                }
+                if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 2 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                    sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                    sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+                }
+                if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 2 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                    sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                    sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+                }
+                if( sz1 != 0 && sz2!= 0 && sz3 != 0) {
+                    szconv  = ( 1. / ( 1. / sz1 / sz1 + 1. / sz2 / sz2 + 1. / sz3 / sz3 )  );
+                }
+            }
+
+            if( index_conversionLead != -1 && index_conversionSecond != -1 && index_conversionThird == -1 && index_conversionFourth != -1) {
+
+                if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 1 && nConvLegs_FourthPhoton == 1 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                    sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                    sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+                }
+                if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 1 && nConvLegs_FourthPhoton == 2 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                    sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                    sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+                }
+                if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 2 && nConvLegs_FourthPhoton == 1 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                    sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                    sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+                }
+                if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 1 && nConvLegs_FourthPhoton == 1 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                    sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                    sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+                }
+                if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 2 && nConvLegs_FourthPhoton == 2 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                    sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                    sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+                }
+                if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 2 && nConvLegs_FourthPhoton == 1 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                    sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                    sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+                }
+                if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 1 && nConvLegs_FourthPhoton == 2 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                    sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                    sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+                }
+                if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 2 && nConvLegs_FourthPhoton == 2 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                    sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                    sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+                }
+                if( sz1 != 0 && sz2!= 0 && sz4 != 0) {
+                    szconv  = ( 1. / ( 1. / sz1 / sz1 + 1. / sz2 / sz2 + 1. / sz4 / sz4 )  );
+                }
+            }
+
+            if( index_conversionLead != -1 && index_conversionSecond == -1 && index_conversionThird != -1 && index_conversionFourth != -1) {
+
+                if( nConvLegs_LeadPhoton == 1 && nConvLegs_FourthPhoton == 1 && nConvLegs_ThirdPhoton == 1 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                    sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+                    sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+                }
+                if( nConvLegs_LeadPhoton == 1 && nConvLegs_FourthPhoton == 1 && nConvLegs_ThirdPhoton == 2 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                    sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+                    sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+                }
+                if( nConvLegs_LeadPhoton == 1 && nConvLegs_FourthPhoton == 2 && nConvLegs_ThirdPhoton == 1 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                    sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+                    sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+                }
+                if( nConvLegs_LeadPhoton == 2 && nConvLegs_FourthPhoton == 1 && nConvLegs_ThirdPhoton == 1 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                    sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+                    sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+                }
+                if( nConvLegs_LeadPhoton == 1 && nConvLegs_FourthPhoton == 2 && nConvLegs_ThirdPhoton == 2 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                    sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+                    sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+                }
+                if( nConvLegs_LeadPhoton == 2 && nConvLegs_FourthPhoton == 2 && nConvLegs_ThirdPhoton == 1 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                    sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+                    sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+                }
+                if( nConvLegs_LeadPhoton == 2 && nConvLegs_FourthPhoton == 1 && nConvLegs_ThirdPhoton == 2 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                    sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+                    sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+                }
+                if( nConvLegs_LeadPhoton == 2 && nConvLegs_FourthPhoton == 2 && nConvLegs_ThirdPhoton == 2 ) {
+                    sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                    sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+                    sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+                }
+                if( sz1 != 0 && sz4!= 0 && sz3 != 0) {
+                    szconv  = ( 1. / ( 1. / sz1 / sz1 + 1. / sz4 / sz4 + 1. / sz3 / sz3 )  );
+                }
+            }
+            if( index_conversionLead == -1 && index_conversionSecond != -1 && index_conversionThird != -1 && index_conversionFourth != -1) {
+
+                if( nConvLegs_FourthPhoton == 1 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 1 ) {
+                    sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+                    sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                    sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+                }
+                if( nConvLegs_FourthPhoton == 1 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 2 ) {
+                    sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+                    sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                    sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+                }
+                if( nConvLegs_FourthPhoton == 1 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 1 ) {
+                    sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+                    sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                    sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+                }
+                if( nConvLegs_FourthPhoton == 2 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 1 ) {
+                    sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+                    sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                    sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+                }
+                if( nConvLegs_FourthPhoton == 1 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 2 ) {
+                    sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+                    sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                    sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+                }
+                if( nConvLegs_FourthPhoton == 2 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 1 ) {
+                    sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+                    sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                    sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+                }
+                if( nConvLegs_FourthPhoton == 2 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 2 ) {
+                    sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+                    sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                    sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+                }
+                if( nConvLegs_FourthPhoton == 2 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 2 ) {
+                    sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+                    sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                    sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+                }
+                if( sz4 != 0 && sz2!= 0 && sz3 != 0) {
+                    szconv  = ( 1. / ( 1. / sz4 / sz4 + 1. / sz2 / sz2 + 1. / sz3 / sz3 )  );
+                }
+            }
+
+            if( index_conversionLead != -1 && index_conversionSecond != -1 && index_conversionThird != -1 && index_conversionFourth != -1) {
+
+              if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 1 && nConvLegs_FourthPhoton == 1) {
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+                sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+              }
+              if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 1 && nConvLegs_FourthPhoton == 2) {
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+                sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+              }
+              if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 2 && nConvLegs_FourthPhoton == 1) {
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+                sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+              }
+              if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 1 && nConvLegs_FourthPhoton == 1) {
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+                sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+              }
+              if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 1 && nConvLegs_FourthPhoton == 1) {
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+                sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+              }
+              if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 2 && nConvLegs_FourthPhoton == 2) {
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+                sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+              }
+              if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 2 && nConvLegs_FourthPhoton == 1) {
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+                sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+              }
+              if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 1 && nConvLegs_FourthPhoton == 1) {
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+                sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+              }
+              if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 1 && nConvLegs_FourthPhoton == 2) {
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+                sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+              }
+              if( nConvLegs_LeadPhoton == 1 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 2 && nConvLegs_FourthPhoton == 2) {
+                sz1 = vtxDZFromConv( p1, conversionsVectorSingleLeg[index_conversionLead] );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+                sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+              }
+              if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 2 && nConvLegs_FourthPhoton == 1) {
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+                sz4 = vtxDZFromConv( p4, conversionsVectorSingleLeg[index_conversionFourth] );
+              }
+              if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 1 && nConvLegs_FourthPhoton == 2) {
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                sz3 = vtxDZFromConv( p3, conversionsVectorSingleLeg[index_conversionThird] );
+                sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+              }
+              if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 1 && nConvLegs_ThirdPhoton == 2 && nConvLegs_FourthPhoton == 2) {
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                sz2 = vtxDZFromConv( p2, conversionsVectorSingleLeg[index_conversionSecond] );
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+                sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+              }
+              if( nConvLegs_LeadPhoton == 2 && nConvLegs_SecondPhoton == 2 && nConvLegs_ThirdPhoton == 2 && nConvLegs_FourthPhoton == 2) {
+                sz1 = vtxDZFromConv( p1, conversionsVector[index_conversionLead] );
+                sz2 = vtxDZFromConv( p2, conversionsVector[index_conversionSecond] );
+                sz3 = vtxDZFromConv( p3, conversionsVector[index_conversionThird] );
+                sz4 = vtxDZFromConv( p4, conversionsVector[index_conversionFourth] );
+              }
+              if( sz1 != 0 && sz2 != 0 && sz3 != 0 && sz4 != 0 ) {
+                    szconv  = sqrt( 1. / ( 1. / sz1 / sz1 + 1. / sz2 / sz2 + 1. / sz3 / sz3 + 1. / sz4 / sz4 ) );
+                }
+            }
+            return szconv;
+        }
+
     std::vector<int> LegacyVertexSelector::IndexMatchedConversion( const edm::Ptr<flashgg::Photon> &g,
             const std::vector<edm::Ptr<reco::Conversion> > &conversionsVector,  const std::vector<edm::Ptr<reco::Conversion> > &conversionsVectorSingleLeg,
             bool useSingleLeg ) const
@@ -510,14 +1953,14 @@ namespace flashgg {
         int selected_conversion_index = -1;
 
         if( (g->hasConversionTracks() && !pureGeomConvMatching) || pureGeomConvMatching){
-            
+
             for( unsigned int i = 0; i < conversionsVector.size(); i++ ) {
                 edm::Ptr<reco::Conversion> conv = conversionsVector[i];
                 if( conv->nTracks() == 2 ) {
                     if( !conv->isConverted() ) { continue; }
                     if( conv->refittedPair4Momentum().pt() < 10. ) { continue; }
                     if( TMath::Prob( conv->conversionVertex().chi2(), conv->conversionVertex().ndof() ) < 1e-6 ) { continue; }
-                    
+
                     TVector3 VtxtoSC;
                     VtxtoSC.SetXYZ( g->superCluster()->position().x() - conv->conversionVertex().x(),
                                     g->superCluster()->position().y() - conv->conversionVertex().y(),
@@ -551,14 +1994,14 @@ namespace flashgg {
                         float oneLegTrack_X = conv->tracksPin()[0].x();
                         float oneLegTrack_Y = conv->tracksPin()[0].y();
                         float oneLegTrack_Z = conv->tracksPin()[0].z();
-                        
+
                         RefPairMo.SetXYZ( oneLegTrack_X, oneLegTrack_Y, oneLegTrack_Z );
                         double dR = 0;
                         dR = VtxtoSC.DeltaR( RefPairMo );
                         if( dR < mindR ) {
                             mindR = dR;
                             selected_conversion_index = j;
-                        }                        
+                        }
                     }
                 }
                 if( mindR < 0.1 ) {
@@ -568,7 +2011,7 @@ namespace flashgg {
                 }
             }
         }
-        
+
         if( mindR < 0.1 )
             {return result;}
         else {
@@ -753,13 +2196,13 @@ namespace flashgg {
             second_max_mva_value = sorter[1].second;
             second_selected_vertex_index = sorter[1].first;
         } else{
-            second_max_mva_value = -2; 
+            second_max_mva_value = -2;
         }
         if( sorter.size() > 2 ) {
             third_max_mva_value = sorter[2].second;
             third_selected_vertex_index = sorter[2].first;
         }else{
-            third_max_mva_value = -2 ; 
+            third_max_mva_value = -2 ;
         }
 
         for( unsigned int jj = 0; jj < sorter.size(); jj++ ) {
@@ -782,13 +2225,13 @@ namespace flashgg {
         nVert_    = vtxs.size();
         MVA0_     = max_mva_value;
         MVA1_     = second_max_mva_value;
-        dZ1_      = vtxs[selected_vertex_index]->position().z() - vtxs[second_selected_vertex_index]->position().z(); 
+        dZ1_      = vtxs[selected_vertex_index]->position().z() - vtxs[second_selected_vertex_index]->position().z();
         MVA2_     = third_max_mva_value;
         dZ2_      = vtxs[selected_vertex_index]->position().z() - vtxs[third_selected_vertex_index]->position().z();
-       
-        if( sorter.size() < 2 ) dZ1_=100; 
+
+        if( sorter.size() < 2 ) dZ1_=100;
         if( sorter.size() < 3 ) dZ2_=100;
-        
+
 
         vtxprobmva_ = VertexProbMva_->EvaluateMVA( "BDT" );
 
@@ -819,13 +2262,15 @@ namespace flashgg {
 
         int IndexMatchedConversionLeadPhoton = -1;
         int IndexMatchedConversionTrailPhoton = -1;
-    
+
         std::vector<int> vIndexMatchedConversionLeadPhoton;
         std::vector<int> vIndexMatchedConversionTrailPhoton;
-        
-        float nConvLegs_LeadPhoton = 0;   
+
+        float nConvLegs_LeadPhoton = 0;
         float nConvLegs_TrailPhoton = 0;
-        
+
+
+
         if( conversionsVector.size() > 0 ) {
             if( (g1->hasConversionTracks() && !pureGeomConvMatching) || pureGeomConvMatching ) {
                 vIndexMatchedConversionLeadPhoton = IndexMatchedConversion( g1, conversionsVector, conversionsVectorSingleLeg, useSingleLeg );
@@ -882,7 +2327,7 @@ namespace flashgg {
 
             for( auto pair_iter = mapRange.first ; pair_iter != mapRange.second ; pair_iter++ ) {
                 const edm::Ptr<pat::PackedCandidate> cand = pair_iter->second;
-                
+
                 TVector3 tk;
                 TVector2 tkXY;
                 double dr1 = 0;
@@ -918,7 +2363,7 @@ namespace flashgg {
             float pull_conv = 999;
 
             if( nConv != 0 ) {
-                
+
                 const edm::Ptr<flashgg::Photon> &dummyg2 = g1;
 
                 zconv = zFromConvPair( g1, dummyg2, IndexMatchedConversionLeadPhoton, IndexMatchedConversionTrailPhoton, nConvLegs_LeadPhoton, nConvLegs_TrailPhoton,
@@ -1002,9 +2447,487 @@ namespace flashgg {
 
     }
 
+    std::vector<std::vector<float>> LegacyVertexSelector::select_h2g( const edm::Ptr<flashgg::Photon> &g1, const edm::Ptr<flashgg::Photon> &g2,
+                                                         const std::vector<edm::Ptr<reco::Vertex> > &vtxs,
+                                                         const VertexCandidateMap &vertexCandidateMap,
+                                                         const std::vector<edm::Ptr<reco::Conversion> > &conversionsVector,
+                                                         const std::vector<edm::Ptr<reco::Conversion> > &conversionsVectorSingleLeg,
+                                                         const math::XYZPoint &beamSpot,
+                                                         bool useSingleLeg
+                                                         )
+    {
 
-        
+      vlogsumpt2_.clear();
+      vptbal_.clear();
+      vptasym_.clear();
+      vpull_conv_.clear();
+      vnConv_.clear();
 
+      int IndexMatchedConversionLeadPhoton = -1;
+      int IndexMatchedConversionSecondPhoton = -1;
+
+      std::vector<int> vIndexMatchedConversionLeadPhoton;
+      std::vector<int> vIndexMatchedConversionSecondPhoton;
+
+      float nConvLegs_LeadPhoton = 0;
+      float nConvLegs_SecondPhoton = 0;
+
+      if( conversionsVector.size() > 0 || conversionsVectorSingleLeg.size() > 0 ) {
+      if( (g1->hasConversionTracks() && !pureGeomConvMatching) || pureGeomConvMatching) {
+           vIndexMatchedConversionLeadPhoton = IndexMatchedConversion( g1, conversionsVector, conversionsVectorSingleLeg, useSingleLeg );
+           IndexMatchedConversionLeadPhoton = vIndexMatchedConversionLeadPhoton[0];
+           nConvLegs_LeadPhoton = vIndexMatchedConversionLeadPhoton[1];
+          }
+      if( (g2->hasConversionTracks() && !pureGeomConvMatching) || pureGeomConvMatching) {
+           vIndexMatchedConversionSecondPhoton = IndexMatchedConversion( g2, conversionsVector, conversionsVectorSingleLeg, useSingleLeg );
+           IndexMatchedConversionSecondPhoton = vIndexMatchedConversionSecondPhoton[0];
+           nConvLegs_SecondPhoton = vIndexMatchedConversionSecondPhoton[1];
+          }
+      }
+
+      std::vector<std::vector<float>> megaVec;
+
+      unsigned int vertex_index;
+      for( vertex_index = 0 ; vertex_index < vtxs.size() ; vertex_index++ ) {
+            edm::Ptr<reco::Vertex> vtx = vtxs[vertex_index];
+
+            TVector3 Photon1Dir;
+            TVector3 Photon1Dir_uv;
+            TVector3 Photon2Dir;
+            TVector3 Photon2Dir_uv;
+
+            TLorentzVector p14;
+            TLorentzVector p24;
+
+            Photon1Dir.SetXYZ( g1->superCluster()->position().x() - vtx->position().x(), g1->superCluster()->position().y() - vtx->position().y(),
+                               g1->superCluster()->position().z() - vtx->position().z() );
+            Photon2Dir.SetXYZ( g2->superCluster()->position().x() - vtx->position().x(), g2->superCluster()->position().y() - vtx->position().y(),
+                               g2->superCluster()->position().z() - vtx->position().z() );
+
+            Photon1Dir_uv = Photon1Dir.Unit() * g1->superCluster()->rawEnergy();
+            Photon2Dir_uv = Photon2Dir.Unit() * g2->superCluster()->rawEnergy();
+            p14.SetPxPyPzE( Photon1Dir_uv.x(), Photon1Dir_uv.y(), Photon1Dir_uv.z(), g1->superCluster()->rawEnergy() );
+            p24.SetPxPyPzE( Photon2Dir_uv.x(), Photon2Dir_uv.y(), Photon2Dir_uv.z(), g2->superCluster()->rawEnergy() );
+
+            TVector2 sumpt;
+            double sumpt2_out = 0;
+            double sumpt2_in = 0;
+            double ptbal = 0;
+            double ptasym = 0;
+
+            sumpt.Set( 0., 0. );
+
+            auto mapRange = std::equal_range( vertexCandidateMap.begin(), vertexCandidateMap.end(), vtx, flashgg::compare_with_vtx() );
+            if( mapRange.first == mapRange.second ) { continue; }
+            for( auto pair_iter = mapRange.first ; pair_iter != mapRange.second ; pair_iter++ ) {
+                const edm::Ptr<pat::PackedCandidate> cand = pair_iter->second;
+                TVector3 tk;
+                TVector2 tkXY;
+                double dr1 = 0.;
+                double dr2 = 0.;
+
+                tk.SetXYZ( cand->px(), cand->py(), cand->pz() );
+                tkXY = tk.XYvector();
+
+                dr1 = tk.DeltaR(p14.Vect());
+                dr2 = tk.DeltaR(p24.Vect());
+
+                bool isPure = cand->trackHighPurity();
+                if( !isPure && trackHighPurity ) { continue; }
+                if( dr1 < dRexclude || dr2 < dRexclude ) {
+                    sumpt2_in += tkXY.Mod2();
+                    continue;
+                }
+                sumpt += tkXY;
+                sumpt2_out += tkXY.Mod2();
+                ptbal -= tkXY * ( p14 + p24 ).Vect().XYvector().Unit();
+              }
+
+              ptasym = ( sumpt.Mod() - ( p14 + p24  ).Vect().XYvector().Mod() ) / ( sumpt.Mod() + ( p14 + p24  ).Vect().XYvector().Mod() );
+              ptasym_ = ptasym;
+
+              float nConv = 0;
+              if( IndexMatchedConversionLeadPhoton != -1 ) { ++nConv; }
+              if( IndexMatchedConversionSecondPhoton != -1 ) { ++nConv; }
+
+              float zconv = 0;
+              float szconv = 0;
+              float pull_conv = 999;
+
+              if( nConv != 0 ) {
+              zconv = zFromConvPair( g1, g2, IndexMatchedConversionLeadPhoton, IndexMatchedConversionSecondPhoton, nConvLegs_LeadPhoton, nConvLegs_SecondPhoton,
+                                      conversionsVector, conversionsVectorSingleLeg, beamSpot );
+
+              szconv = sZFromConvPair( g1, g2, IndexMatchedConversionLeadPhoton, IndexMatchedConversionSecondPhoton, nConvLegs_LeadPhoton, nConvLegs_SecondPhoton,
+                                       conversionsVector, conversionsVectorSingleLeg );
+              if( szconv != 0 ) {
+                  pull_conv = fabs( vtx->position().z() - zconv ) / szconv;
+              } else {
+                  pull_conv = 10.;
+                }
+              }
+
+              if( pull_conv > 10. ) { pull_conv = 10.; }
+
+              logsumpt2_ = log( sumpt2_in + sumpt2_out );
+              ptbal_ = ptbal;
+              pull_conv_ = pull_conv;
+              nConv_ = nConv;
+
+              vlogsumpt2_.push_back( logsumpt2_ );
+              vptasym_.push_back(ptasym_);
+              vptbal_.push_back(ptbal_);
+              vpull_conv_.push_back(pull_conv_);
+              vnConv_.push_back(nConv_);
+      }
+      megaVec.push_back(vlogsumpt2_);
+      megaVec.push_back(vptasym_);
+      megaVec.push_back(vptbal_);
+      megaVec.push_back(vpull_conv_);
+      megaVec.push_back(vnConv_);
+      return megaVec;
+    }
+
+    std::vector<std::vector<float>> LegacyVertexSelector::select_h3g( const edm::Ptr<flashgg::Photon> &g1, const edm::Ptr<flashgg::Photon> &g2, const edm::Ptr<flashgg::Photon> &g3,
+                                                         const std::vector<edm::Ptr<reco::Vertex> > &vtxs,
+                                                         const VertexCandidateMap &vertexCandidateMap,
+                                                         const std::vector<edm::Ptr<reco::Conversion> > &conversionsVector,
+                                                         const std::vector<edm::Ptr<reco::Conversion> > &conversionsVectorSingleLeg,
+                                                         const math::XYZPoint &beamSpot,
+                                                         bool useSingleLeg
+                                                         )
+    {
+
+      vlogsumpt2_.clear();
+      vptbal_.clear();
+      vptasym_.clear();
+      vpull_conv_.clear();
+      vnConv_.clear();
+
+      int IndexMatchedConversionLeadPhoton = -1;
+      int IndexMatchedConversionSecondPhoton = -1;
+      int IndexMatchedConversionThirdPhoton = -1;
+
+      std::vector<int> vIndexMatchedConversionLeadPhoton;
+      std::vector<int> vIndexMatchedConversionSecondPhoton;
+      std::vector<int> vIndexMatchedConversionThirdPhoton;
+
+      float nConvLegs_LeadPhoton = 0;
+      float nConvLegs_SecondPhoton = 0;
+      float nConvLegs_ThirdPhoton = 0;
+
+      if( conversionsVector.size() > 0 || conversionsVectorSingleLeg.size() > 0 ) {
+      if( (g1->hasConversionTracks() && !pureGeomConvMatching) || pureGeomConvMatching) {
+           vIndexMatchedConversionLeadPhoton = IndexMatchedConversion( g1, conversionsVector, conversionsVectorSingleLeg, useSingleLeg );
+           IndexMatchedConversionLeadPhoton = vIndexMatchedConversionLeadPhoton[0];
+           nConvLegs_LeadPhoton = vIndexMatchedConversionLeadPhoton[1];
+          }
+      if( (g2->hasConversionTracks() && !pureGeomConvMatching) || pureGeomConvMatching) {
+           vIndexMatchedConversionSecondPhoton = IndexMatchedConversion( g2, conversionsVector, conversionsVectorSingleLeg, useSingleLeg );
+           IndexMatchedConversionSecondPhoton = vIndexMatchedConversionSecondPhoton[0];
+           nConvLegs_SecondPhoton = vIndexMatchedConversionSecondPhoton[1];
+          }
+     if( (g3->hasConversionTracks() && !pureGeomConvMatching) || pureGeomConvMatching) {
+           vIndexMatchedConversionThirdPhoton = IndexMatchedConversion( g3, conversionsVector, conversionsVectorSingleLeg, useSingleLeg );
+           IndexMatchedConversionThirdPhoton = vIndexMatchedConversionThirdPhoton[0];
+           nConvLegs_ThirdPhoton = vIndexMatchedConversionThirdPhoton[1];
+         }
+      }
+
+
+      std::vector<std::vector<float>> megaVec;
+
+      unsigned int vertex_index;
+      for( vertex_index = 0 ; vertex_index < vtxs.size() ; vertex_index++ ) {
+            edm::Ptr<reco::Vertex> vtx = vtxs[vertex_index];
+
+            TVector3 Photon1Dir;
+            TVector3 Photon1Dir_uv;
+            TVector3 Photon2Dir;
+            TVector3 Photon2Dir_uv;
+            TVector3 Photon3Dir;
+            TVector3 Photon3Dir_uv;
+
+            TLorentzVector p14;
+            TLorentzVector p24;
+            TLorentzVector p34;
+            Photon1Dir.SetXYZ( g1->superCluster()->position().x() - vtx->position().x(), g1->superCluster()->position().y() - vtx->position().y(),
+                               g1->superCluster()->position().z() - vtx->position().z() );
+            Photon2Dir.SetXYZ( g2->superCluster()->position().x() - vtx->position().x(), g2->superCluster()->position().y() - vtx->position().y(),
+                               g2->superCluster()->position().z() - vtx->position().z() );
+            Photon3Dir.SetXYZ( g3->superCluster()->position().x() - vtx->position().x(), g3->superCluster()->position().y() - vtx->position().y(),
+                               g3->superCluster()->position().z() - vtx->position().z() );
+
+            Photon1Dir_uv = Photon1Dir.Unit() * g1->superCluster()->rawEnergy();
+            Photon2Dir_uv = Photon2Dir.Unit() * g2->superCluster()->rawEnergy();
+            Photon3Dir_uv = Photon3Dir.Unit() * g3->superCluster()->rawEnergy();
+            p14.SetPxPyPzE( Photon1Dir_uv.x(), Photon1Dir_uv.y(), Photon1Dir_uv.z(), g1->superCluster()->rawEnergy() );
+            p24.SetPxPyPzE( Photon2Dir_uv.x(), Photon2Dir_uv.y(), Photon2Dir_uv.z(), g2->superCluster()->rawEnergy() );
+            p34.SetPxPyPzE( Photon3Dir_uv.x(), Photon3Dir_uv.y(), Photon3Dir_uv.z(), g3->superCluster()->rawEnergy() );
+
+            TVector2 sumpt;
+            double sumpt2_out = 0;
+            double sumpt2_in = 0;
+            double ptbal = 0;
+            double ptasym = 0;
+
+            sumpt.Set( 0., 0. );
+
+            auto mapRange = std::equal_range( vertexCandidateMap.begin(), vertexCandidateMap.end(), vtx, flashgg::compare_with_vtx() );
+            if( mapRange.first == mapRange.second ) { continue; }
+            for( auto pair_iter = mapRange.first ; pair_iter != mapRange.second ; pair_iter++ ) {
+                const edm::Ptr<pat::PackedCandidate> cand = pair_iter->second;
+                TVector3 tk;
+                TVector2 tkXY;
+                double dr1 = 0.;
+                double dr2 = 0.;
+                double dr3 = 0.;
+
+                tk.SetXYZ( cand->px(), cand->py(), cand->pz() );
+                tkXY = tk.XYvector();
+
+                dr1 = tk.DeltaR(p14.Vect());
+                dr2 = tk.DeltaR(p24.Vect());
+                dr3 = tk.DeltaR(p34.Vect());
+
+                bool isPure = cand->trackHighPurity();
+                if( !isPure && trackHighPurity ) { continue; }
+                if( dr1 < dRexclude || dr2 < dRexclude || dr3 < dRexclude ) {
+                    sumpt2_in += tkXY.Mod2();
+                    continue;
+                }
+                sumpt += tkXY;
+                sumpt2_out += tkXY.Mod2();
+                ptbal -= tkXY * ( p14 + p24 + p34 ).Vect().XYvector().Unit();
+              }
+
+              ptasym = ( sumpt.Mod() - ( p14 + p24 + p34  ).Vect().XYvector().Mod() ) / ( sumpt.Mod() + ( p14 + p24 +p34  ).Vect().XYvector().Mod() );
+              ptasym_ = ptasym;
+
+              float nConv = 0;
+              if( IndexMatchedConversionLeadPhoton != -1 ) { ++nConv; }
+              if( IndexMatchedConversionSecondPhoton != -1 ) { ++nConv; }
+              if( IndexMatchedConversionThirdPhoton != -1 ) { ++nConv; }
+
+              float zconv = 0;
+              float szconv = 0;
+              float pull_conv = 999;
+
+              if( nConv != 0 ) {
+              zconv = zFromConvPair_h3g( g1, g2, g3, IndexMatchedConversionLeadPhoton, IndexMatchedConversionSecondPhoton,IndexMatchedConversionThirdPhoton, nConvLegs_LeadPhoton, nConvLegs_SecondPhoton,
+                                     nConvLegs_ThirdPhoton, conversionsVector, conversionsVectorSingleLeg, beamSpot );
+
+              szconv = sZFromConvPair_h3g( g1, g2, g3, IndexMatchedConversionLeadPhoton, IndexMatchedConversionSecondPhoton, IndexMatchedConversionThirdPhoton, nConvLegs_LeadPhoton, nConvLegs_SecondPhoton, nConvLegs_ThirdPhoton,
+                                       conversionsVector, conversionsVectorSingleLeg );
+              if( szconv != 0 ) {
+                  pull_conv = fabs( vtx->position().z() - zconv ) / szconv;
+              } else {
+                  pull_conv = 10.;
+                }
+              }
+
+              if( pull_conv > 10. ) { pull_conv = 10.; }
+
+              logsumpt2_ = log( sumpt2_in + sumpt2_out );
+              ptbal_ = ptbal;
+              pull_conv_ = pull_conv;
+              nConv_ = nConv;
+
+              vlogsumpt2_.push_back( logsumpt2_ );
+              vptasym_.push_back(ptasym_);
+              vptbal_.push_back(ptbal_);
+              vpull_conv_.push_back(pull_conv_);
+              vnConv_.push_back(nConv_);
+
+      }
+      megaVec.push_back(vlogsumpt2_);
+      megaVec.push_back(vptasym_);
+      megaVec.push_back(vptbal_);
+      megaVec.push_back(vpull_conv_);
+      megaVec.push_back(vnConv_);
+      return megaVec;
+    }
+
+    std::vector<std::vector<float>> LegacyVertexSelector::select_h4g( const edm::Ptr<flashgg::Photon> &g1, const edm::Ptr<flashgg::Photon> &g2, const edm::Ptr<flashgg::Photon> &g3, const edm::Ptr<flashgg::Photon> &g4,
+                                                         const std::vector<edm::Ptr<reco::Vertex> > &vtxs,
+                                                         const VertexCandidateMap &vertexCandidateMap,
+                                                         const std::vector<edm::Ptr<reco::Conversion> > &conversionsVector,
+                                                         const std::vector<edm::Ptr<reco::Conversion> > &conversionsVectorSingleLeg,
+                                                         const math::XYZPoint &beamSpot,
+                                                         bool useSingleLeg
+                                                         )
+    {
+
+      vlogsumpt2_.clear();
+      vptbal_.clear();
+      vptasym_.clear();
+      vpull_conv_.clear();
+      vnConv_.clear();
+
+      int IndexMatchedConversionLeadPhoton = -1;
+      int IndexMatchedConversionSecondPhoton = -1;
+      int IndexMatchedConversionThirdPhoton = -1;
+      int IndexMatchedConversionFourthPhoton = -1;
+
+      std::vector<int> vIndexMatchedConversionLeadPhoton;
+      std::vector<int> vIndexMatchedConversionSecondPhoton;
+      std::vector<int> vIndexMatchedConversionThirdPhoton;
+      std::vector<int> vIndexMatchedConversionFourthPhoton;
+
+      float nConvLegs_LeadPhoton = 0;
+      float nConvLegs_SecondPhoton = 0;
+      float nConvLegs_ThirdPhoton = 0;
+      float nConvLegs_FourthPhoton = 0;
+
+      if( conversionsVector.size() > 0 || conversionsVectorSingleLeg.size() > 0 ) {
+      if( (g1->hasConversionTracks() && !pureGeomConvMatching) || pureGeomConvMatching) {
+           vIndexMatchedConversionLeadPhoton = IndexMatchedConversion( g1, conversionsVector, conversionsVectorSingleLeg, useSingleLeg );
+           IndexMatchedConversionLeadPhoton = vIndexMatchedConversionLeadPhoton[0];
+           nConvLegs_LeadPhoton = vIndexMatchedConversionLeadPhoton[1];
+          }
+      if( (g2->hasConversionTracks() && !pureGeomConvMatching) || pureGeomConvMatching) {
+           vIndexMatchedConversionSecondPhoton = IndexMatchedConversion( g2, conversionsVector, conversionsVectorSingleLeg, useSingleLeg );
+           IndexMatchedConversionSecondPhoton = vIndexMatchedConversionSecondPhoton[0];
+           nConvLegs_SecondPhoton = vIndexMatchedConversionSecondPhoton[1];
+          }
+     if( (g3->hasConversionTracks() && !pureGeomConvMatching) || pureGeomConvMatching) {
+           vIndexMatchedConversionThirdPhoton = IndexMatchedConversion( g3, conversionsVector, conversionsVectorSingleLeg, useSingleLeg );
+           IndexMatchedConversionThirdPhoton = vIndexMatchedConversionThirdPhoton[0];
+           nConvLegs_ThirdPhoton = vIndexMatchedConversionThirdPhoton[1];
+         }
+     if( (g4->hasConversionTracks() && !pureGeomConvMatching) || pureGeomConvMatching) {
+         vIndexMatchedConversionFourthPhoton = IndexMatchedConversion( g4, conversionsVector, conversionsVectorSingleLeg, useSingleLeg );
+         IndexMatchedConversionFourthPhoton = vIndexMatchedConversionFourthPhoton[0];
+         nConvLegs_FourthPhoton = vIndexMatchedConversionFourthPhoton[1];
+         }
+      }
+
+
+      std::vector<std::vector<float>> megaVec;
+
+      unsigned int vertex_index;
+      // if ( !initialized_ ){
+      //   Initialize();
+      // }
+      for( vertex_index = 0 ; vertex_index < vtxs.size() ; vertex_index++ ) {
+            edm::Ptr<reco::Vertex> vtx = vtxs[vertex_index];
+
+            TVector3 Photon1Dir;
+            TVector3 Photon1Dir_uv;
+            TVector3 Photon2Dir;
+            TVector3 Photon2Dir_uv;
+            TVector3 Photon3Dir;
+            TVector3 Photon3Dir_uv;
+            TVector3 Photon4Dir;
+            TVector3 Photon4Dir_uv;
+            TLorentzVector p14;
+            TLorentzVector p24;
+            TLorentzVector p34;
+            TLorentzVector p44;
+            Photon1Dir.SetXYZ( g1->superCluster()->position().x() - vtx->position().x(), g1->superCluster()->position().y() - vtx->position().y(),
+                               g1->superCluster()->position().z() - vtx->position().z() );
+            Photon2Dir.SetXYZ( g2->superCluster()->position().x() - vtx->position().x(), g2->superCluster()->position().y() - vtx->position().y(),
+                               g2->superCluster()->position().z() - vtx->position().z() );
+            Photon3Dir.SetXYZ( g3->superCluster()->position().x() - vtx->position().x(), g3->superCluster()->position().y() - vtx->position().y(),
+                               g3->superCluster()->position().z() - vtx->position().z() );
+            Photon4Dir.SetXYZ( g4->superCluster()->position().x() - vtx->position().x(), g4->superCluster()->position().y() - vtx->position().y(),
+                               g4->superCluster()->position().z() - vtx->position().z() );
+            Photon1Dir_uv = Photon1Dir.Unit() * g1->superCluster()->rawEnergy();
+            Photon2Dir_uv = Photon2Dir.Unit() * g2->superCluster()->rawEnergy();
+            Photon3Dir_uv = Photon3Dir.Unit() * g3->superCluster()->rawEnergy();
+            Photon4Dir_uv = Photon4Dir.Unit() * g4->superCluster()->rawEnergy();
+            p14.SetPxPyPzE( Photon1Dir_uv.x(), Photon1Dir_uv.y(), Photon1Dir_uv.z(), g1->superCluster()->rawEnergy() );
+            p24.SetPxPyPzE( Photon2Dir_uv.x(), Photon2Dir_uv.y(), Photon2Dir_uv.z(), g2->superCluster()->rawEnergy() );
+            p34.SetPxPyPzE( Photon3Dir_uv.x(), Photon3Dir_uv.y(), Photon3Dir_uv.z(), g3->superCluster()->rawEnergy() );
+            p44.SetPxPyPzE( Photon4Dir_uv.x(), Photon4Dir_uv.y(), Photon4Dir_uv.z(), g4->superCluster()->rawEnergy() );
+
+            TVector2 sumpt;
+            double sumpt2_out = 0;
+            double sumpt2_in = 0;
+            double ptbal = 0;
+            double ptasym = 0;
+
+            sumpt.Set( 0., 0. );
+
+            auto mapRange = std::equal_range( vertexCandidateMap.begin(), vertexCandidateMap.end(), vtx, flashgg::compare_with_vtx() );
+            if( mapRange.first == mapRange.second ) { continue; }
+            for( auto pair_iter = mapRange.first ; pair_iter != mapRange.second ; pair_iter++ ) {
+                const edm::Ptr<pat::PackedCandidate> cand = pair_iter->second;
+                TVector3 tk;
+                TVector2 tkXY;
+                double dr1 = 0.;
+                double dr2 = 0.;
+                double dr3 = 0.;
+                double dr4 = 0.;
+
+                tk.SetXYZ( cand->px(), cand->py(), cand->pz() );
+                tkXY = tk.XYvector();
+
+                dr1 = tk.DeltaR(p14.Vect());
+                dr2 = tk.DeltaR(p24.Vect());
+                dr3 = tk.DeltaR(p34.Vect());
+                dr4 = tk.DeltaR(p44.Vect());
+
+                bool isPure = cand->trackHighPurity();
+                if( !isPure && trackHighPurity ) { continue; }
+                if( dr1 < dRexclude || dr2 < dRexclude || dr3 < dRexclude || dr4 < dRexclude ) {
+                    sumpt2_in += tkXY.Mod2();
+                    continue;
+                }
+                sumpt += tkXY;
+                sumpt2_out += tkXY.Mod2();
+                ptbal -= tkXY * ( p14 + p24 + p34 + p44).Vect().XYvector().Unit();
+              }
+
+              ptasym = ( sumpt.Mod() - ( p14 + p24 + p34 + p44 ).Vect().XYvector().Mod() ) / ( sumpt.Mod() + ( p14 + p24 +p34 + p44 ).Vect().XYvector().Mod() );
+              ptasym_ = ptasym;
+
+              float nConv = 0;
+              if( IndexMatchedConversionLeadPhoton != -1 ) { ++nConv; }
+              if( IndexMatchedConversionSecondPhoton != -1 ) { ++nConv; }
+              if( IndexMatchedConversionThirdPhoton != -1 ) { ++nConv; }
+              if( IndexMatchedConversionFourthPhoton != -1 ) { ++nConv; }
+
+              float zconv = 0;
+              float szconv = 0;
+              float pull_conv = 999;
+              if( nConv != 0 ) {
+              zconv = zFromConvPair_h4g( g1, g2, g3, g4, IndexMatchedConversionLeadPhoton, IndexMatchedConversionSecondPhoton,IndexMatchedConversionThirdPhoton, IndexMatchedConversionFourthPhoton, nConvLegs_LeadPhoton, nConvLegs_SecondPhoton,
+                                     nConvLegs_ThirdPhoton, nConvLegs_FourthPhoton, conversionsVector, conversionsVectorSingleLeg, beamSpot );
+              szconv = sZFromConvPair_h4g( g1, g2, g3, g4, IndexMatchedConversionLeadPhoton, IndexMatchedConversionSecondPhoton, IndexMatchedConversionThirdPhoton, IndexMatchedConversionFourthPhoton, nConvLegs_LeadPhoton, nConvLegs_SecondPhoton, nConvLegs_ThirdPhoton, nConvLegs_FourthPhoton,
+                                       conversionsVector, conversionsVectorSingleLeg );
+
+              if( szconv != 0 ) {
+                  pull_conv = fabs( vtx->position().z() - zconv ) / szconv;
+              } else {
+                  pull_conv = 10.;
+                }
+              }
+
+              if( pull_conv > 10. ) { pull_conv = 10.; }
+
+              logsumpt2_ = log( sumpt2_in + sumpt2_out );
+              ptbal_ = ptbal;
+              pull_conv_ = pull_conv;
+              nConv_ = nConv;
+              // float mva_value = VertexIdMva_->EvaluateMVA("BDT");
+
+              // cout << "mva value = " << mva_value;
+
+              vlogsumpt2_.push_back( logsumpt2_ );
+              vptasym_.push_back(ptasym_);
+              vptbal_.push_back(ptbal_);
+              vpull_conv_.push_back(pull_conv_);
+              vnConv_.push_back(nConv_);
+
+      }
+      megaVec.push_back(vlogsumpt2_);
+      megaVec.push_back(vptasym_);
+      megaVec.push_back(vptbal_);
+      megaVec.push_back(vpull_conv_);
+      megaVec.push_back(vnConv_);
+      return megaVec;
+    }
 
     void LegacyVertexSelector::writeInfoFromLastSelectionTo( flashgg::DiPhotonCandidate &dipho )
     {
@@ -1061,6 +2984,19 @@ namespace flashgg {
         phojet.setVMVASortedIndex( vmva_sortedindex_ );
 
         phojet.setVtxProbMVA( vtxprobmva_ );
+    }
+
+    void LegacyVertexSelector::writeInfoFromLastSelectionTo( flashgg::H4GCandidate &h4g )
+    {
+      // h4g.setLogSumPt2( logsumpt2_);
+      // h4g.setPtBal( ptbal_ );
+      // h4g.setPtAsym( ptasym_);
+      //
+      // h4g.setVLogSumPt2( vlogsumpt2_ );
+      // h4g.setVPtBal(vptbal_ );
+      // h4g.setVPtAsym( vptasym_ );
+      //
+      // h4g.setLogSumPt2_Zero( vlogsumpt2_[0]);
     }
 
 } // namespace flashgg
