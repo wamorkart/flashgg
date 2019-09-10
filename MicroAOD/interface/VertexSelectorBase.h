@@ -6,6 +6,7 @@
 #include "flashgg/DataFormats/interface/Photon.h"
 #include "flashgg/DataFormats/interface/DiPhotonCandidate.h"
 #include "flashgg/DataFormats/interface/PhotonJetCandidate.h"
+#include "flashgg/DataFormats/interface/H4GCandidate.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
 #include "DataFormats/Common/interface/PtrVector.h"
 #include "DataFormats/PatCandidates/interface/PackedCandidate.h"
@@ -50,10 +51,42 @@ namespace flashgg {
                                                //                                          const float&
                                              )  = 0;
 
+        virtual std::vector<std::vector<float>> select_h2g( const edm::Ptr<flashgg::Photon> &,
+                                              const edm::Ptr<flashgg::Photon> &, const std::vector<edm::Ptr<reco::Vertex> > &,
+                                              const VertexCandidateMap &,
+                                              const std::vector<edm::Ptr<reco::Conversion> > &,
+                                              const std::vector<edm::Ptr<reco::Conversion> > &,
+                                              const math::XYZPoint &,
+                                              bool
+                                              //					  const Parameters_Selector_Type&,
+                                              //                                          const float&
+                                            )  = 0;
+        virtual std::vector<std::vector<float>> select_h3g( const edm::Ptr<flashgg::Photon> &, const edm::Ptr<flashgg::Photon> &,
+                                              const edm::Ptr<flashgg::Photon> &, const std::vector<edm::Ptr<reco::Vertex> > &,
+                                              const VertexCandidateMap &,
+                                              const std::vector<edm::Ptr<reco::Conversion> > &,
+                                              const std::vector<edm::Ptr<reco::Conversion> > &,
+                                              const math::XYZPoint &,
+                                              bool
+                                              //					  const Parameters_Selector_Type&,
+                                              //                                          const float&
+                                            )  = 0;
+        virtual std::vector<std::vector<float>> select_h4g( const edm::Ptr<flashgg::Photon> &,
+                                              const edm::Ptr<flashgg::Photon> &,const edm::Ptr<flashgg::Photon> &,const edm::Ptr<flashgg::Photon> &, const std::vector<edm::Ptr<reco::Vertex> > &,
+                                              const VertexCandidateMap &,
+                                              const std::vector<edm::Ptr<reco::Conversion> > &,
+                                              const std::vector<edm::Ptr<reco::Conversion> > &,
+                                              const math::XYZPoint &,
+                                              bool
+                                              //					  const Parameters_Selector_Type&,
+                                              //                                          const float&
+                                            )  = 0;
+
         const std::string &name() const { return _selectorName; };
 
         virtual void writeInfoFromLastSelectionTo( flashgg::DiPhotonCandidate & ) = 0;
         virtual void writeInfoFromLastSelectionTo( flashgg::PhotonJetCandidate & ) = 0;
+        virtual void writeInfoFromLastSelectionTo( flashgg::H4GCandidate & ) = 0;
 
     private:
         const std::string _selectorName;
@@ -73,4 +106,3 @@ typedef edmplugin::PluginFactory< flashgg::VertexSelectorBase* ( const edm::Para
 // c-basic-offset:4
 // End:
 // vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
-

@@ -45,14 +45,14 @@ all_variables = var.pho_variables + var.dipho_variables + var.tp_variables
 
 from flashgg.Taggers.h4gCandidateDumper_cfi import h4gCandidateDumper
 process.h4gCandidateDumper = h4gCandidateDumper.clone()
-process.h4gCandidateDumper.dumpTrees = False
-process.h4gCandidateDumper.dumpWorkspace = True
+process.h4gCandidateDumper.dumpTrees = True
+process.h4gCandidateDumper.dumpWorkspace = False
 
 cfgTools.addCategories(process.h4gCandidateDumper,
                         [
                             ("Reject", "", -1),
-                            #("4photons","phoVector.size() > 3 "),
-                             ("4photons","phoVector.size() > 3 && phoP4Corrected[0].pt() > 30 && phoP4Corrected[1].pt() > 20 && phoP4Corrected[2].pt() > 10 && phoP4Corrected[3].pt() > 10 && abs(phoP4Corrected[0].eta()) < 2.5 && abs(phoP4Corrected[1].eta()) < 2.5 && abs(phoP4Corrected[2].eta()) < 2.5 && abs(phoP4Corrected[3].eta()) < 2.5 && pho1_MVA > -0.9 && pho2_MVA > -0.9 && pho3_MVA > -0.6 && pho4_MVA > -0.6 && h4gFourVect.mass() > 100 && h4gFourVect.mass() < 180", 0),
+                            ("4photons","phoVector.size() > 3 "),
+                             #("4photons","phoVector.size() > 3 && phoP4Corrected[0].pt() > 30 && phoP4Corrected[1].pt() > 20 && phoP4Corrected[2].pt() > 10 && phoP4Corrected[3].pt() > 10 && abs(phoP4Corrected[0].eta()) < 2.5 && abs(phoP4Corrected[1].eta()) < 2.5 && abs(phoP4Corrected[2].eta()) < 2.5 && abs(phoP4Corrected[3].eta()) < 2.5 && pho1_MVA > -0.9 && pho2_MVA > -0.9 && pho3_MVA > -0.6 && pho4_MVA > -0.6 && h4gFourVect.mass() > 100 && h4gFourVect.mass() < 180", 0),
                             ("3photons","phoVector.size() == 3", 0),
                             ("2photons","phoVector.size() == 2", 0)
                         ],
