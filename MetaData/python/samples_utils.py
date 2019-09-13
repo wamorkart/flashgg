@@ -489,7 +489,7 @@ class SamplesManager(object):
         
     def getParentInfo(self, dset_type, dsetName):
         parent_n_info = 'nlumis' if dset_type=='data' else 'nevents'
-        parent_dset = das_query("parent dataset=%s instance=prod/phys03" % dsetName)['data'][0]['blah'][0]['name']
+        parent_dset = das_query("parent dataset=%s instance=prod/phys03" % dsetName)['data'][0]['parent'][0]['name']
         parent_info = das_query("dataset dataset=%s instance=prod/phys03" % parent_dset)
         try:
             parent_info = parent_info['data'][-1]['dataset'][0][parent_n_info]
