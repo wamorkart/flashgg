@@ -154,6 +154,7 @@ class JobConfig(object):
             self.pu_distribs["PUMoriond17"] = mix_Moriond17.input.nbPileupEvents
             self.pu_distribs["upgrade2017"] = mix_Moriond17.input.nbPileupEvents
             self.pu_distribs["PUM17"] = mix_Moriond17.input.nbPileupEvents  ## for h4gamma 2016 samples
+
         except Exception:
             print "Failed to load Moriond17 mixing, this is expected in earlier releases"
             
@@ -390,7 +391,6 @@ class JobConfig(object):
             for s in secondary_files:
                 runs_and_lumis[str(s)] = {lumi['run_number'] : lumi['lumi_section_num'] for lumi in das_query("lumi file=%s instance=prod/phys03" % s,
                                                                                                               cmd='dasgoclient --dasmaps=./')['data'][0]['lumi']}
-
         for f in files:
             if len(f.split(":",1))>1:
                 flist.append(str(f))
@@ -410,7 +410,6 @@ class JobConfig(object):
                     for run in matched_runs:                        
                         if any(lumi in f_runs_and_lumis[run] for lumi in s_runs_and_lumis[run]):
                             sflist.append(s_name)
-                
         if len(flist) > 0:
             ## fwlite
             if isFwlite:
