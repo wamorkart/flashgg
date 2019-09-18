@@ -153,6 +153,7 @@ class JobConfig(object):
             self.pu_distribs["Summer16"] = mix_Moriond17.input.nbPileupEvents
             self.pu_distribs["PUMoriond17"] = mix_Moriond17.input.nbPileupEvents
             self.pu_distribs["upgrade2017"] = mix_Moriond17.input.nbPileupEvents
+            self.pu_distribs["PUM17"] = mix_Moriond17.input.nbPileupEvents  ## for h4gamma 2016 samples
         except Exception:
             print "Failed to load Moriond17 mixing, this is expected in earlier releases"
             
