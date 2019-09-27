@@ -132,6 +132,7 @@ class MicroAODCustomize(object):
                 self.customizeDataMuons(process)
         elif "sig" in self.processType.lower():
             self.customizeSignal(process)
+            print customize.datasetName.lower()
             if "tth" in customize.datasetName.lower():
                 self.customizeTTH(process)
             elif "vh" in customize.datasetName.lower() or "wmh" in customize.datasetName.lower() or "wph" in customize.datasetName.lower() or "wh" in customize.datasetName.lower() or "zh" in customize.datasetName.lower():
@@ -144,6 +145,8 @@ class MicroAODCustomize(object):
                 self.customizeTH(process)
             elif "hh" in customize.datasetName.lower():
                 self.customizeHH(process)
+            elif "susygluglutohtoaa" in customize.datasetName.lower():
+                self.customizeH4G(process)
             else:
                 raise Exception,"processType=sig but datasetName does not contain recognized production mechanism - see MicroAODCustomize.py"
         if self.processType == "background" or self.processType == "bkg":
@@ -532,7 +535,8 @@ class MicroAODCustomize(object):
     def customizeHH(self,process):
         print "using HH sample, treating them as signals"
 
-
+    def customizeH4G(self,process):
+        print "usign H4Gamma samples, treating them as signals"
 
     def customizeTH(self,process):
         print "customizeTH"
