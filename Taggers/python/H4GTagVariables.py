@@ -74,6 +74,8 @@ pho_variables = [
       "pho23_phi               := ? phoP4Corrected.size() > 2 ? h4gPho23.phi() : -999.",
       "pho24_phi               := ? phoP4Corrected.size() > 3 ? h4gPho24.phi() : -999.",
       "pho34_phi               := ? phoP4Corrected.size() > 3 ? h4gPho34.phi() : -999.",
+      "isSR                    := isSR",
+      "isCR                    := isCR"
     ]
 
 dipho_variables = [
@@ -96,7 +98,8 @@ dipho_variables = [
     "dp2_p2i                 := h4gDiPho2_iPho2",
     "dp1_PtoverMass          := h4gDiPho1.mass()/h4gDiPho1.pt()",
     "dp2_PtoverMass          := h4gDiPho2.mass()/h4gDiPho2.pt()",
-    "absCosThetaStar_CS      := abs(getCosThetaStar_CS(6500))",
+    "absCosThetaStar_CS      := abs(getCosThetaStar_CS())",
+    "absCosThetaStar_CS_old  := abs(getCosThetaStar_CS_old(6500))",
     "absCosTheta_pho_a1      := abs(CosThetaAngles()[1])",
     "absCosTheta_pho_a2      := abs(CosThetaAngles()[0])"
 ]

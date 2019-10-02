@@ -90,7 +90,7 @@ namespace flashgg {
     const float &ptBal() const { return Vector_[2][bdtVtx_index_]; };
     const float &pullConv() const { return Vector_[3][bdtVtx_index_]; };
     const std::vector<std::vector<float>> &test() const { return Vector_; };
-    const float &vtxProbMVA() const { return vtxProbMVA_; }; 
+    const float &vtxProbMVA() const { return vtxProbMVA_; };
     const float &MVA0() const { return MVA0_; };
     const float &MVA1() const { return MVA1_; };
     const float &MVA2() const { return MVA2_; };
@@ -132,10 +132,13 @@ namespace flashgg {
     const reco::Candidate::LorentzVector& h4gPho24() const { return pho24_; };
     const reco::Candidate::LorentzVector& h4gPho34() const { return pho34_; };
     const reco::Candidate::LorentzVector& h4gFourVect() const { return tp_; };
-    float getCosThetaStar_CS(float ebeam) const;
+    const int& isSR() const { return isSR_;};
+    const int& isCR() const { return isCR_;};
+    float getCosThetaStar_CS() const;
+    float getCosThetaStar_CS_old(float ebeam) const;
     std::vector<float> CosThetaAngles() const;
     float HelicityCosTheta( TLorentzVector Booster, TLorentzVector Boosted) const;
-
+    std::vector<flashgg::Photon> PhotonBasicSelection( std::vector<flashgg::Photon>) const;
 
   private:
 
@@ -196,6 +199,8 @@ namespace flashgg {
     reco::Candidate::LorentzVector pho24_;
     reco::Candidate::LorentzVector pho34_;
     reco::Candidate::LorentzVector tp_;
+    int isSR_;
+    int isCR_;
 
   };
   typedef std::vector<H4GCandidate> H4GCandidateCollection;

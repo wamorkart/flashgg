@@ -74,13 +74,17 @@ pho14_ (),
 pho23_ (),
 pho24_ (),
 pho34_ (),
-tp_ ()
+tp_ (),
+isSR_(),
+isCR_()
 {}
 
   H4GCandidate::~H4GCandidate() {}
   H4GCandidate::H4GCandidate( std::vector<flashgg::Photon> phoVector, std::vector<edm::Ptr<reco::Vertex>> Vertices, std::vector<edm::Ptr<reco::Vertex>> slim_Vertices, edm::Ptr<reco::Vertex> vertex_diphoton, edm::Ptr<reco::Vertex> vertex_bdt, reco::GenParticle::Point genVertex, math::XYZPoint BSPoint, std::vector <edm::Ptr<flashgg::DiPhotonCandidate>> diPhoPtrs, std::vector<std::vector<float>> Vector, float MVA0, float MVA1, float MVA2, float dZ1, float dZ2, float dZtrue, int hgg_index, int trueVtx_index, int rndVtx_index, int bdtVtx_index, float tp_pt, float nVertices, float nConv, TMVA::Reader *VertexProbMva):
   phoVector_(phoVector), Vertices_(Vertices), slim_Vertices_(slim_Vertices),vertex_diphoton_(vertex_diphoton), vertex_bdt_(vertex_bdt), genVertex_(genVertex), BSPoint_(BSPoint), diPhoPtrs_(diPhoPtrs), Vector_(Vector), MVA0_(MVA0), MVA1_(MVA1), MVA2_(MVA2), dZ1_(dZ1), dZ2_(dZ2), dZtrue_(dZtrue), hgg_index_(hgg_index), trueVtx_index_(trueVtx_index), rndVtx_index_(rndVtx_index), bdtVtx_index_(bdtVtx_index), tp_pt_(tp_pt), nVertices_(nVertices), nConv_(nConv), VertexProbMva_(VertexProbMva)
   {
+    isSR_ = 0;
+    isCR_ = 0;
     int random_vtx = rand() % slim_Vertices_.size();
     Vertex_random_ = slim_Vertices_[random_vtx];
 
@@ -213,6 +217,31 @@ tp_ ()
       phoP4Corrected2_ = phoP4Corrected_[dp1_ipho2_];
       phoP4Corrected3_ = phoP4Corrected_[dp2_ipho1_];
       phoP4Corrected4_ = phoP4Corrected_[dp2_ipho2_];
+
+      vector<flashgg::Photon> selPhotons;
+      selPhotons = PhotonBasicSelection (phoP4Corrected_);
+      vector<flashgg::Photon> IDPhotons;
+      std::vector<double> _PhotonID = {-0.9,-0.9,0.6,0.6};
+      if (selPhotons.size() == 4)
+         {
+           std::vector<flashgg::Photon> goodIDPhotons;
+           for (unsigned int phoIndex = 0; phoIndex < selPhotons.size(); phoIndex++)
+           {
+             flashgg::Photon photon = selPhotons[phoIndex];
+             if (photon.phoIdMvaDWrtVtx(Vertices_[bdtVtx_index]) < _PhotonID[phoIndex]) continue;
+             goodIDPhotons.push_back(photon);
+           }
+           if (goodIDPhotons.size() == 4)
+           {
+             isSR_=1;
+             isCR_=0;
+            }
+           if (goodIDPhotons.size() == 2)
+           {
+            isCR_=1;
+            isSR_=0;
+            }
+          }
     }
 
     if (phoP4Corrected_.size() == 2)
@@ -252,7 +281,37 @@ tp_ ()
 
   }
 
-  float H4GCandidate::getCosThetaStar_CS(float ebeam) const {
+  // good photon selection
+
+  std::vector<flashgg::Photon> H4GCandidate::PhotonBasicSelection (std::vector<flashgg::Photon> phoCol) const
+  {
+    std::vector<double> _PhotonPt = {30.,18.,10.,10};
+    std::vector<flashgg::Photon> goodPhotons;
+    for (unsigned int phoIndex = 0; phoIndex < phoCol.size(); phoIndex++)
+    {
+      flashgg::Photon photon = phoCol[phoIndex];
+      if (photon.pt() < _PhotonPt[phoIndex] || abs(photon.eta() > 2.5 || photon.passElectronVeto() !=1 )) continue;
+      goodPhotons.push_back(photon);
+    }
+    return goodPhotons;
+  }
+
+  float H4GCandidate::getCosThetaStar_CS() const {
+
+    reco::Candidate::LorentzVector h_lor = dp1_ + dp2_;
+    TLorentzVector h;
+    h.SetPxPyPzE(h_lor.Px(),h_lor.Py(),h_lor.Pz(),h_lor.E()) ;
+
+    reco::Candidate::LorentzVector a1_lor = dp1_;
+    TLorentzVector a_1;
+    a_1.SetPxPyPzE(a1_lor.Px(),a1_lor.Py(),a1_lor.Pz(),a1_lor.E()) ;
+
+    a_1.Boost(-h.BoostVector());
+
+    return a_1.CosTheta();
+  }
+
+  float H4GCandidate::getCosThetaStar_CS_old(float ebeam) const {
     TLorentzVector p1, p2;
     p1.SetPxPyPzE(0, 0,  ebeam, ebeam);
     p2.SetPxPyPzE(0, 0, -ebeam, ebeam);

@@ -53,7 +53,10 @@ FlashggH4GCandidate = cms.EDProducer("FlashggH4GCandidateProducer",
                                      singlelegsigma2Tid      = cms.double(0.892751),
                                      singlelegsigma2Tec      = cms.double(1.56638),
                                      # MaxJetCollections       = cms.uint32(maxJetCollections)
-
+                                     ptCuts = cms.vdouble(30.0,18.0,10.0,10.0),
+                                     etaCuts = cms.double(2.5),
+                                     mvaCuts = cms.vdouble(-0.9,-0.9,0.6,0.6),
+                                     hMassWindow = cms.vdouble(100,180)
 
                                      )
 flashggH4GTagSequence = cms.Sequence( flashggH4GTag )
