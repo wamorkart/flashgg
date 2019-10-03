@@ -61,7 +61,7 @@ from flashgg.Taggers.h4gCandidateDumper_cfi import h4gCandidateDumper
 
 process.h4gCandidateDumper_vtxBDT_sig = h4gCandidateDumper.clone()
 process.h4gCandidateDumper_vtxBDT_sig.dumpTrees = True
-process.h4gCandidateDumper_vtxBDT_sig.dumpWorkspace = False
+process.h4gCandidateDumper_vtxBDT_sig.dumpWorkspace = True
 
 
 cfgTools.addCategories(process.h4gCandidateDumper_vtxBDT_sig,
@@ -108,7 +108,7 @@ cfgTools.addCategories(process.h4gCandidateDumper_vtxProb,
 
 process.h4gCandidateDumper = h4gCandidateDumper.clone()
 process.h4gCandidateDumper.dumpTrees = True
-process.h4gCandidateDumper.dumpWorkspace = False
+process.h4gCandidateDumper.dumpWorkspace = True
 
 cfgTools.addCategories(process.h4gCandidateDumper,
                        [
@@ -121,46 +121,6 @@ cfgTools.addCategories(process.h4gCandidateDumper,
                         variables = all_variables,
                         histograms=[]
                         )
-# from flashgg.MetaData.JobConfig import customize
-
-# files = []
-# secondary_files = []
-
-# for d in customize.inputdataset:
-#     print('>> Creating list of files from: \n'+d)
-#     # for instance in ['global', 'phys03']:
-#     for instance in ['phys03']:
-#         print "-query='file dataset="+d+" instance=prod/"+instance+"'"
-#         query = "-query='file dataset="+d+" instance=prod/"+instance+"'"
-#         print query
-#         print 'dasgoclient '+query+' -limit=0'
-#         lsCmd = subprocess.Popen(['dasgoclient '+query+' -limit=0'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, close_fds=True)
-#         print lsCmd
-#         str_files, err = lsCmd.communicate()
-#         print str_files
-#         print err
-#         for ifile in str_files.split("\n"):
-#             print 'root://cms-xrd-global.cern.ch/'+ifile
-#         files.extend(['root://cms-xrd-global.cern.ch/'+ifile for ifile in str_files.split("\n")])
-#         files.pop()
-#         print files
-#         for file in files:
-#             print "file = ", file
-#             print file[len('root://cms-xrd-global.cern.ch/'):]
-#             query = "-query='parent file="+file[len('root://cms-xrd-global.cern.ch/'):]+" instance=prod/"+instance+"'"
-#             lsCmd = subprocess.Popen(['dasgoclient '+query+' -limit=0'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-#             str_files, err = lsCmd.communicate()
-#             secondary_files.extend(['root://cms-xrd-global.cern.ch/'+ifile for ifile in str_files.split("\n")])
-#             secondary_files.pop()
-
-# for f in files:
-#     print f
-#     print " "
-#
-# for s in secondary_files:
-#     print s
-#     print " "
-# process.source.secondaryFileNames = secFileList
 process.source = cms.Source ("PoolSource",
                              # fileNames = cms.untracked.vstring(files),
                              # secondaryFileNames = cms.untracked.vstring(secondary_files)
