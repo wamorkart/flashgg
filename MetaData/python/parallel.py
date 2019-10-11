@@ -249,7 +249,9 @@ class WorkNodeJob(object):
         script += 'if [[ $retval == 0 ]]; then\n'
         script += '    errors=""\n'
         script += '    for file in $(find -name %s); do\n' % " -or -name ".join(self.stage_patterns)
-        script += '        %s $file %s\n' % ( self.stage_cmd, self.stage_dest )
+        #script += '        %s $file %s\n' % ( self.stage_cmd, self.stage_dest )
+        filesOutPath = '/eos/user/t/twamorka/H4Gamma_2017Ntuples/'
+        script += '%s $file %s\n' % ( self.stage_cmd, filesOutPath )
         script += '        if [[ $? != 0 ]]; then\n'
         script += '            errors="$errors $file($?)"\n'
         script += '        fi\n'
@@ -264,7 +266,6 @@ class WorkNodeJob(object):
         # get specific epilogue needed by the runner
         # this can be used, for example, to propagate $retval by touching a file
         script += self.runner.epilogue("cp -pv",os.path.abspath(self.job_outdir))+"\n"
-
         script += 'exit $retval\n'
         script += '\n'
         
