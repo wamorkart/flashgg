@@ -4,10 +4,14 @@ from flashggH4GTag_cfi import flashggH4GTag
 
 
 FlashggH4GCandidate = cms.EDProducer("FlashggH4GCandidateProducer",
+                                     #PhotonTag              = cms.InputTag('flashggPhotons'),
                                      PhotonTag              = cms.InputTag('flashggRandomizedPhotons'),
-                                     DiPhotonTag            = cms.InputTag('flashggDiPhotons'),
+                                     DiPhotonTag            = cms.InputTag('flashggPreselectedDiPhotons'),
+                                     DiPhotonTag2           = cms.InputTag('flashggDiPhotonSystematics'),
                                      VertexTag              = cms.InputTag('offlineSlimmedPrimaryVertices'),
                                      GenParticleTag         = cms.InputTag('flashggPrunedGenParticles'),
+                                     GenParticleTag2        = cms.InputTag('prunedGenParticles'),
+                                     GenTag                 = cms.InputTag('generator'),
                                      beamSpotTag            = cms.InputTag('offlineBeamSpot'),
                                      conversionTag          = cms.InputTag('reducedEgamma', 'reducedConversions'),
                                      conversionTagSingleLeg = cms.InputTag("reducedEgamma","reducedSingleLegConversions"),
@@ -57,6 +61,7 @@ FlashggH4GCandidate = cms.EDProducer("FlashggH4GCandidateProducer",
                                      etaCuts = cms.double(2.5),
                                      mvaCuts = cms.vdouble(-0.9,-0.9,0.6,0.6),
                                      hMassWindow = cms.vdouble(100,180)
+                                     # FLASHfilters = cms.InputTag('TriggerResults::FLASHggMicroAOD')
 
                                      )
 flashggH4GTagSequence = cms.Sequence( flashggH4GTag )

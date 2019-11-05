@@ -1,3 +1,4 @@
+import importlib
 import subprocess
 import FWCore.ParameterSet.Config as cms
 import os
@@ -6,7 +7,14 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 from flashgg.Taggers.flashggH4GCandidate_cfi import FlashggH4GCandidate
 from flashgg.Taggers.flashggPreselectedDiPhotons_cfi import flashggPreselectedDiPhotons
 from flashgg.Taggers.flashggPreselectedDiPhotons_LowMass_cfi import flashggPreselectedDiPhotonsLowMass
+from flashgg.Taggers.flashggPreselectedDiPhotons_cfi_LowMass2017 import flashggPreselectedDiPhotons_LowMass2017
 import flashgg.Taggers.dumperConfigTools as cfgTools
+from flashgg.MetaData.MetaConditionsReader import *
+from flashgg.Taggers.flashggUpdatedIdMVADiPhotons_cfi import flashggUpdatedIdMVADiPhotons
+
+from flashgg.Systematics.flashggDiPhotonSystematics_cfi import flashggDiPhotonSystematics
+
+
 
 process = cms.Process("FLASHggH4GTest")
 
@@ -37,18 +45,47 @@ customize.options.register('isCondor',
                  VarParsing.VarParsing.varType.bool,
                  "isCondor")
 
+customize.options.register('year',
+                 '',
+                 VarParsing.VarParsing.multiplicity.singleton,
+                 VarParsing.VarParsing.varType.string,
+                 "year")
+
+customize.options.register('isSignal',
+                 '',
+                 VarParsing.VarParsing.multiplicity.singleton,
+                 VarParsing.VarParsing.varType.int,
+                 "isSignal")
+
 
 from flashgg.MetaData.JobConfig import customize
 customize.parse()
 
+
+
+###--Scales and smearing stuff
+customize.metaConditions = MetaConditionsReader(customize.metaConditions)
+
 ###---H4G candidates production
 process.FlashggH4GCandidate = FlashggH4GCandidate.clone()
-process.FlashggH4GCandidate.idSelection = cms.PSet(
-        rho = flashggPreselectedDiPhotonsLowMass.rho,
-        cut = flashggPreselectedDiPhotonsLowMass.cut,
-        variables = flashggPreselectedDiPhotonsLowMass.variables,
-        categories = flashggPreselectedDiPhotonsLowMass.categories
-        )
+
+if (customize.year == "2016"):
+    print "2016 diphoton ID selection"
+    process.FlashggH4GCandidate.idSelection = cms.PSet(
+            rho = flashggPreselectedDiPhotonsLowMass.rho,
+            cut = flashggPreselectedDiPhotonsLowMass.cut,
+            variables = flashggPreselectedDiPhotonsLowMass.variables,
+            categories = flashggPreselectedDiPhotonsLowMass.categories
+            )
+elif (customize.year == "2017"):
+        print "2017 diphoton ID selection"
+        process.FlashggH4GCandidate.idSelection = cms.PSet(
+                rho = flashggPreselectedDiPhotons_LowMass2017.rho,
+                cut = flashggPreselectedDiPhotons_LowMass2017.cut,
+                variables = flashggPreselectedDiPhotons_LowMass2017.variables,
+                categories = flashggPreselectedDiPhotons_LowMass2017.categories
+                )
+
 
 ###--- get the variables
 import flashgg.Taggers.H4GTagVariables as var
@@ -108,7 +145,7 @@ cfgTools.addCategories(process.h4gCandidateDumper_vtxProb,
 
 process.h4gCandidateDumper = h4gCandidateDumper.clone()
 process.h4gCandidateDumper.dumpTrees = True
-process.h4gCandidateDumper.dumpWorkspace = True
+process.h4gCandidateDumper.dumpWorkspace = False
 
 cfgTools.addCategories(process.h4gCandidateDumper,
                        [
@@ -121,13 +158,33 @@ cfgTools.addCategories(process.h4gCandidateDumper,
                         variables = all_variables,
                         histograms=[]
                         )
-process.source = cms.Source ("PoolSource",
-                             # fileNames = cms.untracked.vstring(files),
-                             # secondaryFileNames = cms.untracked.vstring(secondary_files)
-                             fileNames = cms.untracked.vstring(
-"root://eoscms.cern.ch//eos/cms/store/group/phys_higgs/HiggsExo/H4Gamma/MicroAOD/H4G_Jun7/v0/SUSYGluGluToHToAA_AToGG_M-60_TuneCUETP8M1_13TeV_pythia8/Test_jun7-R2S16MAODv2-PUM17_GT/170607_180035/0000/myMicroAODOutputFile_9.root"),
-                             secondaryFileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/mc/RunIISummer16MiniAODv2/SUSYGluGluToHToAA_AToGG_M-60_TuneCUETP8M1_13TeV_pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/C85D3FF6-84C8-E611-B11D-D4AE526A0B29.root")
-)
+
+if (customize.year == "2016"):
+    process.source = cms.Source ("PoolSource",
+                             # fileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/user/spigazzi/flashgg/Era2016_RR-17Jul2018_v2/legacyRun2FullV1/GluGluToHHTo2B2G_node_SM_13TeV-madgraph/Era2016_RR-17Jul2018_v2-legacyRun2FullV1-v0-RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/190605_224652/0000/myMicroAODOutputFile_2.root"),
+                             # secondaryFileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch///store/mc/RunIISummer16MiniAODv3/GluGluToHHTo2B2G_node_SM_13TeV-madgraph/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v2/110000/CA97CD76-CD37-E911-ADBD-0090FAA57E64.root")
+            fileNames = cms.untracked.vstring("root://eoscms.cern.ch//eos/cms/store/group/phys_higgs/HiggsExo/H4Gamma/MicroAOD/H4G_Jun7/v0/SUSYGluGluToHToAA_AToGG_M-60_TuneCUETP8M1_13TeV_pythia8/Test_jun7-R2S16MAODv2-PUM17_GT/170607_180035/0000/myMicroAODOutputFile_9.root"),
+            secondaryFileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/mc/RunIISummer16MiniAODv2/SUSYGluGluToHToAA_AToGG_M-60_TuneCUETP8M1_13TeV_pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/C85D3FF6-84C8-E611-B11D-D4AE526A0B29.root")
+            #fileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/user/spigazzi/flashgg/Era2016_RR-17Jul2018_v2/legacyRun2FullV1/DiPhotonJetsBox_M40_80-Sherpa/Era2016_RR-17Jul2018_v2-legacyRun2FullV1-v0-RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/190715_222009/0000/myMicroAODOutputFile_62.root"),
+            #secondaryFileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/mc/RunIISummer16MiniAODv3/DiPhotonJetsBox_M40_80-Sherpa/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v1/60000/36573481-50CD-E811-95FB-0242AC130004.root")
+            #fileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/user/spigazzi/flashgg/Era2016_RR-17Jul2018_v2/legacyRun2FullV1/DoubleEG/Era2016_RR-17Jul2018_v2-legacyRun2FullV1-v0-Run2016B-17Jul2018_ver2-v1/190605_220256/0000/myMicroAODOutputFile_932.root"),
+            #secondaryFileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/data/Run2016B/DoubleEG/MINIAOD/17Jul2018_ver2-v1/20000/D03AED69-308D-E811-AFFC-008CFA197CD0.root","root://cms-xrd-global.cern.ch//store/data/Run2016B/DoubleEG/MINIAOD/17Jul2018_ver2-v1/20000/FCFDB07D-378D-E811-89A0-008CFAE45144.root")
+            )
+
+
+elif (customize.year == "2017"):
+      process.source = cms.Source ("PoolSource",
+              # print "reading 2017 files"
+              fileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/group/phys_higgs/HiggsExo/H4Gamma/H4G_2017samples_producedwithBkgCustomization/H4G_2017_27Sep2019/RunIIFall18-4_0_0-119-g2d54185d/SUSYGluGluToHToAA_AToGG_M-50_TuneCP5_13TeV_pythia8/H4G_2017_27Sep2019-RunIIFall18-4_0_0-119-g2d54185d-v0-RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/190927_153802/0000/myMicroAODOutputFile_2.root"),
+              secondaryFileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/mc/RunIIFall17MiniAODv2/SUSYGluGluToHToAA_AToGG_M-50_TuneCP5_13TeV_pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/50000/E2F1936C-FE74-E811-96F8-0CC47A2AECFA.root")
+              )
+                            #fileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/user/spigazzi/flashgg/Era2016_RR-17Jul2018_v2/legacyRun2FullV1/DoubleEG/Era2016_RR-17Jul2018_v2-legacyRun2FullV1-v0-Run2016B-17Jul2018_ver2-v1/190605_220256/0000/myMicroAODOutputFile_75.root"),
+                            #secondaryFileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/data/Run2016B/DoubleEG/MINIAOD/17Jul2018_ver2-v1/50000/583DC595-668C-E811-B6FB-008CFA1974A4.root")
+                            # fileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/user/spigazzi/flashgg/Era2016_RR-17Jul2018_v2/legacyRun2FullV1/DoubleEG/Era2016_RR-17Jul2018_v2-legacyRun2FullV1-v0-Run2016B-17Jul2018_ver2-v1/190605_220256/0000/myMicroAODOutputFile_932.root"),
+                            # secondaryFileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/data/Run2016B/DoubleEG/MINIAOD/17Jul2018_ver2-v1/20000/D03AED69-308D-E811-AFFC-008CFA197CD0.root","root://cms-xrd-global.cern.ch//store/data/Run2016B/DoubleEG/MINIAOD/17Jul2018_ver2-v1/20000/FCFDB07D-378D-E811-89A0-008CFAE45144.root")
+                            #fileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/group/phys_higgs/HiggsExo/H4Gamma/H4G_2016samples_producedwithBkgCustomization/H4GandHH4G_2016_27Sep2019/RunIIFall18-4_0_0-119-g2d54185d/SUSYGluGluToHToAA_AToGG_M-5_TuneCUETP8M1_13TeV_pythia8/H4GandHH4G_2016_27Sep2019-RunIIFall18-4_0_0-119-g2d54185d-v0-RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/190927_175857/0001/myMicroAODOutputFile_1052.root"),
+                            #secondaryFileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/mc/RunIISummer16MiniAODv3/SUSYGluGluToHToAA_AToGG_M-5_TuneCUETP8M1_13TeV_pythia8/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v2/110000/30D9D91B-FC3C-E911-A438-141877412793.root")
+
 
 process.TFileService = cms.Service("TFileService",
                                    fileName = cms.string("test.root"),
@@ -140,12 +197,20 @@ if customize.inputFiles:
 
 # Require low mass diphoton triggers
 from HLTrigger.HLTfilters.hltHighLevel_cfi import hltHighLevel
-process.hltHighLevel= hltHighLevel.clone(HLTPaths = cms.vstring(
+if (customize.year == "2016"):
+   print "applying 2016 triggers"
+   process.hltHighLevel= hltHighLevel.clone(HLTPaths = cms.vstring(
                                                               # "HLT_Diphoton30_18_R9Id_OR_IsoCaloId_AND_HE_R9Id_Mass90_v*",
                                                               # "HLT_Diphoton30_18_R9Id_OR_IsoCaloId_AND_HE_R9Id_Mass90", ##--std Hgg diphoton trigger
                                                               "HLT_Diphoton30PV_18PV_R9Id_AND_IsoCaloId_AND_HE_R9Id_DoublePixelVeto_Mass55_v*", ##--low mass trigger
                                                               "HLT_Diphoton30EB_18EB_R9Id_OR_IsoCaloId_AND_HE_R9Id_DoublePixelVeto_Mass55_v*"   ##--low mass diphoton trigger
                                                                ))
+
+elif (customize.year == "2017"):
+     print "applying 2017 triggers"
+     process.hltHighLevel = hltHighLevel.clone(HLTPaths = cms.vstring(
+                                                                "HLT_Diphoton30PV_18PV_R9Id_AND_IsoCaloId_AND_HE_R9Id_PixelVeto_Mass55*"
+                                                                ))
 process.options = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
 
 #############   Geometry  ###############
@@ -159,15 +224,68 @@ process.load("Configuration.StandardSequences.Reconstruction_cff")
 process.eeBadScFilter.EERecHitSource = cms.InputTag("reducedEgamma","reducedEERecHits") # Saved MicroAOD Collection (data only)
 
 process.dataRequirements = cms.Sequence()
-# process.dataRequirements += process.hltHighLevel
+# process.load("flashgg/Taggers/vtxH4GSequence")
+process.dataRequirements += process.hltHighLevel
 if customize.processId == "Data":
    process.dataRequirements += process.hltHighLevel
    process.dataRequirements += process.eeBadScFilter
 
 process.load("flashgg/Taggers/vtxH4GSequence")
+#
+process.flashggUpdatedIdMVADiPhotons = flashggUpdatedIdMVADiPhotons
+process.load("flashgg.Systematics."+customize.metaConditions["flashggDiPhotonSystematics"])
+# #
+sysmodule = importlib.import_module(
+    "flashgg.Systematics."+customize.metaConditions["flashggDiPhotonSystematics"])
+systModules2D = cms.VPSet()
+systModules = cms.VPSet()
+
+if customize.processId == "Data":
+    print'Data'
+    systModules.append(sysmodule.MCScaleHighR9EB_EGM)
+    systModules.append(sysmodule.MCScaleLowR9EB_EGM)
+    systModules.append(sysmodule.MCScaleHighR9EE_EGM)
+    systModules.append(sysmodule.MCScaleLowR9EE_EGM)
+    # systModules.append(sysmodule.MCScaleGain6EB_EGM)
+    # systModules.append(sysmodule.MCScaleGain1EB_EGM)
+
+    for module in systModules:
+        module.ApplyCentralValue = cms.bool(True)
+
+else:
+    print'Not Data'
+    systModules.append(sysmodule.MCScaleHighR9EB_EGM)
+    systModules.append(sysmodule.MCScaleLowR9EB_EGM)
+    systModules.append(sysmodule.MCScaleHighR9EE_EGM)
+    systModules.append(sysmodule.MCScaleLowR9EE_EGM)
+
+    systModules2D.append(sysmodule.MCSmearHighR9EE_EGM)
+    systModules2D.append(sysmodule.MCSmearLowR9EE_EGM)
+    systModules2D.append(sysmodule.MCSmearHighR9EB_EGM)
+    systModules2D.append(sysmodule.MCSmearLowR9EB_EGM)
+
+    for module in systModules:
+        module.ApplyCentralValue = cms.bool(False)
+
+print "I AM HERE 1"
+
+# process.flashggPreselectedDiPhotons = flashggPreselectedDiPhotons
+print "I AM HERE 2"
+process.flashggDiPhotonSystematics = flashggDiPhotonSystematics
+print "I AM HERE 3"
+process.flashggDiPhotonSystematics.src = "flashggPreselectedDiPhotons"
+print "I AM HERE 4"
+process.flashggDiPhotonSystematics.SystMethods = systModules
+print "I AM HERE 5"
+process.flashggDiPhotonSystematics.SystMethods2D = systModules2D
+print "I AM HERE 6"
 
 if customize.stdDumper:
    #standard dumper sequence
+   # process.path = cms.Path(process.vtxH4GSequence*process.dataRequirements*process.flashggDiPhotonSystematics*process.FlashggH4GCandidate*process.h4gCandidateDumper)
+
+   # process.path = cms.Path(process.vtxH4GSequence*process.flashggPreselectedDiPhotons*process.dataRequirements*process.flashggDiPhotonSystematics*process.FlashggH4GCandidate*process.h4gCandidateDumper)
+
    process.path = cms.Path(process.vtxH4GSequence*process.dataRequirements*process.FlashggH4GCandidate*process.h4gCandidateDumper)
 
 if customize.vtxBDTDumper:

@@ -50,6 +50,7 @@ BS_factor_HggVtx_(),
 BS_factor_RandomVtx_ (),
 BS_factor_BDTVtx_ (),
 phoP4Corrected_ (),
+phoP4Corrected_dp_(),
 phoP4Corrected1_ (),
 phoP4Corrected2_ (),
 phoP4Corrected3_ (),
@@ -76,12 +77,13 @@ pho24_ (),
 pho34_ (),
 tp_ (),
 isSR_(),
-isCR_()
+isCR_(),
+diphoPhotons_()
 {}
 
   H4GCandidate::~H4GCandidate() {}
-  H4GCandidate::H4GCandidate( std::vector<flashgg::Photon> phoVector, std::vector<edm::Ptr<reco::Vertex>> Vertices, std::vector<edm::Ptr<reco::Vertex>> slim_Vertices, edm::Ptr<reco::Vertex> vertex_diphoton, edm::Ptr<reco::Vertex> vertex_bdt, reco::GenParticle::Point genVertex, math::XYZPoint BSPoint, std::vector <edm::Ptr<flashgg::DiPhotonCandidate>> diPhoPtrs, std::vector<std::vector<float>> Vector, float MVA0, float MVA1, float MVA2, float dZ1, float dZ2, float dZtrue, int hgg_index, int trueVtx_index, int rndVtx_index, int bdtVtx_index, float tp_pt, float nVertices, float nConv, TMVA::Reader *VertexProbMva):
-  phoVector_(phoVector), Vertices_(Vertices), slim_Vertices_(slim_Vertices),vertex_diphoton_(vertex_diphoton), vertex_bdt_(vertex_bdt), genVertex_(genVertex), BSPoint_(BSPoint), diPhoPtrs_(diPhoPtrs), Vector_(Vector), MVA0_(MVA0), MVA1_(MVA1), MVA2_(MVA2), dZ1_(dZ1), dZ2_(dZ2), dZtrue_(dZtrue), hgg_index_(hgg_index), trueVtx_index_(trueVtx_index), rndVtx_index_(rndVtx_index), bdtVtx_index_(bdtVtx_index), tp_pt_(tp_pt), nVertices_(nVertices), nConv_(nConv), VertexProbMva_(VertexProbMva)
+  H4GCandidate::H4GCandidate( std::vector<flashgg::Photon> phoVector, std::vector<edm::Ptr<reco::Vertex>> Vertices, std::vector<edm::Ptr<reco::Vertex>> slim_Vertices, edm::Ptr<reco::Vertex> vertex_diphoton, edm::Ptr<reco::Vertex> vertex_bdt, reco::GenParticle::Point genVertex, math::XYZPoint BSPoint, std::vector <edm::Ptr<flashgg::DiPhotonCandidate>> diPhoPtrs, std::vector<std::vector<float>> Vector, float MVA0, float MVA1, float MVA2, float dZ1, float dZ2, float dZtrue, int hgg_index, int trueVtx_index, int rndVtx_index, int bdtVtx_index, float tp_pt, float nVertices, float nConv, TMVA::Reader *VertexProbMva, double genTotalWeight, std::vector<const flashgg::Photon*> diphoPhotons):
+  phoVector_(phoVector), Vertices_(Vertices), slim_Vertices_(slim_Vertices),vertex_diphoton_(vertex_diphoton), vertex_bdt_(vertex_bdt), genVertex_(genVertex), BSPoint_(BSPoint), diPhoPtrs_(diPhoPtrs), Vector_(Vector), MVA0_(MVA0), MVA1_(MVA1), MVA2_(MVA2), dZ1_(dZ1), dZ2_(dZ2), dZtrue_(dZtrue), hgg_index_(hgg_index), trueVtx_index_(trueVtx_index), rndVtx_index_(rndVtx_index), bdtVtx_index_(bdtVtx_index), tp_pt_(tp_pt), nVertices_(nVertices), nConv_(nConv), VertexProbMva_(VertexProbMva), genTotalWeight_(genTotalWeight),diphoPhotons_(diphoPhotons)
   {
     isSR_ = 0;
     isCR_ = 0;
@@ -151,6 +153,27 @@ isCR_()
         phoP4Corrected_.push_back(phoVector_[p]);
       }
     }
+
+    if (diphoPhotons_.size() > 0)
+    {
+      for (int dp = 0; dp < (int) diphoPhotons_.size(); dp++)
+      {
+        float sc_X_dp = diphoPhotons_[dp]->superCluster()->x();
+        float sc_Y_dp = diphoPhotons_[dp]->superCluster()->y();
+        float sc_Z_dp = diphoPhotons_[dp]->superCluster()->z();
+        math::XYZVector sc_Pos_dp( sc_X_dp, sc_Y_dp, sc_Z_dp );
+        math::XYZVector direction_dp = sc_Pos_dp - vtx_Pos;
+        math::XYZVector pho_dp = ( direction_dp.Unit() ) * ( diphoPhotons_[dp]->energy() );
+        math::XYZTLorentzVector corrected_p4_dp( pho_dp.x(), pho_dp.y(), pho_dp.z(), diphoPhotons_[dp]->energy() );
+        // auto diphotons_[dp] = LeadingJet.p4()
+        // diphoPhotons_[dp].setP4(corrected_p4_dp);
+        phoP4Corrected_dp_.push_back(diphoPhotons_[dp]->p4());
+      }
+    }
+    cout << phoP4Corrected_[0].pt() << "  " << phoP4Corrected_dp_[0].pt() << endl;
+    cout << phoP4Corrected_[1].pt() << "  " << phoP4Corrected_dp_[1].pt() << endl;
+    cout << phoP4Corrected_[2].pt() << "  " << phoP4Corrected_dp_[2].pt() << endl;
+    cout << phoP4Corrected_[3].pt() << "  " << phoP4Corrected_dp_[3].pt() << endl;
 
     pho1_MVA_ = phoP4Corrected_.size() > 0 ? phoP4Corrected_[0].phoIdMvaDWrtVtx(Vertices_[bdtVtx_index]) : -999;
     pho2_MVA_ = phoP4Corrected_.size() > 0 ? phoP4Corrected_[1].phoIdMvaDWrtVtx(Vertices_[bdtVtx_index]) : -999;
