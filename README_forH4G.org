@@ -24,15 +24,20 @@
    scram b -j 4
    #+END_EXAMPLE
 
-** Examples to run on RunII legacy test campaign:
+** Example to run locally:
+
+  #+BEGIN_EXAMPLE
+  voms-proxy-init -voms cms --valid 168:00
+  (for 2016): cmsRun Taggers/test/H4GTest_cfg.py stdDumper=1 isCondor=0 isSignal=1 year=2016 metaConditions=$CMSSW_BASE/src/flashgg/MetaData/data/MetaConditions/Era2016_RR-17Jul2018_v1.json
+
+  #+END_EXAMPLE
+
+** Examples to run using fggRunJobs:
    *Note: copying the proxy file to the working node is not yet supported when using HTCondor as bacth system. Therefore the user must set*
    *the =X509_USER_PROXY= environment variable and run with the =--no-copy-proxy= option*
    #+BEGIN_EXAMPLE
-   cd Systematics/test
    voms-proxy-init -voms cms --valid 168:00
    cp /tmp/MYPROXY ~/
    export X509_USER_PROXY=~/MYPROXY
-   fggRunJobs.py --load legacy_runII_v1_YEAR.json -d test_legacy_YEAR workspaceStd.py -n 300 -q workday --no-copy-proxy
+   fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Sig_Jsons/H4G_Signal_2016_newCatalog.json -D -P -n 500 -d outDir/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/Nov11/
    #+END_EXAMPLE
-
-   *Note: 2018 workflow is just a skeleton, only scales and smearings are known to be correct.*
