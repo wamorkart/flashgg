@@ -53,7 +53,6 @@ int mcTruthVertexIndex( const std::vector<edm::Ptr<reco::GenParticle> > &genPart
             break;
         }
     }
-
     int  ivMatch = 0;
     double dzMin = 999;
     for( unsigned int iv = 0; iv < vertices.size(); iv++ ) {
@@ -63,12 +62,10 @@ int mcTruthVertexIndex( const std::vector<edm::Ptr<reco::GenParticle> > &genPart
             dzMin   = dz;
         }
     }
-
-
-    if( dzMin < dzMatch ) { return ivMatch; }
-
-    return -1;
-}
+    if( dzMin < dzMatch ) { return ivMatch;
+    }
+     return -1;
+    }
 
 
 namespace flashgg {
@@ -113,9 +110,6 @@ namespace flashgg {
 
     EDGetTokenT<View<DiPhotonCandidate> > diphotonToken_;
     Handle<View<flashgg::DiPhotonCandidate> > diphotons;
-
-    EDGetTokenT<View<DiPhotonCandidate> > diphotonToken2_;
-    Handle<View<flashgg::DiPhotonCandidate> > diphotons2;
 
     EDGetTokenT<View<reco::Vertex> > vertexToken_;
     Handle<View<reco::Vertex> > vertex;
@@ -178,18 +172,13 @@ namespace flashgg {
     //----output collection
     auto_ptr<vector<H4GCandidate> > H4GColl_;
 
-    //--for cut FLow
-    // edm::InputTag genInfo_;
-    // edm::EDGetTokenT<GenEventInfoProduct> genInfoToken_;
 
   };
   //---constructors
   H4GCandidateProducer::H4GCandidateProducer( ):
   photonToken_(),
   diphotonToken_(),
-  diphotonToken2_(),
   genParticleToken_(),
-  // genInfoToken_(),
   beamSpotToken_(),
   conversionToken_(),
   conversionTokenSingleLeg_(),
@@ -202,7 +191,7 @@ namespace flashgg {
   H4GCandidateProducer::H4GCandidateProducer( const ParameterSet & pSet):
   photonToken_( consumes<View<Photon> >( pSet.getParameter<InputTag> ( "PhotonTag" ) ) ),
   diphotonToken_( consumes<View<DiPhotonCandidate> >( pSet.getParameter<InputTag> ( "DiPhotonTag" ) ) ),
-  diphotonToken2_( consumes<View<DiPhotonCandidate> >( pSet.getParameter<InputTag> ( "DiPhotonTag2" ) ) ),
+  // diphotonToken2_( consumes<View<DiPhotonCandidate> >( pSet.getParameter<InputTag> ( "DiPhotonTag2" ) ) ),
   vertexToken_( consumes<View<reco::Vertex> >( pSet.getParameter<InputTag> ( "VertexTag" ) ) ),
   genParticleToken_( consumes<View<reco::GenParticle> >( pSet.getParameter<InputTag> ( "GenParticleTag" ) ) ),
   genToken2_(consumes<View<pat::PackedGenParticle>> ( pSet.getParameter<InputTag> ( "GenParticleTag2" ) )),
@@ -250,8 +239,6 @@ namespace flashgg {
     mvaCuts_ = pSet.getParameter<std::vector<double>>("mvaCuts");
     hMassWindow_ = pSet.getParameter<std::vector<double>>("hMassWindow");
 
-    // genInfo_ = pSet.getUntrackedParameter<edm::InputTag>( "genInfo", edm::InputTag("generator") );
-    // genInfoToken_ = consumes<GenEventInfoProduct>( genInfo_ );
     cutFlow = fs->make<TH1F> ("cutFlow","Cut FLow",10,0,10);
 
     tree = new TTree("genTree"," gen level H4G Tree");
@@ -266,10 +253,8 @@ namespace flashgg {
   {
     event.getByToken( photonToken_, photons );
     event.getByToken( diphotonToken_, diphotons );
-    event.getByToken( diphotonToken2_, diphotons2 );
     event.getByToken( vertexToken_, vertex );
     event.getByToken( genParticleToken_, genParticle );
-    // event.getByToken( genInfoToken_, genInfo );
     event.getByToken( beamSpotToken_, recoBeamSpotHandle );
     event.getByToken( conversionToken_, conversionHandle );
     event.getByToken( conversionTokenSingleLeg_, conversionHandleSingleLeg );
@@ -299,9 +284,7 @@ namespace flashgg {
     vector<int>	pvVecNoTrue;
     int irand = -999;
     int randVtxIndexI = -999;
-
-    // if( ! event.isRealData() )
-    if (isSignal)
+    if( ! event.isRealData() )
     {
       Handle<View<reco::GenParticle> > genParticles;
       event.getByToken( genParticleToken_, genParticles );
@@ -329,16 +312,14 @@ namespace flashgg {
        genPhoton_p4.push_back(part.daughter(1)->p4());
        }
      }
-
     }
-    // cout << "truevtxindexi " << trueVtxIndexI << "irand " << irand << "randvtxindexi " << randVtxIndexI << endl;
-    // cout << genVertex.z() << endl;
+
+
     edm::Ptr<reco::Vertex> vertex_diphoton;
     edm::Ptr<reco::Vertex> vertex_bdt;
     //---at least one diphoton should pass the low mass hgg pre-selection
     bool atLeastOneDiphoPass = false;
     std::vector<const flashgg::Photon*> phosTemp;
-    std::vector <edm::Ptr<flashgg::DiPhotonCandidate>> diPhoPtrs;
     for( unsigned int dpIndex = 0; dpIndex < diphotons->size(); dpIndex++ )
     {
       edm::Ptr<flashgg::DiPhotonCandidate> thisDPPtr = diphotons->ptrAt( dpIndex );
@@ -346,6 +327,7 @@ namespace flashgg {
       flashgg::DiPhotonCandidate * thisDPPointer = const_cast<flashgg::DiPhotonCandidate *>(thisDPPtr.get());
       atLeastOneDiphoPass |= idSelector_(*thisDPPointer, event);
     }
+
     int n_photons = -999;
     n_photons = photons->size();
     Handle<GenEventInfoProduct> genInfo;
@@ -355,30 +337,33 @@ namespace flashgg {
      genTotalWeight = genInfo->weight();
    } else {
       genTotalWeight = 1;
-      // cout << "here " << endl;
    }
 
-   // cout << "gentotalweight" << genTotalWeight << endl;
    cutFlow->Fill(0.0,genTotalWeight); // all events
     if (n_photons == 4 )
     {
      cutFlow->Fill(1.0,genTotalWeight); // events w/ 4 photons
     }
 
-    std::vector<flashgg::Photon> phoVector;
     std::vector<edm::Ptr<flashgg::Photon>> phoPtrVector;
-    std::vector<const flashgg::Photon*> diphoPhotons;
+    std::vector< flashgg::Photon> diphoPhotons;
+    std::vector<flashgg::Photon*> diphoPhotonsVector;
+    std::vector <edm::Ptr<flashgg::DiPhotonCandidate>> diPhoPtrs;
+
     int n_pho = 0;
 
     if (atLeastOneDiphoPass)
     {
       for( unsigned int dpIndex = 0; dpIndex < diphotons->size(); dpIndex++ )
       {
-        edm::Ptr<flashgg::DiPhotonCandidate> thisDPPtr = diphotons->ptrAt( dpIndex );
-        diPhoPtrs.push_back(thisDPPtr);
-        const flashgg::Photon * pho1 = thisDPPtr->leadingPhoton();
-        const flashgg::Photon * pho2 = thisDPPtr->subLeadingPhoton();
-        if (diphoPhotons.size() == 0 ){
+        edm::Ptr<flashgg::DiPhotonCandidate> thisDiPho = diphotons->ptrAt( dpIndex );
+        flashgg::DiPhotonCandidate * thisDPPointer = const_cast<flashgg::DiPhotonCandidate *>(thisDiPho.get());
+        thisDPPointer->makePhotonsPersistent();
+        diPhoPtrs.push_back(thisDiPho);
+        auto pho1 = thisDPPointer->getLeadingPhoton();
+        auto pho2 = thisDPPointer->getSubLeadingPhoton();
+
+         if (diphoPhotons.size() == 0 ){
           diphoPhotons.push_back(pho1);
           diphoPhotons.push_back(pho2);
           n_pho +=2;
@@ -387,53 +372,33 @@ namespace flashgg {
         else {
           float minDR1 = 999, minDR2 = 999;
           for (size_t p=0; p < diphoPhotons.size(); p++){
-            float deltar1 = sqrt(pow(diphoPhotons[p]->superCluster()->eta()-pho1->superCluster()->eta(),2)+pow(diphoPhotons[p]->superCluster()->phi()-pho1->superCluster()->phi(),2));
-            float deltar2 = sqrt(pow(diphoPhotons[p]->superCluster()->eta()-pho2->superCluster()->eta(),2)+pow(diphoPhotons[p]->superCluster()->phi()-pho2->superCluster()->phi(),2));
-            // float deltar1 = deltaR(diphoPhotons[p]->p4(), pho1->p4());
+            float deltar1 = sqrt(pow(diphoPhotons[p].superCluster()->eta()-pho1.superCluster()->eta(),2)+pow(diphoPhotons[p].superCluster()->phi()-pho1.superCluster()->phi(),2));
+            float deltar2 = sqrt(pow(diphoPhotons[p].superCluster()->eta()-pho2.superCluster()->eta(),2)+pow(diphoPhotons[p].superCluster()->phi()-pho2.superCluster()->phi(),2));
             if (deltar1 < minDR1) minDR1 = deltar1;
-            // float deltar2 = deltaR(diphoPhotons[p]->p4(), pho2->p4());
             if (deltar2 < minDR2) minDR2 = deltar2;
           }
-          if (minDR1 > 0.0000001)
+          if (minDR1 > 0.00001)
           {
             n_pho++;
             diphoPhotons.push_back(pho1);
           }
-          if (minDR2 > 0.0000001)
+          if (minDR2 > 0.00001)
           {
             n_pho++;
             diphoPhotons.push_back(pho2);
           }
         }
       }
-      for (int index1 = 0; index1 < (int)diphoPhotons.size(); ++index1) {
-        cout << diphoPhotons[index1]->pt() << endl;
-      }
-      for (int index1 = 0; index1 < (int)diphoPhotons.size(); ++index1) {
-      int smallestindex = index1;
-      for (int index2 = index1+1; index2 < (int)diphoPhotons.size(); ++index2){
-         if (diphoPhotons[index1]->pt() < diphoPhotons[index2]->pt()){
-           smallestindex  = index2;
-           std::swap(diphoPhotons[index1],diphoPhotons[smallestindex]);
-         }
-      }
-    }
-    // for (int index1 = 0; index1 < (int)diphoPhotons.size(); ++index1) {
-    //   cout << "after " << diphoPhotons[index1]->pt() << endl;
-    // }
+
+      std::sort(diphoPhotons.begin(), diphoPhotons.end(), [](const flashgg::Photon a, const flashgg::Photon b) {return a.pt() > b.pt(); });
 
       for( int phoIndex = 0; phoIndex < n_photons; phoIndex++ )
       {
-        edm::Ptr<flashgg::Photon> pho = photons->ptrAt( phoIndex );
-        flashgg::Photon * thisPPointer = const_cast<flashgg::Photon *>(pho.get());
-        phoVector.push_back(*thisPPointer);
+        edm::Ptr<flashgg::Photon> pho = photons->ptrAt(phoIndex);
         phoPtrVector.push_back(pho);
       }
-      // for (int index1 = 0; index1 < (int)phoPtrVector.size(); ++index1) {
-      //   cout << "after " << phoPtrVector[index1]->pt() << endl;
-      // }
-      cout << "photons from diphotons " << diphoPhotons.size() << endl;
-      cout << "photons from photons " << phoPtrVector.size() << endl;
+
+      std::sort(phoPtrVector.begin(), phoPtrVector.end(), [](const edm::Ptr<flashgg::Photon> a, const edm::Ptr<flashgg::Photon> b) {return a->pt() > b->pt(); });
 
       for( int v = 0; v < (int) vertex->size(); v++ )
       {
@@ -460,15 +425,15 @@ namespace flashgg {
       int randVtxIndex = randVtxIndexI;
 
       std::vector<std::vector<float>> vtxVar;
-      if (phoVector.size() == 2)
+      if (phoPtrVector.size() == 2)
       {
         vtxVar = vertexSelector_->select_h2g(phoPtrVector[0],phoPtrVector[1], Vertices, *vertexCandidateMap,conversionHandle->ptrs(), conversionHandleSingleLeg->ptrs(), BSPoint, useSingleLeg_   );
       }
-      if (phoVector.size() == 3)
+      if (phoPtrVector.size() == 3)
       {
         vtxVar = vertexSelector_->select_h3g(phoPtrVector[0],phoPtrVector[1],phoPtrVector[2], Vertices, *vertexCandidateMap,conversionHandle->ptrs(), conversionHandleSingleLeg->ptrs(), BSPoint, useSingleLeg_   );
       }
-      if (phoVector.size() > 3)
+      if (phoPtrVector.size() > 3)
       {
         vtxVar = vertexSelector_->select_h4g(phoPtrVector[0],phoPtrVector[1],phoPtrVector[2],phoPtrVector[3], Vertices, *vertexCandidateMap,conversionHandle->ptrs(), conversionHandleSingleLeg->ptrs(), BSPoint, useSingleLeg_   );
       }
@@ -541,7 +506,7 @@ namespace flashgg {
         }
       }
     }
-      H4GCandidate h4g(phoVector, Vertices, slim_Vertices, vertex_diphoton, vertex_bdt, genVertex, BSPoint, diPhoPtrs, vtxVar, MVA0, MVA1, MVA2, dZ1, dZ2, dZtrue, hgg_index, trueVtxIndex, randVtxIndex, selected_vertex_index_, tp_pt, nVertices, nConv, VertexProbMva_, genTotalWeight,diphoPhotons);
+      H4GCandidate h4g(Vertices, slim_Vertices, vertex_diphoton, vertex_bdt, genVertex, BSPoint, vtxVar, MVA0, MVA1, MVA2, dZ1, dZ2, dZtrue, hgg_index, trueVtxIndex, randVtxIndex, selected_vertex_index_, tp_pt, nVertices, nConv, VertexProbMva_, genTotalWeight,diphoPhotons,diPhoPtrs);
       H4GColl_->push_back(h4g);
     }
     event.put( std::move(H4GColl_) );

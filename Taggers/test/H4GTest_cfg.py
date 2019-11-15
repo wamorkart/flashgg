@@ -104,9 +104,9 @@ process.h4gCandidateDumper_vtxBDT_sig.dumpWorkspace = True
 cfgTools.addCategories(process.h4gCandidateDumper_vtxBDT_sig,
                         [
                             ("Reject", "", -1),
-                            ("4photons_sig","phoVector.size() > 3"),
-                            ("3photons_sig","phoVector.size() == 3", 0),
-                            ("2photons_sig","phoVector.size() == 2", 0)
+                            ("4photons_sig","phoP4Corrected_dp.size() > 3"),
+                            ("3photons_sig","phoP4Corrected_dp.size() == 3", 0),
+                            ("2photons_sig","phoP4Corrected_dp.size() == 2", 0)
                         ],
                         variables = vtx_BDT_variables_sig,
                         histograms=[]
@@ -115,14 +115,14 @@ cfgTools.addCategories(process.h4gCandidateDumper_vtxBDT_sig,
 
 process.h4gCandidateDumper_vtxBDT_bkg = h4gCandidateDumper.clone()
 process.h4gCandidateDumper_vtxBDT_bkg.dumpTrees = True
-process.h4gCandidateDumper_vtxBDT_bkg.dumpWorkspace = False
+process.h4gCandidateDumper_vtxBDT_bkg.dumpWorkspace = True
 
 cfgTools.addCategories(process.h4gCandidateDumper_vtxBDT_bkg,
                         [
                             ("Reject", "", -1),
-                            ("4photons_bkg","phoVector.size() > 3"),
-                            ("3photons_bkg","phoVector.size() == 3", 0),
-                            ("2photons_bkg","phoVector.size() == 2", 0)
+                            ("4photons_bkg","phoP4Corrected_dp.size() > 3"),
+                            ("3photons_bkg","phoP4Corrected_dp.size() == 3", 0),
+                            ("2photons_bkg","phoP4Corrected_dp.size() == 2", 0)
                         ],
                         variables = vtx_BDT_variables_bkg,
                         histograms=[]
@@ -130,14 +130,14 @@ cfgTools.addCategories(process.h4gCandidateDumper_vtxBDT_bkg,
 
 process.h4gCandidateDumper_vtxProb = h4gCandidateDumper.clone()
 process.h4gCandidateDumper_vtxProb.dumpTrees = True
-process.h4gCandidateDumper_vtxProb.dumpWorkspace = False
+process.h4gCandidateDumper_vtxProb.dumpWorkspace = True
 
 cfgTools.addCategories(process.h4gCandidateDumper_vtxProb,
                         [
                             ("Reject", "", -1),
-                            ("4photons","phoVector.size() > 3"),
-                            ("3photons","phoVector.size() == 3", 0),
-                            ("2photons","phoVector.size() == 2", 0)
+                            ("4photons","phoP4Corrected_dp.size() > 3"),
+                            ("3photons","phoP4Corrected_dp.size() == 3", 0),
+                            ("2photons","phoP4Corrected_dp.size() == 2", 0)
                         ],
                         variables = vtxProb_BDT_variables,
                         histograms=[]
@@ -145,15 +145,14 @@ cfgTools.addCategories(process.h4gCandidateDumper_vtxProb,
 
 process.h4gCandidateDumper = h4gCandidateDumper.clone()
 process.h4gCandidateDumper.dumpTrees = True
-process.h4gCandidateDumper.dumpWorkspace = False
+process.h4gCandidateDumper.dumpWorkspace = True
 
 cfgTools.addCategories(process.h4gCandidateDumper,
                        [
                             ("Reject", "", -1),
-                            ("4photons","phoVector.size() > 3 "),
-                            # ("4photons","phoVector.size() > 3 && phoP4Corrected[0].pt() > 30 && phoP4Corrected[1].pt() > 20 && phoP4Corrected[2].pt() > 10 && phoP4Corrected[3].pt() > 10 && abs(phoP4Corrected[0].eta()) < 2.5 && abs(phoP4Corrected[1].eta()) < 2.5 && abs(phoP4Corrected[2].eta()) < 2.5 && abs(phoP4Corrected[3].eta()) < 2.5 && pho1_MVA > -0.9 && pho2_MVA > -0.9 && pho3_MVA > -0.9 && pho4_MVA > -0.9 && h4gFourVect.mass() > 100 && h4gFourVect.mass() < 180", 0),
-                            ("3photons","phoVector.size() == 3", 0),
-                            ("2photons","phoVector.size() == 2", 0)
+                            ("4photons","phoP4Corrected_dp.size() > 3 "),
+                            ("3photons","phoP4Corrected_dp.size() == 3", 0),
+                            ("2photons","phoP4Corrected_dp.size() == 2", 0)
                         ],
                         variables = all_variables,
                         histograms=[]
@@ -267,30 +266,22 @@ else:
     for module in systModules:
         module.ApplyCentralValue = cms.bool(False)
 
-print "I AM HERE 1"
-
-# process.flashggPreselectedDiPhotons = flashggPreselectedDiPhotons
-print "I AM HERE 2"
 process.flashggDiPhotonSystematics = flashggDiPhotonSystematics
-print "I AM HERE 3"
-process.flashggDiPhotonSystematics.src = "flashggPreselectedDiPhotons"
-print "I AM HERE 4"
+process.flashggDiPhotonSystematics.src = "flashggDiPhotons"
 process.flashggDiPhotonSystematics.SystMethods = systModules
-print "I AM HERE 5"
 process.flashggDiPhotonSystematics.SystMethods2D = systModules2D
-print "I AM HERE 6"
 
 if customize.stdDumper:
    #standard dumper sequence
-   # process.path = cms.Path(process.vtxH4GSequence*process.dataRequirements*process.flashggDiPhotonSystematics*process.FlashggH4GCandidate*process.h4gCandidateDumper)
+   process.path = cms.Path(process.vtxH4GSequence*process.dataRequirements*process.flashggDiPhotonSystematics*process.FlashggH4GCandidate*process.h4gCandidateDumper)
 
-   # process.path = cms.Path(process.vtxH4GSequence*process.flashggPreselectedDiPhotons*process.dataRequirements*process.flashggDiPhotonSystematics*process.FlashggH4GCandidate*process.h4gCandidateDumper)
+   #process.path = cms.Path(process.vtxH4GSequence*process.flashggPreselectedDiPhotons*process.dataRequirements*process.flashggDiPhotonSystematics*process.FlashggH4GCandidate*process.h4gCandidateDumper)
 
-   process.path = cms.Path(process.vtxH4GSequence*process.dataRequirements*process.FlashggH4GCandidate*process.h4gCandidateDumper)
+   #process.path = cms.Path(process.vtxH4GSequence*process.dataRequirements*process.FlashggH4GCandidate*process.h4gCandidateDumper)
 
 if customize.vtxBDTDumper:
    #vtxBDT dumper sequence
-   process.path = cms.Path(process.vtxH4GSequence*process.dataRequirements*process.FlashggH4GCandidate*process.h4gCandidateDumper_vtxBDT_sig*process.h4gCandidateDumper_vtxBDT_bkg)
+   process.path = cms.Path(process.vtxH4GSequence*process.dataRequirements*process.flashggDiPhotonSystematics*process.FlashggH4GCandidate*process.h4gCandidateDumper_vtxBDT_sig*process.h4gCandidateDumper_vtxBDT_bkg)
 
 if customize.vtxProbDumper:
    #vtxProb dumper sequence

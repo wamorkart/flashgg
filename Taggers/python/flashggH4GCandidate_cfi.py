@@ -4,10 +4,10 @@ from flashggH4GTag_cfi import flashggH4GTag
 
 
 FlashggH4GCandidate = cms.EDProducer("FlashggH4GCandidateProducer",
-                                     #PhotonTag              = cms.InputTag('flashggPhotons'),
+                                     #PhotonTag              = cms.InputTag('flashggSinglePhotonView'),
                                      PhotonTag              = cms.InputTag('flashggRandomizedPhotons'),
-                                     DiPhotonTag            = cms.InputTag('flashggPreselectedDiPhotons'),
-                                     DiPhotonTag2           = cms.InputTag('flashggDiPhotonSystematics'),
+                                     #DiPhotonTag            = cms.InputTag('flashggDiPhotons'),
+                                     DiPhotonTag            = cms.InputTag('flashggDiPhotonSystematics'),
                                      VertexTag              = cms.InputTag('offlineSlimmedPrimaryVertices'),
                                      GenParticleTag         = cms.InputTag('flashggPrunedGenParticles'),
                                      GenParticleTag2        = cms.InputTag('prunedGenParticles'),
