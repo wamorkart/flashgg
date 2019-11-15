@@ -249,9 +249,7 @@ class WorkNodeJob(object):
         script += 'if [[ $retval == 0 ]]; then\n'
         script += '    errors=""\n'
         script += '    for file in $(find -name %s); do\n' % " -or -name ".join(self.stage_patterns)
-        #script += '        %s $file %s\n' % ( self.stage_cmd, self.stage_dest )
-        filesOutPath = '/eos/user/t/twamorka/H4Gamma_2017Ntuples/'
-        script += '%s $file %s\n' % ( self.stage_cmd, filesOutPath )
+        script += '        %s $file %s\n' % ( self.stage_cmd, self.stage_dest )
         script += '        if [[ $? != 0 ]]; then\n'
         script += '            errors="$errors $file($?)"\n'
         script += '        fi\n'
