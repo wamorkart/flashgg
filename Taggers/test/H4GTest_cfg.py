@@ -285,7 +285,7 @@ if customize.vtxBDTDumper:
 
 if customize.vtxProbDumper:
    #vtxProb dumper sequence
-   process.path = cms.Path(process.vtxH4GSequence*process.dataRequirements*process.FlashggH4GCandidate*process.h4gCandidateDumper_vtxProb)
+   process.path = cms.Path(process.vtxH4GSequence*process.dataRequirements*process.flashggDiPhotonSystematics*process.FlashggH4GCandidate*process.h4gCandidateDumper_vtxProb)
 
 if customize.isCondor:
    customize(process)
