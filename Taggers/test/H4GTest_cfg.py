@@ -92,7 +92,7 @@ import flashgg.Taggers.H4GTagVariables as var
 vtx_BDT_variables_sig = var.vtx_BDT_variables_sig
 vtx_BDT_variables_bkg = var.vtx_BDT_variables_bkg
 vtxProb_BDT_variables = var.vtx_variables + var.vtxProb_BDT_variables
-all_variables = var.pho_variables + var.dipho_variables + var.vtx_variables + var.tp_variables
+all_variables = var.pho_variables + var.dipho_variables + var.vtx_variables + var.tp_variables + var.gen_variables
 
 from flashgg.Taggers.h4gCandidateDumper_cfi import h4gCandidateDumper
 
@@ -230,10 +230,10 @@ if customize.processId == "Data":
    process.dataRequirements += process.eeBadScFilter
 
 process.load("flashgg/Taggers/vtxH4GSequence")
-#
+
 process.flashggUpdatedIdMVADiPhotons = flashggUpdatedIdMVADiPhotons
 process.load("flashgg.Systematics."+customize.metaConditions["flashggDiPhotonSystematics"])
-# #
+
 sysmodule = importlib.import_module(
     "flashgg.Systematics."+customize.metaConditions["flashggDiPhotonSystematics"])
 systModules2D = cms.VPSet()
@@ -274,10 +274,7 @@ process.flashggDiPhotonSystematics.SystMethods2D = systModules2D
 if customize.stdDumper:
    #standard dumper sequence
    process.path = cms.Path(process.vtxH4GSequence*process.dataRequirements*process.flashggDiPhotonSystematics*process.FlashggH4GCandidate*process.h4gCandidateDumper)
-
-   #process.path = cms.Path(process.vtxH4GSequence*process.flashggPreselectedDiPhotons*process.dataRequirements*process.flashggDiPhotonSystematics*process.FlashggH4GCandidate*process.h4gCandidateDumper)
-
-   #process.path = cms.Path(process.vtxH4GSequence*process.dataRequirements*process.FlashggH4GCandidate*process.h4gCandidateDumper)
+   # process.path = cms.Path(process.vtxH4GSequence*process.dataRequirements*process.FlashggH4GCandidate*process.h4gCandidateDumper)
 
 if customize.vtxBDTDumper:
    #vtxBDT dumper sequence

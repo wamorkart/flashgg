@@ -78,12 +78,14 @@ pho24_ (),
 pho34_ (),
 tp_ (),
 isSR_(),
-isCR_()
+isCR_(),
+gen_a1_mass_(),
+gen_a2_mass_()
 // diphoPhotonsVector_()
 {}
   H4GCandidate::~H4GCandidate() {}
-  H4GCandidate::H4GCandidate( std::vector<edm::Ptr<reco::Vertex>> Vertices, std::vector<edm::Ptr<reco::Vertex>> slim_Vertices, edm::Ptr<reco::Vertex> vertex_diphoton, edm::Ptr<reco::Vertex> vertex_bdt, reco::GenParticle::Point genVertex, math::XYZPoint BSPoint, std::vector<std::vector<float>> Vector, float MVA0, float MVA1, float MVA2, float dZ1, float dZ2, float dZtrue, int hgg_index, int trueVtx_index, int rndVtx_index, int bdtVtx_index, float tp_pt, float nVertices, float nConv, TMVA::Reader *VertexProbMva, double genTotalWeight, std::vector<flashgg::Photon> diphoPhotons, std::vector <edm::Ptr<flashgg::DiPhotonCandidate>> diPhoPtrs):
-   Vertices_(Vertices), slim_Vertices_(slim_Vertices),vertex_diphoton_(vertex_diphoton), vertex_bdt_(vertex_bdt), genVertex_(genVertex), BSPoint_(BSPoint), Vector_(Vector), MVA0_(MVA0), MVA1_(MVA1), MVA2_(MVA2), dZ1_(dZ1), dZ2_(dZ2), dZtrue_(dZtrue), hgg_index_(hgg_index), trueVtx_index_(trueVtx_index), rndVtx_index_(rndVtx_index), bdtVtx_index_(bdtVtx_index), tp_pt_(tp_pt), nVertices_(nVertices), nConv_(nConv), VertexProbMva_(VertexProbMva), genTotalWeight_(genTotalWeight),diphoPhotons_(diphoPhotons), diPhoPtrs_(diPhoPtrs)
+  H4GCandidate::H4GCandidate( std::vector<edm::Ptr<reco::Vertex>> Vertices, std::vector<edm::Ptr<reco::Vertex>> slim_Vertices, edm::Ptr<reco::Vertex> vertex_diphoton, edm::Ptr<reco::Vertex> vertex_bdt, reco::GenParticle::Point genVertex, math::XYZPoint BSPoint, std::vector<std::vector<float>> Vector, float MVA0, float MVA1, float MVA2, float dZ1, float dZ2, float dZtrue, int hgg_index, int trueVtx_index, int rndVtx_index, int bdtVtx_index, float tp_pt, float nVertices, float nConv, TMVA::Reader *VertexProbMva, double genTotalWeight, std::vector<flashgg::Photon> diphoPhotons, std::vector <edm::Ptr<flashgg::DiPhotonCandidate>> diPhoPtrs, std::vector<reco::Candidate::LorentzVector> genPhoton_p4):
+   Vertices_(Vertices), slim_Vertices_(slim_Vertices),vertex_diphoton_(vertex_diphoton), vertex_bdt_(vertex_bdt), genVertex_(genVertex), BSPoint_(BSPoint), Vector_(Vector), MVA0_(MVA0), MVA1_(MVA1), MVA2_(MVA2), dZ1_(dZ1), dZ2_(dZ2), dZtrue_(dZtrue), hgg_index_(hgg_index), trueVtx_index_(trueVtx_index), rndVtx_index_(rndVtx_index), bdtVtx_index_(bdtVtx_index), tp_pt_(tp_pt), nVertices_(nVertices), nConv_(nConv), VertexProbMva_(VertexProbMva), genTotalWeight_(genTotalWeight),diphoPhotons_(diphoPhotons), diPhoPtrs_(diPhoPtrs), genPhoton_p4_(genPhoton_p4)
 
   {
 
@@ -297,6 +299,8 @@ isCR_()
     tp_pt =  tp_.pt();
     vtxProbMVA_ = VertexProbMva_->EvaluateMVA( "BDT" );
 
+    gen_a1_mass_ = (genPhoton_p4_[0]+genPhoton_p4_[1]).mass();
+    gen_a2_mass_ = (genPhoton_p4_[2]+genPhoton_p4_[3]).mass();
   }
 
   // good photon selection

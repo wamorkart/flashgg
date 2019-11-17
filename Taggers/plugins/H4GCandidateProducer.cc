@@ -93,7 +93,8 @@ namespace flashgg {
     TH1F* cutFlow;
     TTree* tree;
 
-    std::vector<LorentzVector> genPhoton_p4;
+    // std::vector<LorentzVector> genPhoton_p4;
+    std::vector<reco::Candidate::LorentzVector> genPhoton_p4;
   private:
     double genTotalWeight;
 
@@ -168,7 +169,6 @@ namespace flashgg {
     CutBasedDiPhotonObjectSelector idSelector_;
 
     unsigned int isSignal;
-
     //----output collection
     auto_ptr<vector<H4GCandidate> > H4GColl_;
 
@@ -210,8 +210,9 @@ namespace flashgg {
     vertexSelector_.reset( FlashggVertexSelectorFactory::get()->create( VertexSelectorName, pSet ) );
 
     useSingleLeg_ = pSet.getParameter<bool>( "useSingleLeg" );
-    vertexIdMVAweightfileH4G_ = pSet.getParameter<edm::FileInPath>( "vertexIdMVAweightfileH4G" );
-    vertexProbMVAweightfileH4G_ = pSet.getParameter<edm::FileInPath>( "vertexProbMVAweightfileH4G" );
+
+    vertexIdMVAweightfileH4G_ = pSet.getParameter<edm::FileInPath>( "vertexIdMVAweightfileH4G_2016" );
+    vertexProbMVAweightfileH4G_ = pSet.getParameter<edm::FileInPath>( "vertexProbMVAweightfileH4G_2016" );
 
     VertexIdMva_ = new TMVA::Reader( "!Color:Silent" );
     VertexIdMva_->AddVariable( "ptAsym", &ptAsym );
@@ -246,6 +247,7 @@ namespace flashgg {
 
     unsigned int def_isSignal = 0;
     isSignal = pSet.getUntrackedParameter<unsigned int>("isSignal", def_isSignal);
+
 
     produces<vector<H4GCandidate> > ();
   }
@@ -303,7 +305,6 @@ namespace flashgg {
           genVertex = part.vertex();
         }
       }
-
       for( auto &part : *genParticle )
       {
         if (part.pdgId() == 25 || part.pdgId() == 54)
@@ -312,6 +313,7 @@ namespace flashgg {
        genPhoton_p4.push_back(part.daughter(1)->p4());
        }
      }
+
     }
 
 
@@ -506,7 +508,7 @@ namespace flashgg {
         }
       }
     }
-      H4GCandidate h4g(Vertices, slim_Vertices, vertex_diphoton, vertex_bdt, genVertex, BSPoint, vtxVar, MVA0, MVA1, MVA2, dZ1, dZ2, dZtrue, hgg_index, trueVtxIndex, randVtxIndex, selected_vertex_index_, tp_pt, nVertices, nConv, VertexProbMva_, genTotalWeight,diphoPhotons,diPhoPtrs);
+      H4GCandidate h4g(Vertices, slim_Vertices, vertex_diphoton, vertex_bdt, genVertex, BSPoint, vtxVar, MVA0, MVA1, MVA2, dZ1, dZ2, dZtrue, hgg_index, trueVtxIndex, randVtxIndex, selected_vertex_index_, tp_pt, nVertices, nConv, VertexProbMva_, genTotalWeight,diphoPhotons,diPhoPtrs,genPhoton_p4);
       H4GColl_->push_back(h4g);
     }
     event.put( std::move(H4GColl_) );
