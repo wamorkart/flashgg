@@ -56,7 +56,7 @@ namespace flashgg {
                                       const std::vector<edm::Ptr<reco::Conversion> > &,
                                       const math::XYZPoint &,
                                       bool
-                                    ) ;
+                                    ) override ;
 
        std::vector<std::vector<float>> select_h3g( const edm::Ptr<flashgg::Photon> &, const edm::Ptr<flashgg::Photon> &,const edm::Ptr<flashgg::Photon> &, const std::vector<edm::Ptr<reco::Vertex> > &,
                                      const VertexCandidateMap &vertexCandidateMap,
@@ -64,7 +64,7 @@ namespace flashgg {
                                      const std::vector<edm::Ptr<reco::Conversion> > &,
                                      const math::XYZPoint &,
                                      bool
-                                   ) ;
+                                   ) override;
 
         std::vector<std::vector<float>> select_h4g( const edm::Ptr<flashgg::Photon> &, const edm::Ptr<flashgg::Photon> &,const edm::Ptr<flashgg::Photon> &,const edm::Ptr<flashgg::Photon> &, const std::vector<edm::Ptr<reco::Vertex> > &,
                                       const VertexCandidateMap &vertexCandidateMap,
@@ -2456,7 +2456,6 @@ namespace flashgg {
                                                          bool useSingleLeg
                                                          )
     {
-
       vlogsumpt2_.clear();
       vptbal_.clear();
       vptasym_.clear();
@@ -2487,10 +2486,8 @@ namespace flashgg {
 
       std::vector<std::vector<float>> megaVec;
 
-      unsigned int vertex_index;
-      for( vertex_index = 0 ; vertex_index < vtxs.size() ; vertex_index++ ) {
-            edm::Ptr<reco::Vertex> vtx = vtxs[vertex_index];
-
+      for( unsigned int vertex_index_h2g = 0 ; vertex_index_h2g < vtxs.size() ; vertex_index_h2g++ ) {
+            edm::Ptr<reco::Vertex> vtx = vtxs[vertex_index_h2g];
             TVector3 Photon1Dir;
             TVector3 Photon1Dir_uv;
             TVector3 Photon2Dir;
@@ -2503,12 +2500,10 @@ namespace flashgg {
                                g1->superCluster()->position().z() - vtx->position().z() );
             Photon2Dir.SetXYZ( g2->superCluster()->position().x() - vtx->position().x(), g2->superCluster()->position().y() - vtx->position().y(),
                                g2->superCluster()->position().z() - vtx->position().z() );
-
             Photon1Dir_uv = Photon1Dir.Unit() * g1->superCluster()->rawEnergy();
             Photon2Dir_uv = Photon2Dir.Unit() * g2->superCluster()->rawEnergy();
             p14.SetPxPyPzE( Photon1Dir_uv.x(), Photon1Dir_uv.y(), Photon1Dir_uv.z(), g1->superCluster()->rawEnergy() );
             p24.SetPxPyPzE( Photon2Dir_uv.x(), Photon2Dir_uv.y(), Photon2Dir_uv.z(), g2->superCluster()->rawEnergy() );
-
             TVector2 sumpt;
             double sumpt2_out = 0;
             double sumpt2_in = 0;
@@ -2516,9 +2511,16 @@ namespace flashgg {
             double ptasym = 0;
 
             sumpt.Set( 0., 0. );
-
             auto mapRange = std::equal_range( vertexCandidateMap.begin(), vertexCandidateMap.end(), vtx, flashgg::compare_with_vtx() );
-            if( mapRange.first == mapRange.second ) { continue; }
+            if( mapRange.first == mapRange.second )
+              {
+                vlogsumpt2_.push_back( 0 );
+                vptasym_.push_back(0);
+                vptbal_.push_back(0);
+                vpull_conv_.push_back(0);
+                vnConv_.push_back(0);
+                continue;
+              }
             for( auto pair_iter = mapRange.first ; pair_iter != mapRange.second ; pair_iter++ ) {
                 const edm::Ptr<pat::PackedCandidate> cand = pair_iter->second;
                 TVector3 tk;
@@ -2674,7 +2676,15 @@ namespace flashgg {
             sumpt.Set( 0., 0. );
 
             auto mapRange = std::equal_range( vertexCandidateMap.begin(), vertexCandidateMap.end(), vtx, flashgg::compare_with_vtx() );
-            if( mapRange.first == mapRange.second ) { continue; }
+            if( mapRange.first == mapRange.second )
+            {
+              vlogsumpt2_.push_back( 0 );
+              vptasym_.push_back(0);
+              vptbal_.push_back(0);
+              vpull_conv_.push_back(0);
+              vnConv_.push_back(0);
+              continue;
+            }
             for( auto pair_iter = mapRange.first ; pair_iter != mapRange.second ; pair_iter++ ) {
                 const edm::Ptr<pat::PackedCandidate> cand = pair_iter->second;
                 TVector3 tk;
@@ -2850,7 +2860,15 @@ namespace flashgg {
             sumpt.Set( 0., 0. );
 
             auto mapRange = std::equal_range( vertexCandidateMap.begin(), vertexCandidateMap.end(), vtx, flashgg::compare_with_vtx() );
-            if( mapRange.first == mapRange.second ) { continue; }
+            if( mapRange.first == mapRange.second )
+               {
+                 vlogsumpt2_.push_back( 0 );
+                 vptasym_.push_back(0);
+                 vptbal_.push_back(0);
+                 vpull_conv_.push_back(0);
+                 vnConv_.push_back(0);
+                 continue;
+               }
             for( auto pair_iter = mapRange.first ; pair_iter != mapRange.second ; pair_iter++ ) {
                 const edm::Ptr<pat::PackedCandidate> cand = pair_iter->second;
                 TVector3 tk;

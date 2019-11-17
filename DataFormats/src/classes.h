@@ -45,7 +45,6 @@
 #include "flashgg/DataFormats/interface/TagAndProbeCandidate.h" //spigazzi
 #include "flashgg/DataFormats/interface/DoubleHTag.h"
 #include "flashgg/DataFormats/interface/H4GCandidate.h"
-
 #include <vector>
 #include <map>
 
@@ -329,6 +328,7 @@ namespace  {
         flashgg::H4GCandidate h4g;
         std::vector<flashgg::H4GCandidate> vec_h4g;
         edm::Wrapper<std::vector<flashgg::H4GCandidate> > wrp_vec_h4g; 
+
 
     };
 }

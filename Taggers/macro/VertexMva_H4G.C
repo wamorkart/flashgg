@@ -25,28 +25,30 @@
 
 void VertexMva_H4G()
 {
-   
-    TString outfileName( "outputTMVA_BDTVtxId.root" );
+
+    TString outfileName( "outputTMVA_BDTVtxId_for2017.root" );
     TFile* outputFile = TFile::Open( outfileName, "RECREATE" );
 
-    TFile* inputFile = TFile::Open("/eos/cms/store/user/bmarzocc/H4G_Analysis/Dumpers_vtxID/SUSYGluGluToHToAA_AToGG_Total_TuneCUETP8M1_13TeV_pythia8.root");
+    // TFile* inputFile = TFile::Open("/eos/cms/store/user/bmarzocc/H4G_Analysis/Dumpers_vtxID/SUSYGluGluToHToAA_AToGG_Total_TuneCUETP8M1_13TeV_pythia8.root");
+    TFile* inputFile = TFile::Open("/eos/user/t/twamorka/15Nov_2017_VtxBDTTree/signal_m_BDTVtx.root");
+    // TTree* signal_ggf  = (TTree*)inputFile->Get("h4gCandidateDumper_vtxBDT_sig/trees/SUSYGluGluToHToAA_AToGG_TuneCUETP8M1_13TeV_pythia8_13TeV_4photons_sig");
+    // TTree* bkg_ggf     = (TTree*)inputFile->Get("h4gCandidateDumper_vtxBDT_bkg/trees/SUSYGluGluToHToAA_AToGG_TuneCUETP8M1_13TeV_pythia8_13TeV_4photons_bkg");
+    TTree* signal_ggf  = (TTree*)inputFile->Get("h4gCandidateDumper_vtxBDT_sig/trees/SUSYGluGluToHToAA_AToGG_TuneCP5_13TeV_pythia8_13TeV_4photons_sig");
+    TTree* bkg_ggf     = (TTree*)inputFile->Get("h4gCandidateDumper_vtxBDT_bkg/trees/SUSYGluGluToHToAA_AToGG_TuneCP5_13TeV_pythia8_13TeV_4photons_bkg");
 
-    TTree* signal_ggf  = (TTree*)inputFile->Get("h4gCandidateDumper_vtxBDT_sig/trees/SUSYGluGluToHToAA_AToGG_TuneCUETP8M1_13TeV_pythia8_13TeV_4photons_sig");
-    TTree* bkg_ggf     = (TTree*)inputFile->Get("h4gCandidateDumper_vtxBDT_bkg/trees/SUSYGluGluToHToAA_AToGG_TuneCUETP8M1_13TeV_pythia8_13TeV_4photons_bkg");
-    
     TMVA::Tools::Instance();
 
     TMVA::Factory *factory = new TMVA::Factory( "TMVAClassification", outputFile,
                                                "!V:!Silent:Color:DrawProgressBar:Transformations=I;D;P;G,D:AnalysisType=Classification" );
-    factory->AddVariable("ptAsym", "ptAsym", "", 'F'); 
+    factory->AddVariable("ptAsym", "ptAsym", "", 'F');
     factory->AddVariable("ptBal", "ptBal", "", 'F');
-    factory->AddVariable("logSumpt2", "logSumpt2", "", 'F'); 
+    factory->AddVariable("logSumpt2", "logSumpt2", "", 'F');
     factory->AddVariable("pullConv", "pullConv", "", 'F');
     factory->AddVariable("nConv", "nConv", "", 'F');
-   
+
     Double_t signalWeight = 1.0;
     Double_t backgroundWeight = 1.0;
-  
+
     factory->AddSignalTree( signal_ggf, signalWeight );
     factory->AddBackgroundTree( bkg_ggf, backgroundWeight );
 
@@ -64,7 +66,7 @@ void VertexMva_H4G()
 
     TString theCat1Vars = "ptAsym:ptBal:logSumpt2";
     TString theCat2Vars = "ptAsym:ptBal:logSumpt2:pullConv";
- 
+
     //TMVA::MethodBase* BDT_Cat = factory->BookMethod( TMVA::Types::kCategory, "BDT","" );
     //mcat = dynamic_cast<TMVA::MethodCategory*>(BDT_Cat);
 
@@ -92,4 +94,3 @@ void VertexMva_H4G()
 
     delete factory;
 }
-

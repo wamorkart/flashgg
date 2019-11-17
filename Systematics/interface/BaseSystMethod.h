@@ -67,7 +67,7 @@ namespace flashgg {
                 throw cms::Exception( "Configuration" ) << "Tried to access BaseSystMethod::RandomEngine() when it is not set";
             }
             return _RandomEngine;
-        }        
+        }
 
     protected:
         void setMakesWeight( bool makes_weight ) { _MakesWeight = makes_weight; }
@@ -90,6 +90,7 @@ namespace flashgg {
 //#include "flashgg/DataFormats/interface/Met.h"
 #include "flashgg/DataFormats/interface/DiPhotonTagBase.h"
 #include "flashgg/MicroAOD/interface/GlobalVariablesComputer.h"
+#include "flashgg/DataFormats/interface/H4GCandidate.h"
 
 //template <class T, class U> struct A {
 //    typedef edmplugin::PluginFactory< flashgg::BaseSystMethod<T,U>* (const edm::ParameterSet & ) > FlashggSystematicMethodsFactory;
@@ -112,6 +113,7 @@ typedef FlashggSystematicMethodsFactory<flashgg::DiPhotonTagBase, int> FlashggSy
 typedef FlashggSystematicMethodsFactory<flashgg::DiPhotonTagBase, std::pair<int,int> > FlashggSystematicTagMethodsFactory2D;
 typedef FlashggSystematicMethodsFactory<flashgg::Met, int > FlashggSystematicMetMethodsFactory;
 typedef FlashggSystematicMethodsFactory<flashgg::Met, std::pair<int,int> > FlashggSystematicMetMethodsFactory2D;
+
 //typedef FlashggSystematicMethodsFactory<pat::MET, int > FlashggSystematicMetMethodsFactory;
 //typedef edmplugin::PluginFactory< flashgg::BaseSystMethod<flashgg::Photon, int>* ( const edm::ParameterSet & ) > FlashggSystematicPhotonMethodsFactory;
 //typedef edmplugin::PluginFactory< flashgg::BaseSystMethod<flashgg::Photon,float>* ( const edm::ParameterSet&) > FlashggSystematicPhotonMethodsFactory;
@@ -125,4 +127,3 @@ typedef FlashggSystematicMethodsFactory<flashgg::Met, std::pair<int,int> > Flash
 // c-basic-offset:4
 // End:
 // vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
-

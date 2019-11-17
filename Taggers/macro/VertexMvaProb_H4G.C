@@ -20,8 +20,8 @@
 
 void VertexMvaProb_H4G()
 {
-    TFile* inputFile = TFile::Open("/eos/cms/store/user/bmarzocc/H4G_Analysis/Dumpers_vtxProb/SUSYGluGluToHToAA_AToGG_Total_TuneCUETP8M1_13TeV_pythia8.root");
-    TTree* inputTree = (TTree*) inputFile->Get("h4gCandidateDumper_vtxProb/trees/SUSYGluGluToHToAA_AToGG_TuneCUETP8M1_13TeV_pythia8_13TeV_4photons");
+    TFile* inputFile = TFile::Open("/eos/user/t/twamorka/16Nov_2017_VtxBDTProbTree/signal_m_BDTVtxProb.root");
+    TTree* inputTree = (TTree*) inputFile->Get("h4gCandidateDumper_vtxProb/trees/SUSYGluGluToHToAA_AToGG_TuneCP5_13TeV_pythia8_13TeV_4photons");
 
     TString outfileName( "outputTMVA_BDTVtxProb.root" );
     TFile* outputFile = TFile::Open( outfileName, "RECREATE" );
