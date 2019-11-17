@@ -1,0 +1,29 @@
+{
+    "checkIfOnT2": false, 
+    "crabTemplate": "/afs/cern.ch/work/t/twamorka/5Sep2019/CMSSW_10_5_0/src/flashgg/MetaData/work/crabConfig_TEMPLATE.py", 
+    "verbose": false, 
+    "campaign": "H4G_2016_0p1_MG5P_test_31Oct2019", 
+    "lumiMask": null, 
+    "unitsPerJob": 1, 
+    "extraPyCfgParam": null, 
+    "checkNFiles": false, 
+    "samples_src": "H4Gamma_0p1_2016_MGP.json", 
+    "parameterSet": "/afs/cern.ch/work/t/twamorka/5Sep2019/CMSSW_10_5_0/src/flashgg/MicroAOD/test/microAODstd.py", 
+    "label": null, 
+    "outputPath": "/store/group/phys_higgs/HiggsExo/H4Gamma/H4G_2016_0p1_MGP_test", 
+    "mkPilot": true, 
+    "metaConditions": "../../data/MetaConditions/Era2016_RR-17Jul2018_v1.json", 
+    "createCrabConfig": true, 
+    "samples": {
+        "data": [], 
+        "bkg": [], 
+        "sig": [
+            "/hToaaTo4gamma_2016/mandrews-hToaaTo4gamma_ma0p1GeV_MG5pythia8-bd3e7bcff6c9bcad356ea4ed7e4f08b4/USER"
+        ]
+    }, 
+    "lumisPerJob": 25, 
+    "outputSite": "T2_CH_CERN", 
+    "flashggVersion": "RunIIFall18-4_0_0-165-gfca94d2b", 
+    "task_dir": "H4G_2016_0p1_MG5P_test_31Oct2019", 
+    "__opts__": null
+}
