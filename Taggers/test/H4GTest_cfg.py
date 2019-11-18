@@ -273,8 +273,8 @@ process.flashggDiPhotonSystematics.SystMethods2D = systModules2D
 
 if customize.stdDumper:
    #standard dumper sequence
-   #process.path = cms.Path(process.vtxH4GSequence*process.dataRequirements*process.flashggDiPhotonSystematics*process.FlashggH4GCandidate*process.h4gCandidateDumper)
-   process.path = cms.Path(process.vtxH4GSequence*process.dataRequirements*process.FlashggH4GCandidate*process.h4gCandidateDumper)
+   process.path = cms.Path(process.vtxH4GSequence*process.dataRequirements*process.flashggDiPhotonSystematics*process.FlashggH4GCandidate*process.h4gCandidateDumper)
+   #process.path = cms.Path(process.vtxH4GSequence*process.dataRequirements*process.FlashggH4GCandidate*process.h4gCandidateDumper)
 
 if customize.vtxBDTDumper:
    #vtxBDT dumper sequence

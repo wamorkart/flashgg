@@ -416,10 +416,7 @@ class JobConfig(object):
                     for run in matched_runs:
                         if any(lumi in f_runs_and_lumis[run] for lumi in s_runs_and_lumis[run]):
                             sflist.append(s_name)
-<<<<<<< HEAD
-=======
 
->>>>>>> f88a3ed6ddf5c87eca57c1381adbf9900b6f2a81
         if len(flist) > 0:
             ## fwlite
             if isFwlite:
