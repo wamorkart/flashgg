@@ -51,17 +51,9 @@ customize.options.register('year',
                  VarParsing.VarParsing.varType.string,
                  "year")
 
-customize.options.register('isSignal',
-                 '',
-                 VarParsing.VarParsing.multiplicity.singleton,
-                 VarParsing.VarParsing.varType.int,
-                 "isSignal")
-
 
 from flashgg.MetaData.JobConfig import customize
 customize.parse()
-
-
 
 ###--Scales and smearing stuff
 customize.metaConditions = MetaConditionsReader(customize.metaConditions)
@@ -177,12 +169,15 @@ elif (customize.year == "2017"):
               fileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/group/phys_higgs/HiggsExo/H4Gamma/H4G_2017samples_producedwithBkgCustomization/H4G_2017_27Sep2019/RunIIFall18-4_0_0-119-g2d54185d/SUSYGluGluToHToAA_AToGG_M-50_TuneCP5_13TeV_pythia8/H4G_2017_27Sep2019-RunIIFall18-4_0_0-119-g2d54185d-v0-RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/190927_153802/0000/myMicroAODOutputFile_2.root"),
               secondaryFileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/mc/RunIIFall17MiniAODv2/SUSYGluGluToHToAA_AToGG_M-50_TuneCP5_13TeV_pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/50000/E2F1936C-FE74-E811-96F8-0CC47A2AECFA.root")
               )
-                            #fileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/user/spigazzi/flashgg/Era2016_RR-17Jul2018_v2/legacyRun2FullV1/DoubleEG/Era2016_RR-17Jul2018_v2-legacyRun2FullV1-v0-Run2016B-17Jul2018_ver2-v1/190605_220256/0000/myMicroAODOutputFile_75.root"),
-                            #secondaryFileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/data/Run2016B/DoubleEG/MINIAOD/17Jul2018_ver2-v1/50000/583DC595-668C-E811-B6FB-008CFA1974A4.root")
-                            # fileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/user/spigazzi/flashgg/Era2016_RR-17Jul2018_v2/legacyRun2FullV1/DoubleEG/Era2016_RR-17Jul2018_v2-legacyRun2FullV1-v0-Run2016B-17Jul2018_ver2-v1/190605_220256/0000/myMicroAODOutputFile_932.root"),
-                            # secondaryFileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/data/Run2016B/DoubleEG/MINIAOD/17Jul2018_ver2-v1/20000/D03AED69-308D-E811-AFFC-008CFA197CD0.root","root://cms-xrd-global.cern.ch//store/data/Run2016B/DoubleEG/MINIAOD/17Jul2018_ver2-v1/20000/FCFDB07D-378D-E811-89A0-008CFAE45144.root")
-                            #fileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/group/phys_higgs/HiggsExo/H4Gamma/H4G_2016samples_producedwithBkgCustomization/H4GandHH4G_2016_27Sep2019/RunIIFall18-4_0_0-119-g2d54185d/SUSYGluGluToHToAA_AToGG_M-5_TuneCUETP8M1_13TeV_pythia8/H4GandHH4G_2016_27Sep2019-RunIIFall18-4_0_0-119-g2d54185d-v0-RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/190927_175857/0001/myMicroAODOutputFile_1052.root"),
-                            #secondaryFileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/mc/RunIISummer16MiniAODv3/SUSYGluGluToHToAA_AToGG_M-5_TuneCUETP8M1_13TeV_pythia8/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v2/110000/30D9D91B-FC3C-E911-A438-141877412793.root")
+if (customize.year == "2016"):
+    print "2016 vtx ID"
+    process.FlashggH4GCandidate.vertexIdMVAweightfileH4G= cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_BDTVtxId_H4G_Total_2016.xml")
+    process.FlashggH4GCandidate.vertexProbMVAweightfileH4G = cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_BDTVtxProb_H4G_Total_2016.xml")
+
+elif (customize.year == "2017"):
+     print "2017 vtx ID"
+     process.FlashggH4GCandidate.vertexIdMVAweightfileH4G= cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_BDTVtxId_H4G_Total_2017.xml")
+     process.FlashggH4GCandidate.vertexProbMVAweightfileH4G = cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_BDTVtxProb_H4G_Total_2017.xml")
 
 
 process.TFileService = cms.Service("TFileService",

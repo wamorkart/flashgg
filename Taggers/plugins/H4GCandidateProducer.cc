@@ -168,7 +168,6 @@ namespace flashgg {
     ConsumesCollector cc_;
     CutBasedDiPhotonObjectSelector idSelector_;
 
-    unsigned int isSignal;
     //----output collection
     auto_ptr<vector<H4GCandidate> > H4GColl_;
 
@@ -211,8 +210,11 @@ namespace flashgg {
 
     useSingleLeg_ = pSet.getParameter<bool>( "useSingleLeg" );
 
-    vertexIdMVAweightfileH4G_ = pSet.getParameter<edm::FileInPath>( "vertexIdMVAweightfileH4G_2016" );
-    vertexProbMVAweightfileH4G_ = pSet.getParameter<edm::FileInPath>( "vertexProbMVAweightfileH4G_2016" );
+    vertexIdMVAweightfileH4G_ = pSet.getParameter<edm::FileInPath>( "vertexIdMVAweightfileH4G" );
+    vertexProbMVAweightfileH4G_ = pSet.getParameter<edm::FileInPath>( "vertexProbMVAweightfileH4G" );
+
+    cout << vertexIdMVAweightfileH4G_ <<  endl;
+    cout << vertexProbMVAweightfileH4G_ << endl;
 
     VertexIdMva_ = new TMVA::Reader( "!Color:Silent" );
     VertexIdMva_->AddVariable( "ptAsym", &ptAsym );
@@ -244,9 +246,6 @@ namespace flashgg {
 
     tree = new TTree("genTree"," gen level H4G Tree");
     tree->Branch("genPhoton_p4",&genPhoton_p4);
-
-    unsigned int def_isSignal = 0;
-    isSignal = pSet.getUntrackedParameter<unsigned int>("isSignal", def_isSignal);
 
 
     produces<vector<H4GCandidate> > ();
@@ -290,8 +289,7 @@ namespace flashgg {
     {
       Handle<View<reco::GenParticle> > genParticles;
       event.getByToken( genParticleToken_, genParticles );
-      // if (isSignal) {
-        trueVtxIndexI = mcTruthVertexIndex( genParticles->ptrs(), primaryVertices->ptrs(), 0.1);
+      trueVtxIndexI = mcTruthVertexIndex( genParticles->ptrs(), primaryVertices->ptrs(), 0.1);
       // }
       for( unsigned int i = 0 ; i < primaryVertices->size() ; i++ ) {
            if( i != (unsigned int)trueVtxIndexI ) { pvVecNoTrue.push_back( i ); }

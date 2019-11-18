@@ -22,8 +22,10 @@ FlashggH4GCandidate = cms.EDProducer("FlashggH4GCandidateProducer",
                                      ##Parameters for Legacy Vertex Selector
                                      vertexIdMVAweightfile      = cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_BDTVtxId_SL_2016.xml"),
                                      vertexProbMVAweightfile    = cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_BDTVtxProb_SL_2016.xml"),
-                                     vertexIdMVAweightfileH4G_2016   = cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_BDTVtxId_H4G_Total_2016.xml"),
-                                     vertexProbMVAweightfileH4G_2016 = cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_BDTVtxProb_H4G_Total_2016.xml"),
+                                     vertexIdMVAweightfileH4G = cms.FileInPath(""),
+                                     vertexProbMVAweightfileH4G = cms.FileInPath(""),
+                                     # vertexIdMVAweightfileH4G_2016   = cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_BDTVtxId_H4G_Total_2016.xml"),
+                                     # vertexProbMVAweightfileH4G_2016 = cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_BDTVtxProb_H4G_Total_2016.xml"),
                                      useSingleLeg               = cms.bool(True),
                                      useZerothVertexFromMicro   = cms.bool(False),
 
