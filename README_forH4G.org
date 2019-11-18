@@ -28,7 +28,7 @@
 
   #+BEGIN_EXAMPLE
   voms-proxy-init -voms cms --valid 168:00
-  (for 2016): cmsRun Taggers/test/H4GTest_cfg.py stdDumper=1 isCondor=0 isSignal=1 year=2016 metaConditions=$CMSSW_BASE/src/flashgg/MetaData/data/MetaConditions/Era2016_RR-17Jul2018_v1.json
+  (for 2016): cmsRun Taggers/test/H4GTest_cfg.py stdDumper=1 isCondor=0 year=2016 metaConditions=$CMSSW_BASE/src/flashgg/MetaData/data/MetaConditions/Era2016_RR-17Jul2018_v1.json
 
   #+END_EXAMPLE
 
