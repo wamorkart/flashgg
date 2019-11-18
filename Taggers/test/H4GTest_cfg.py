@@ -145,7 +145,7 @@ cfgTools.addCategories(process.h4gCandidateDumper_vtxProb,
 
 process.h4gCandidateDumper = h4gCandidateDumper.clone()
 process.h4gCandidateDumper.dumpTrees = True
-process.h4gCandidateDumper.dumpWorkspace = True
+process.h4gCandidateDumper.dumpWorkspace = False
 
 cfgTools.addCategories(process.h4gCandidateDumper,
                        [
@@ -273,8 +273,8 @@ process.flashggDiPhotonSystematics.SystMethods2D = systModules2D
 
 if customize.stdDumper:
    #standard dumper sequence
-   process.path = cms.Path(process.vtxH4GSequence*process.dataRequirements*process.flashggDiPhotonSystematics*process.FlashggH4GCandidate*process.h4gCandidateDumper)
-   # process.path = cms.Path(process.vtxH4GSequence*process.dataRequirements*process.FlashggH4GCandidate*process.h4gCandidateDumper)
+   #process.path = cms.Path(process.vtxH4GSequence*process.dataRequirements*process.flashggDiPhotonSystematics*process.FlashggH4GCandidate*process.h4gCandidateDumper)
+   process.path = cms.Path(process.vtxH4GSequence*process.dataRequirements*process.FlashggH4GCandidate*process.h4gCandidateDumper)
 
 if customize.vtxBDTDumper:
    #vtxBDT dumper sequence
