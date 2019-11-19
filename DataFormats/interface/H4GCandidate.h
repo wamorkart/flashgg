@@ -47,7 +47,7 @@ namespace flashgg {
   public:
     //---ctors---
     H4GCandidate() ;
-    H4GCandidate( std::vector<edm::Ptr<reco::Vertex>> Vertices,std::vector<edm::Ptr<reco::Vertex>> slim_Vertices,edm::Ptr<reco::Vertex> vertex_diphoton, edm::Ptr<reco::Vertex> vertex_bdt, reco::GenParticle::Point genVertex, math::XYZPoint BSPoint, std::vector<std::vector<float>> Vector, float MVA0, float MVA1, float MVA2, float dZ1, float dZ2, float dZtrue, int hgg_index, int trueVtx_index, int rndVtx_index, int bdtVtx_index, float tp_pt, float nVertices, float nConv, TMVA::Reader *VertexProbMva, double genTotalWeight,std::vector<flashgg::Photon> diphoPhotons,std::vector <edm::Ptr<flashgg::DiPhotonCandidate>> diPhoPtrs, std::vector<reco::Candidate::LorentzVector> genPhoton_p4 );
+    H4GCandidate( std::vector<edm::Ptr<reco::Vertex>> Vertices,std::vector<edm::Ptr<reco::Vertex>> slim_Vertices,edm::Ptr<reco::Vertex> vertex_diphoton, edm::Ptr<reco::Vertex> vertex_bdt, reco::GenParticle::Point genVertex, math::XYZPoint BSPoint, std::vector<std::vector<float>> Vector, float MVA0, float MVA1, float MVA2, float dZ1, float dZ2, float dZtrue, int hgg_index, int trueVtx_index, int rndVtx_index, int bdtVtx_index, float tp_pt, float nVertices, float nConv, TMVA::Reader *VertexProbMva, double genTotalWeight,std::vector<flashgg::Photon> diphoPhotons,std::vector <edm::Ptr<flashgg::DiPhotonCandidate>> diPhoPtrs, float gen_a1_mass, float gen_a2_mass, float gen_h_mass );
 
     //---dtor---
     ~H4GCandidate();
@@ -142,9 +142,9 @@ namespace flashgg {
     const double& genTotalWeight() const { return genTotalWeight_; };
     const std::vector<flashgg::Photon> diphoPhotons() const {return diphoPhotons_; };
     const std::vector <edm::Ptr<flashgg::DiPhotonCandidate>> diPhoPtrs() const {return diPhoPtrs_; };
-    const std::vector<reco::Candidate::LorentzVector> genPhoton_p4() const {return genPhoton_p4_; };
     const float gen_a1_mass() const { return gen_a1_mass_; };
     const float gen_a2_mass() const { return gen_a2_mass_; };
+    const float gen_h_mass() const { return gen_h_mass_; };
 
   private:
 
@@ -210,9 +210,9 @@ namespace flashgg {
     int isCR_;
     std::vector<flashgg::Photon> diphoPhotons_;
     std::vector <edm::Ptr<flashgg::DiPhotonCandidate>> diPhoPtrs_;
-    std::vector<reco::Candidate::LorentzVector> genPhoton_p4_;
     float gen_a1_mass_;
     float gen_a2_mass_;
+    float gen_h_mass_;
   };
   typedef std::vector<H4GCandidate> H4GCandidateCollection;
 

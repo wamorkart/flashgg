@@ -213,9 +213,6 @@ namespace flashgg {
     vertexIdMVAweightfileH4G_ = pSet.getParameter<edm::FileInPath>( "vertexIdMVAweightfileH4G" );
     vertexProbMVAweightfileH4G_ = pSet.getParameter<edm::FileInPath>( "vertexProbMVAweightfileH4G" );
 
-    cout << vertexIdMVAweightfileH4G_ <<  endl;
-    cout << vertexProbMVAweightfileH4G_ << endl;
-
     VertexIdMva_ = new TMVA::Reader( "!Color:Silent" );
     VertexIdMva_->AddVariable( "ptAsym", &ptAsym );
     VertexIdMva_->AddVariable( "ptBal", &ptBal );
@@ -285,8 +282,13 @@ namespace flashgg {
     vector<int>	pvVecNoTrue;
     int irand = -999;
     int randVtxIndexI = -999;
+    float gen_a1_mass = 0;
+    float gen_a2_mass = 0;
+    float gen_h_mass = 0;
+    std::vector<edm::Ptr<reco::GenParticle>> genPhos;
     if( ! event.isRealData() )
     {
+      std::vector<reco::Candidate::LorentzVector> genPho_p4;
       Handle<View<reco::GenParticle> > genParticles;
       event.getByToken( genParticleToken_, genParticles );
       trueVtxIndexI = mcTruthVertexIndex( genParticles->ptrs(), primaryVertices->ptrs(), 0.1);
@@ -303,17 +305,24 @@ namespace flashgg {
           genVertex = part.vertex();
         }
       }
-      for( auto &part : *genParticle )
+      // for( auto &part : *genParticle )
+      for( unsigned int genLoop = 0 ; genLoop < genParticles->size(); genLoop++ )
       {
-        if (part.pdgId() == 25 || part.pdgId() == 54)
+        edm::Ptr<reco::GenParticle> part = genParticles->ptrAt(genLoop);
+        if( part->isPromptFinalState() == 0 ) continue;
+        if (part->pdgId() != 22 ) continue;
+        if (part->mother()->pdgId() == 25 || part->mother()->pdgId() == 54)
       {
-       genPhoton_p4.push_back(part.daughter(0)->p4());
-       genPhoton_p4.push_back(part.daughter(1)->p4());
+        genPhos.push_back(part);
        }
      }
-
     }
-
+    if (genPhos.size() !=0 )
+    {
+      gen_a1_mass = (genPhos[0]->p4()+genPhos[1]->p4()).mass();
+      gen_a2_mass = (genPhos[2]->p4()+genPhos[3]->p4()).mass();
+      gen_h_mass = (genPhos[0]->p4()+genPhos[1]->p4()+genPhos[2]->p4()+genPhos[3]->p4()).mass();
+    }
 
     edm::Ptr<reco::Vertex> vertex_diphoton;
     edm::Ptr<reco::Vertex> vertex_bdt;
@@ -506,7 +515,7 @@ namespace flashgg {
         }
       }
     }
-      H4GCandidate h4g(Vertices, slim_Vertices, vertex_diphoton, vertex_bdt, genVertex, BSPoint, vtxVar, MVA0, MVA1, MVA2, dZ1, dZ2, dZtrue, hgg_index, trueVtxIndex, randVtxIndex, selected_vertex_index_, tp_pt, nVertices, nConv, VertexProbMva_, genTotalWeight,diphoPhotons,diPhoPtrs,genPhoton_p4);
+      H4GCandidate h4g(Vertices, slim_Vertices, vertex_diphoton, vertex_bdt, genVertex, BSPoint, vtxVar, MVA0, MVA1, MVA2, dZ1, dZ2, dZtrue, hgg_index, trueVtxIndex, randVtxIndex, selected_vertex_index_, tp_pt, nVertices, nConv, VertexProbMva_, genTotalWeight,diphoPhotons,diPhoPtrs, gen_a1_mass,gen_a2_mass,gen_h_mass);
       H4GColl_->push_back(h4g);
     }
     event.put( std::move(H4GColl_) );
