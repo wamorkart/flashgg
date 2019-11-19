@@ -305,23 +305,27 @@ namespace flashgg {
           genVertex = part.vertex();
         }
       }
-      // for( auto &part : *genParticle )
       for( unsigned int genLoop = 0 ; genLoop < genParticles->size(); genLoop++ )
       {
         edm::Ptr<reco::GenParticle> part = genParticles->ptrAt(genLoop);
-        if( part->isPromptFinalState() == 0 ) continue;
-        if (part->pdgId() != 22 ) continue;
-        if (part->mother()->pdgId() == 25 || part->mother()->pdgId() == 54)
-      {
-        genPhos.push_back(part);
-       }
+        if (part->pdgId() ==  25 || part->pdgId() == 54)
+        {
+          if (part->daughter(0)->pdgId() == 22)
+          {
+            genPhos.push_back(part);
+          }
+        }
      }
     }
+    // cout << genPhos.size() << endl;
     if (genPhos.size() !=0 )
     {
-      gen_a1_mass = (genPhos[0]->p4()+genPhos[1]->p4()).mass();
-      gen_a2_mass = (genPhos[2]->p4()+genPhos[3]->p4()).mass();
-      gen_h_mass = (genPhos[0]->p4()+genPhos[1]->p4()+genPhos[2]->p4()+genPhos[3]->p4()).mass();
+      // cout << genPhos[0]->p4().mass() << endl;
+      // cout << genPhos[1]->p4().mass() << endl;
+      // cout << (genPhos[0]->p4()+genPhos[1]->p4()).mass() << endl;
+      gen_a1_mass = genPhos[0]->p4().mass();
+      gen_a2_mass = genPhos[1]->p4().mass();
+      gen_h_mass = (genPhos[0]->p4()+genPhos[1]->p4()).mass() ;
     }
 
     edm::Ptr<reco::Vertex> vertex_diphoton;
