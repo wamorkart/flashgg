@@ -173,6 +173,8 @@ if (customize.year == "2016"):
     print "2016 vtx ID"
     process.FlashggH4GCandidate.vertexIdMVAweightfileH4G= cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_BDTVtxId_H4G_Total_2016.xml")
     process.FlashggH4GCandidate.vertexProbMVAweightfileH4G = cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_BDTVtxProb_H4G_Total_2016.xml")
+    print "2016 diphoton Pair"
+    process.FlashggH4GCandidate.diphoPairMVAweightfileH4G= cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_DiphoPair_H4G_M-60_2016.xml")
 
 elif (customize.year == "2017"):
      print "2017 vtx ID"
