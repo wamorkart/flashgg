@@ -179,10 +179,9 @@ diphoton_pairing_indices_()
     pho_MVA_min_ = *min_element(pho_MVA_vec.begin(),pho_MVA_vec.end());
     pho_MVA_max_ = *max_element(pho_MVA_vec.begin(),pho_MVA_vec.end());
 
-    /*float minDM = 1000000;
     if (phoP4Corrected_dp_.size() > 3)
     {
-      for (int i1=0; i1 < (int) phoP4Corrected_dp_.size(); i1++)
+      /*for (int i1=0; i1 < (int) phoP4Corrected_dp_.size(); i1++)
       {
         flashgg::Photon pho1 = phoP4Corrected_dp_[i1];
         for (int i2=0; i2 < (int) phoP4Corrected_dp_.size(); i2++)
@@ -226,47 +225,45 @@ diphoton_pairing_indices_()
           }
         }
       }*/
-
       
-      if (phoP4Corrected_dp_.size() > 3){
-         flashgg::Photon pho1 = phoP4Corrected_dp_[diphoton_pairing_indices_.at(0)];
-         flashgg::Photon pho2 = phoP4Corrected_dp_[diphoton_pairing_indices_.at(1)];
-         flashgg::Photon pho3 = phoP4Corrected_dp_[diphoton_pairing_indices_.at(2)];
-         flashgg::Photon pho4 = phoP4Corrected_dp_[diphoton_pairing_indices_.at(3)]; 
-         if(pho1.pt() > pho2.pt()){
-            dp1_pho1_ = pho1.p4();
-            dp1_pho2_ = pho2.p4();
-            dp1_ipho1_ = diphoton_pairing_indices_.at(0);
-            dp1_ipho2_ = diphoton_pairing_indices_.at(1);
-         }else{
-            dp1_pho1_ = pho2.p4();
-            dp1_pho2_ = pho3.p4();
-            dp1_ipho1_ = diphoton_pairing_indices_.at(1);
-            dp1_ipho2_ = diphoton_pairing_indices_.at(0);
-         }
-         if(pho3.pt() > pho4.pt()){
-            dp2_pho1_ = pho3.p4();
-            dp2_pho2_ = pho4.p4();
-            dp2_ipho1_ = diphoton_pairing_indices_.at(2);
-            dp2_ipho2_ = diphoton_pairing_indices_.at(3);
-         }else{
-            dp2_pho1_ = pho4.p4();
-            dp2_pho2_ = pho3.p4();
-            dp2_ipho1_ = diphoton_pairing_indices_.at(3);
-            dp2_ipho2_ = diphoton_pairing_indices_.at(2);
-         }
-         auto dipho1 = pho1.p4() + pho2.p4();
-         auto dipho2 = pho3.p4() + pho4.p4();
-         if (dipho1.pt() > dipho2.pt())
-         {
-            dp1_ = dipho1;
-            dp2_ = dipho2;
-         }
-         else if (dipho1.pt() < dipho2.pt())
-         {
-            dp1_ = dipho2;
-            dp2_ = dipho1;
-         } 
+      flashgg::Photon pho1 = phoP4Corrected_dp_[diphoton_pairing_indices_.at(0)];
+      flashgg::Photon pho2 = phoP4Corrected_dp_[diphoton_pairing_indices_.at(1)];
+      flashgg::Photon pho3 = phoP4Corrected_dp_[diphoton_pairing_indices_.at(2)];
+      flashgg::Photon pho4 = phoP4Corrected_dp_[diphoton_pairing_indices_.at(3)]; 
+      if(pho1.pt() > pho2.pt()){
+         dp1_pho1_ = pho1.p4();
+         dp1_pho2_ = pho2.p4();
+         dp1_ipho1_ = diphoton_pairing_indices_.at(0);
+         dp1_ipho2_ = diphoton_pairing_indices_.at(1);
+      }else{
+         dp1_pho1_ = pho2.p4();
+         dp1_pho2_ = pho3.p4();
+         dp1_ipho1_ = diphoton_pairing_indices_.at(1);
+         dp1_ipho2_ = diphoton_pairing_indices_.at(0);
+      }
+      if(pho3.pt() > pho4.pt()){
+         dp2_pho1_ = pho3.p4();
+         dp2_pho2_ = pho4.p4();
+         dp2_ipho1_ = diphoton_pairing_indices_.at(2);
+         dp2_ipho2_ = diphoton_pairing_indices_.at(3);
+      }else{
+         dp2_pho1_ = pho4.p4();
+         dp2_pho2_ = pho3.p4();
+         dp2_ipho1_ = diphoton_pairing_indices_.at(3);
+         dp2_ipho2_ = diphoton_pairing_indices_.at(2);
+      }
+      auto dipho1 = pho1.p4() + pho2.p4();
+      auto dipho2 = pho3.p4() + pho4.p4();
+      if (dipho1.pt() > dipho2.pt())
+      {
+          dp1_ = dipho1;
+          dp2_ = dipho2;
+      }
+      else if (dipho1.pt() < dipho2.pt())
+      {
+          dp1_ = dipho2;
+          dp2_ = dipho1;
+      } 
     
       tp_ = phoP4Corrected_dp_[0].p4() + phoP4Corrected_dp_[1].p4() + phoP4Corrected_dp_[2].p4() + phoP4Corrected_dp_[3].p4();
       pho12_ = phoP4Corrected_dp_[0].p4() + phoP4Corrected_dp_[1].p4();
