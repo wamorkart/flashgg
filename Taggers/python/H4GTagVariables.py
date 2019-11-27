@@ -269,10 +269,6 @@ ws_variables = [
 ]
 
 gen_variables = [
-   "genPho1_pt              := genPhoton_p4[0].pt()",
-   "genPho2_pt              := genPhoton_p4[1].pt()",
-   "genPho3_pt              := genPhoton_p4[2].pt()",
-   "genPho4_pt              := genPhoton_p4[3].pt()",
    "gen_a1_mass             := gen_a1_mass",
    "gen_a2_mass             := gen_a2_mass"
 ]
