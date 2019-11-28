@@ -664,7 +664,6 @@ namespace flashgg {
        }
      }
 
-     unsigned int dipho_index=0;
      sorter_.clear();
      dipair_index_map_.clear(); 
      diphoton_pairing_indices_.clear(); 
@@ -678,24 +677,27 @@ namespace flashgg {
         genToReco_photon_map_tmp_.clear();
         genToReco_photon_map_.clear();
         dipair_index_map_.clear();
-        for(int iPho=0; iPho < (int) phoP4Corrected_dp.size(); iPho++){
-           genPhoton_dR_[0].push_back(deltaR(phoP4Corrected_dp[iPho].eta(),phoP4Corrected_dp[iPho].phi(),genPhoton_p4[0].eta(),genPhoton_p4[0].phi()));
-           genPhoton_dR_[1].push_back(deltaR(phoP4Corrected_dp[iPho].eta(),phoP4Corrected_dp[iPho].phi(),genPhoton_p4[1].eta(),genPhoton_p4[1].phi()));
-           genPhoton_dR_[2].push_back(deltaR(phoP4Corrected_dp[iPho].eta(),phoP4Corrected_dp[iPho].phi(),genPhoton_p4[2].eta(),genPhoton_p4[2].phi()));
-           genPhoton_dR_[3].push_back(deltaR(phoP4Corrected_dp[iPho].eta(),phoP4Corrected_dp[iPho].phi(),genPhoton_p4[3].eta(),genPhoton_p4[3].phi()));
-        }
+ 
+        if(saveDiphoPairingTree_ && !event.isRealData())
+        {
+           for(int iPho=0; iPho < (int) phoP4Corrected_dp.size(); iPho++){
+               genPhoton_dR_[0].push_back(deltaR(phoP4Corrected_dp[iPho].eta(),phoP4Corrected_dp[iPho].phi(),genPhoton_p4[0].eta(),genPhoton_p4[0].phi()));
+               genPhoton_dR_[1].push_back(deltaR(phoP4Corrected_dp[iPho].eta(),phoP4Corrected_dp[iPho].phi(),genPhoton_p4[1].eta(),genPhoton_p4[1].phi()));
+               genPhoton_dR_[2].push_back(deltaR(phoP4Corrected_dp[iPho].eta(),phoP4Corrected_dp[iPho].phi(),genPhoton_p4[2].eta(),genPhoton_p4[2].phi()));
+               genPhoton_dR_[3].push_back(deltaR(phoP4Corrected_dp[iPho].eta(),phoP4Corrected_dp[iPho].phi(),genPhoton_p4[3].eta(),genPhoton_p4[3].phi()));
+           }
         
-        index_ = std::min_element(genPhoton_dR_[0].begin(),genPhoton_dR_[0].end()) - genPhoton_dR_[0].begin();
-        genToReco_photon_map_tmp_[index_].push_back(0); 
-        index_ = std::min_element(genPhoton_dR_[1].begin(),genPhoton_dR_[1].end()) - genPhoton_dR_[1].begin();
-        genToReco_photon_map_tmp_[index_].push_back(1); 
-        index_ = std::min_element(genPhoton_dR_[2].begin(),genPhoton_dR_[2].end()) - genPhoton_dR_[2].begin();
-        genToReco_photon_map_tmp_[index_].push_back(2);
-        index_ = std::min_element(genPhoton_dR_[3].begin(),genPhoton_dR_[3].end()) - genPhoton_dR_[3].begin(); 
-        genToReco_photon_map_tmp_[index_].push_back(3);  
+           index_ = std::min_element(genPhoton_dR_[0].begin(),genPhoton_dR_[0].end()) - genPhoton_dR_[0].begin();
+           genToReco_photon_map_tmp_[index_].push_back(0); 
+           index_ = std::min_element(genPhoton_dR_[1].begin(),genPhoton_dR_[1].end()) - genPhoton_dR_[1].begin();
+           genToReco_photon_map_tmp_[index_].push_back(1); 
+           index_ = std::min_element(genPhoton_dR_[2].begin(),genPhoton_dR_[2].end()) - genPhoton_dR_[2].begin();
+           genToReco_photon_map_tmp_[index_].push_back(2);
+           index_ = std::min_element(genPhoton_dR_[3].begin(),genPhoton_dR_[3].end()) - genPhoton_dR_[3].begin(); 
+           genToReco_photon_map_tmp_[index_].push_back(3);  
        
-        for (auto const& pair : genToReco_photon_map_tmp_)
-        { 
+           for (auto const& pair : genToReco_photon_map_tmp_)
+           { 
              if(pair.second.size()==1) genToReco_photon_map_[pair.first]=pair.second.at(0);
              else{
                 int index_tmp_=0;
@@ -708,10 +710,11 @@ namespace flashgg {
                 }
                 genToReco_photon_map_[pair.first]=index_tmp_;  
              }
-        }
+           }
 
-        for(int iPho=0; iPho<(int) phoP4Corrected_dp.size(); iPho++)
-            if(genToReco_photon_map_.find(iPho)==genToReco_photon_map_.end()) genToReco_photon_map_[iPho]=-1; 
+           for(int iPho=0; iPho<(int) phoP4Corrected_dp.size(); iPho++)
+             if(genToReco_photon_map_.find(iPho)==genToReco_photon_map_.end()) genToReco_photon_map_[iPho]=-1; 
+        } 
         
         for (int i1=0; i1 < (int) phoP4Corrected_dp.size(); i1++)
         { 
