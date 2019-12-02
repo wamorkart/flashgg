@@ -28,7 +28,7 @@
 
   #+BEGIN_EXAMPLE
   voms-proxy-init -voms cms --valid 168:00
-  (for 2016): cmsRun Taggers/test/H4GTest_cfg.py stdDumper=1 isCondor=0 year=2016 metaConditions=$CMSSW_BASE/src/flashgg/MetaData/data/MetaConditions/Era2016_RR-17Jul2018_v1.json
+  (for 2016): cmsRun Taggers/test/H4GTest_cfg.py stdDumper=1 isCondor=0 year=2016 isSignal=1 mass=60 metaConditions=$CMSSW_BASE/src/flashgg/MetaData/data/MetaConditions/Era2016_RR-17Jul2018_v1.json
 
   #+END_EXAMPLE
 
@@ -86,13 +86,13 @@
 
 ** 2016 Ntuples
    #+BEGIN_EXAMPLE
-   - 60 GeV /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_60/
-   - 55 GeV /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_55/
-   - 50 GeV /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_50/
-   - 45 GeV /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_45/
-   - 40 GeV /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_40/
-   - 35 GeV /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_35/
-   - 25 GeV /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_25/
-   - 20 GeV /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_20/
-   - 15 GeV /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_15/
+   60 GeV: /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_60/
+   55 GeV: /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_55/
+   50 GeV: /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_50/
+   45 GeV: /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_45/
+   40 GeV: /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_40/
+   35 GeV: /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_35/
+   25 GeV: /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_25/
+   20 GeV: /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_20/
+   15 GeV: /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_15/
    #+END_EXAMPLE
