@@ -83,11 +83,12 @@ gen_a1_mass_(),
 gen_a2_mass_(),
 gen_h_mass_(),
 // diphoPhotonsVector_()
-diphoton_pairing_indices_()
+diphoton_pairing_indices_(),
+diphoPair_MVA_()
 {}
   H4GCandidate::~H4GCandidate() {}
-  H4GCandidate::H4GCandidate( std::vector<edm::Ptr<reco::Vertex>> Vertices, std::vector<edm::Ptr<reco::Vertex>> slim_Vertices, edm::Ptr<reco::Vertex> vertex_diphoton, edm::Ptr<reco::Vertex> vertex_bdt, reco::GenParticle::Point genVertex, math::XYZPoint BSPoint, std::vector<std::vector<float>> Vector, float MVA0, float MVA1, float MVA2, float dZ1, float dZ2, float dZtrue, int hgg_index, int trueVtx_index, int rndVtx_index, int bdtVtx_index, float tp_pt, float nVertices, float nConv, TMVA::Reader *VertexProbMva, double genTotalWeight, std::vector<flashgg::Photon> diphoPhotons, std::vector <edm::Ptr<flashgg::DiPhotonCandidate>> diPhoPtrs,float gen_a1_mass, float gen_a2_mass, float gen_h_mass, std::vector<int> diphoton_pairing_indices):
-   Vertices_(Vertices), slim_Vertices_(slim_Vertices),vertex_diphoton_(vertex_diphoton), vertex_bdt_(vertex_bdt), genVertex_(genVertex), BSPoint_(BSPoint), Vector_(Vector), MVA0_(MVA0), MVA1_(MVA1), MVA2_(MVA2), dZ1_(dZ1), dZ2_(dZ2), dZtrue_(dZtrue), hgg_index_(hgg_index), trueVtx_index_(trueVtx_index), rndVtx_index_(rndVtx_index), bdtVtx_index_(bdtVtx_index), tp_pt_(tp_pt), nVertices_(nVertices), nConv_(nConv), VertexProbMva_(VertexProbMva), genTotalWeight_(genTotalWeight),diphoPhotons_(diphoPhotons), diPhoPtrs_(diPhoPtrs), gen_a1_mass_(gen_a1_mass), gen_a2_mass_(gen_a2_mass), gen_h_mass_(gen_h_mass), diphoton_pairing_indices_(diphoton_pairing_indices)
+  H4GCandidate::H4GCandidate( std::vector<edm::Ptr<reco::Vertex>> Vertices, std::vector<edm::Ptr<reco::Vertex>> slim_Vertices, edm::Ptr<reco::Vertex> vertex_diphoton, edm::Ptr<reco::Vertex> vertex_bdt, reco::GenParticle::Point genVertex, math::XYZPoint BSPoint, std::vector<std::vector<float>> Vector, float MVA0, float MVA1, float MVA2, float dZ1, float dZ2, float dZtrue, int hgg_index, int trueVtx_index, int rndVtx_index, int bdtVtx_index, float tp_pt, float nVertices, float nConv, TMVA::Reader *VertexProbMva, double genTotalWeight, std::vector<flashgg::Photon> diphoPhotons, std::vector <edm::Ptr<flashgg::DiPhotonCandidate>> diPhoPtrs,float gen_a1_mass, float gen_a2_mass, float gen_h_mass, std::vector<int> diphoton_pairing_indices, float diphoPair_MVA):
+   Vertices_(Vertices), slim_Vertices_(slim_Vertices),vertex_diphoton_(vertex_diphoton), vertex_bdt_(vertex_bdt), genVertex_(genVertex), BSPoint_(BSPoint), Vector_(Vector), MVA0_(MVA0), MVA1_(MVA1), MVA2_(MVA2), dZ1_(dZ1), dZ2_(dZ2), dZtrue_(dZtrue), hgg_index_(hgg_index), trueVtx_index_(trueVtx_index), rndVtx_index_(rndVtx_index), bdtVtx_index_(bdtVtx_index), tp_pt_(tp_pt), nVertices_(nVertices), nConv_(nConv), VertexProbMva_(VertexProbMva), genTotalWeight_(genTotalWeight),diphoPhotons_(diphoPhotons), diPhoPtrs_(diPhoPtrs), gen_a1_mass_(gen_a1_mass), gen_a2_mass_(gen_a2_mass), gen_h_mass_(gen_h_mass), diphoton_pairing_indices_(diphoton_pairing_indices),diphoPair_MVA_(diphoPair_MVA)
 
   {
 
@@ -225,11 +226,11 @@ diphoton_pairing_indices_()
           }
         }
       }*/
-      
+
       flashgg::Photon pho1 = phoP4Corrected_dp_[diphoton_pairing_indices_.at(0)];
       flashgg::Photon pho2 = phoP4Corrected_dp_[diphoton_pairing_indices_.at(1)];
       flashgg::Photon pho3 = phoP4Corrected_dp_[diphoton_pairing_indices_.at(2)];
-      flashgg::Photon pho4 = phoP4Corrected_dp_[diphoton_pairing_indices_.at(3)]; 
+      flashgg::Photon pho4 = phoP4Corrected_dp_[diphoton_pairing_indices_.at(3)];
       if(pho1.pt() > pho2.pt()){
          dp1_pho1_ = pho1.p4();
          dp1_pho2_ = pho2.p4();
@@ -263,8 +264,8 @@ diphoton_pairing_indices_()
       {
           dp1_ = dipho2;
           dp2_ = dipho1;
-      } 
-    
+      }
+
       tp_ = phoP4Corrected_dp_[0].p4() + phoP4Corrected_dp_[1].p4() + phoP4Corrected_dp_[2].p4() + phoP4Corrected_dp_[3].p4();
       pho12_ = phoP4Corrected_dp_[0].p4() + phoP4Corrected_dp_[1].p4();
       pho13_ = phoP4Corrected_dp_[0].p4() + phoP4Corrected_dp_[2].p4();

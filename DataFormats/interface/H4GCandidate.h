@@ -47,7 +47,7 @@ namespace flashgg {
   public:
     //---ctors---
     H4GCandidate() ;
-    H4GCandidate( std::vector<edm::Ptr<reco::Vertex>> Vertices,std::vector<edm::Ptr<reco::Vertex>> slim_Vertices,edm::Ptr<reco::Vertex> vertex_diphoton, edm::Ptr<reco::Vertex> vertex_bdt, reco::GenParticle::Point genVertex, math::XYZPoint BSPoint, std::vector<std::vector<float>> Vector, float MVA0, float MVA1, float MVA2, float dZ1, float dZ2, float dZtrue, int hgg_index, int trueVtx_index, int rndVtx_index, int bdtVtx_index, float tp_pt, float nVertices, float nConv, TMVA::Reader *VertexProbMva, double genTotalWeight,std::vector<flashgg::Photon> diphoPhotons,std::vector <edm::Ptr<flashgg::DiPhotonCandidate>> diPhoPtrs, float gen_a1_mass, float gen_a2_mass, float gen_h_mass, std::vector<int> diphoton_pairing_indices);
+    H4GCandidate( std::vector<edm::Ptr<reco::Vertex>> Vertices,std::vector<edm::Ptr<reco::Vertex>> slim_Vertices,edm::Ptr<reco::Vertex> vertex_diphoton, edm::Ptr<reco::Vertex> vertex_bdt, reco::GenParticle::Point genVertex, math::XYZPoint BSPoint, std::vector<std::vector<float>> Vector, float MVA0, float MVA1, float MVA2, float dZ1, float dZ2, float dZtrue, int hgg_index, int trueVtx_index, int rndVtx_index, int bdtVtx_index, float tp_pt, float nVertices, float nConv, TMVA::Reader *VertexProbMva, double genTotalWeight,std::vector<flashgg::Photon> diphoPhotons,std::vector <edm::Ptr<flashgg::DiPhotonCandidate>> diPhoPtrs, float gen_a1_mass, float gen_a2_mass, float gen_h_mass, std::vector<int> diphoton_pairing_indices, float diphoPair_MVA);
 
     //---dtor---
     ~H4GCandidate();
@@ -146,6 +146,7 @@ namespace flashgg {
     const float gen_a2_mass() const { return gen_a2_mass_; };
     const float gen_h_mass() const { return gen_h_mass_; };
     const std::vector<int> diphoton_pairing_indices() const { return diphoton_pairing_indices_; };
+    const float diphoPair_MVA() const { return diphoPair_MVA_; };
 
   private:
 
@@ -214,7 +215,8 @@ namespace flashgg {
     float gen_a1_mass_;
     float gen_a2_mass_;
     float gen_h_mass_;
-    std::vector<int> diphoton_pairing_indices_; 
+    std::vector<int> diphoton_pairing_indices_;
+    float diphoPair_MVA_;
   };
   typedef std::vector<H4GCandidate> H4GCandidateCollection;
 
