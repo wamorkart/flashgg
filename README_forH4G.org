@@ -85,12 +85,14 @@
   #+END_EXAMPLE
 
 ** 2016 Ntuples
-   - 60 GeV: /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_60/
-   - 55 GeV: /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_55/
-   - 50 GeV: /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_50/
-   - 45 GeV: /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_45/
-   - 40 GeV: /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_40/
-   - 35 GeV: /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_35/
-   - 25 GeV: /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_25/
-   - 20 GeV: /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_20/
-   - 15 GeV: /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_15/
+   #+BEGIN_EXAMPLE
+   - 60 GeV /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_60/
+   - 55 GeV /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_55/
+   - 50 GeV /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_50/
+   - 45 GeV /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_45/
+   - 40 GeV /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_40/
+   - 35 GeV /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_35/
+   - 25 GeV /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_25/
+   - 20 GeV /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_20/
+   - 15 GeV /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_15/
+   #+END_EXAMPLE
