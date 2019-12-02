@@ -41,3 +41,31 @@
    export X509_USER_PROXY=~/MYPROXY
    fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Sig_Jsons/H4G_Signal_2016_newCatalog.json -D -P -n 500 -d outDir/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/Nov11/
    #+END_EXAMPLE
+
+** Run on 2016 Signal samples
+   #+BEGIN_EXAMPLE
+   fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Sig_Jsons/H4G_Signal_2016_newCatalog_60.json -D -P -n 500 -d Dec2_Signal/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/29Nov_2016NTuples_wDiPhoTraining/
+   fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Sig_Jsons/H4G_Signal_2016_newCatalog_55.json -D -P -n 500 -d Dec2_Signal/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/29Nov_2016NTuples_wDiPhoTraining/
+   fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Sig_Jsons/H4G_Signal_2016_newCatalog_50.json -D -P -n 500 -d Dec2_Signal/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/29Nov_2016NTuples_wDiPhoTraining/
+   fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Sig_Jsons/H4G_Signal_2016_newCatalog_45.json -D -P -n 500 -d Dec2_Signal/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/29Nov_2016NTuples_wDiPhoTraining/
+   fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Sig_Jsons/H4G_Signal_2016_newCatalog_40.json -D -P -n 500 -d Dec2_Signal/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/29Nov_2016NTuples_wDiPhoTraining/
+   fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Sig_Jsons/H4G_Signal_2016_newCatalog_35.json -D -P -n 500 -d Dec2_Signal/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/29Nov_2016NTuples_wDiPhoTraining/
+   fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Sig_Jsons/H4G_Signal_2016_newCatalog_30.json -D -P -n 500 -d Dec2_Signal/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/29Nov_2016NTuples_wDiPhoTraining/
+   fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Sig_Jsons/H4G_Signal_2016_newCatalog_25.json -D -P -n 500 -d Dec2_Signal/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/29Nov_2016NTuples_wDiPhoTraining/
+   fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Sig_Jsons/H4G_Signal_2016_newCatalog_20.json -D -P -n 500 -d Dec2_Signal/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/29Nov_2016NTuples_wDiPhoTraining/
+   fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Sig_Jsons/H4G_Signal_2016_newCatalog_15.json -D -P -n 500 -d Dec2_Signal/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/29Nov_2016NTuples_wDiPhoTraining/
+   #+END_EXAMPLE
+
+** Run on 2016 Data samples
+   #+BEGIN_EXAMPLE
+   fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Data_Jsons/H4G_Data_All_60_2016.json -D -P -n 500 -d Dec2_Data_60/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/Dec2_Data_60/
+   fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Data_Jsons/H4G_Data_All_55_2016.json -D -P -n 500 -d Dec2_Data_55/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/Dec2_Data_55/
+   fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Data_Jsons/H4G_Data_All_50_2016.json -D -P -n 500 -d Dec2_Data_50/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/Dec2_Data_50/
+   fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Data_Jsons/H4G_Data_All_45_2016.json -D -P -n 500 -d Dec2_Data_45/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/Dec2_Data_45/
+   fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Data_Jsons/H4G_Data_All_40_2016.json -D -P -n 500 -d Dec2_Data_40/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/Dec2_Data_40/
+   fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Data_Jsons/H4G_Data_All_35_2016.json -D -P -n 500 -d Dec2_Data_35/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/Dec2_Data_35/
+   fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Data_Jsons/H4G_Data_All_30_2016.json -D -P -n 500 -d Dec2_Data_30/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/Dec2_Data_30/
+   fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Data_Jsons/H4G_Data_All_25_2016.json -D -P -n 500 -d Dec2_Data_25/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/Dec2_Data_25/
+   fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Data_Jsons/H4G_Data_All_20_2016.json -D -P -n 500 -d Dec2_Data_20/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/Dec2_Data_20/
+   fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Data_Jsons/H4G_Data_All_15_2016.json -D -P -n 500 -d Dec2_Data_15/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/Dec2_Data_15/
+   #+END_EXAMPLE
