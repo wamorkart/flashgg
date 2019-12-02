@@ -69,3 +69,28 @@
    fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Data_Jsons/H4G_Data_All_20_2016.json -D -P -n 500 -d Dec2_Data_20/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/Dec2_Data_20/
    fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Data_Jsons/H4G_Data_All_15_2016.json -D -P -n 500 -d Dec2_Data_15/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/Dec2_Data_15/
    #+END_EXAMPLE
+
+** Run on 2016 Background samples
+  #+BEGIN_EXAMPLE
+  fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Bkg_Jsons/H4G_Bkg_All_60_2016.json -D -P -n 500 -d Dec2_Bkg_60/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/Dec2_Bkg_60/
+  fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Bkg_Jsons/H4G_Bkg_All_55_2016.json -D -P -n 500 -d Dec2_Bkg_55/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/Dec2_Bkg_55/
+  fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Bkg_Jsons/H4G_Bkg_All_50_2016.json -D -P -n 500 -d Dec2_Bkg_50/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/Dec2_Bkg_50/
+  fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Bkg_Jsons/H4G_Bkg_All_45_2016.json -D -P -n 500 -d Dec2_Bkg_45/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/Dec2_Bkg_45/
+  fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Bkg_Jsons/H4G_Bkg_All_40_2016.json -D -P -n 500 -d Dec2_Bkg_40/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/Dec2_Bkg_40/
+  fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Bkg_Jsons/H4G_Bkg_All_35_2016.json -D -P -n 500 -d Dec2_Bkg_35/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/Dec2_Bkg_35/
+  fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Bkg_Jsons/H4G_Bkg_All_30_2016.json -D -P -n 500 -d Dec2_Bkg_30/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/Dec2_Bkg_30/
+  fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Bkg_Jsons/H4G_Bkg_All_25_2016.json -D -P -n 500 -d Dec2_Bkg_25/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/Dec2_Bkg_25/
+  fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Bkg_Jsons/H4G_Bkg_All_20_2016.json -D -P -n 500 -d Dec2_Bkg_20/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/Dec2_Bkg_20/
+  fggRunJobs.py --load Taggers/test/H4G_2016_newCatalog/Bkg_Jsons/H4G_Bkg_All_15_2016.json -D -P -n 500 -d Dec2_Bkg_15/ -x cmsRun Taggers/test/H4GTest_cfg.py -q workday --no-copy-proxy --stage-to /eos/user/t/twamorka/Dec2_Bkg_15/
+  #+END_EXAMPLE
+
+** 2016 Ntuples
+   60 GeV: /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_60/
+   55 GeV: /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_55/
+   50 GeV: /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_50/
+   45 GeV: /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_45/
+   40 GeV: /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_40/
+   35 GeV: /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_35/
+   25 GeV: /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_25/
+   20 GeV: /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_20/
+   15 GeV: /eos/user/t/twamorka/Ntuples_wBDTDiPhotonPairing/2016/m_15/
