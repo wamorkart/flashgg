@@ -25,7 +25,7 @@
             "/QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8"
          ],
          "GluGluHToGG_M125_13TeV_amcatnloFXFX_pythia8"   : [
-            "/GluGluHToGG_M125_13TeV_amcatnloFXFX_pythia8i"
+            "/GluGluHToGG_M125_13TeV_amcatnloFXFX_pythia8"
          ],
          "VBFHToGG_M125_13TeV_amcatnlo_pythia8"    : [
             "/VBFHToGG_M125_13TeV_amcatnlo_pythia8/spigazzi-Era2016_RR-17Jul2018_v2-legacyRun2FullV1-v0-RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext2-v2-42666aea495bdc3a36d796ff9c4bc819/USER"
@@ -42,8 +42,8 @@
          "TGJets_TuneCUETP8M1_13TeV_amcatnlo_madspin_pythia8"  : [
             "/TGJets_TuneCUETP8M1_13TeV_amcatnlo_madspin_pythia8"
          ],
-         "TTJets_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8" : [
-            "/TTJets_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8"
+         "TTJets_TuneCUETP8M2T4_13TeV-amcatnloFXFX-pythia8" : [
+            "/TTJets_TuneCUETP8M2T4_13TeV-amcatnloFXFX-pythia8"
          ],
          "ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8_v2" : [
             "/ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8_v2"
