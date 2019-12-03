@@ -2488,6 +2488,14 @@ namespace flashgg {
       std::vector<std::vector<float>> megaVec;
 
       unsigned int vertex_index;
+      if (vtxs.size() == 1)
+      {
+        vlogsumpt2_.push_back( -999 );
+        vptasym_.push_back(-999);
+        vptbal_.push_back(-999);
+        vpull_conv_.push_back(-999);
+        vnConv_.push_back(-999);
+     }
       for( vertex_index = 0 ; vertex_index < vtxs.size() ; vertex_index++ ) {
             edm::Ptr<reco::Vertex> vtx = vtxs[vertex_index];
 
@@ -2638,6 +2646,14 @@ namespace flashgg {
       std::vector<std::vector<float>> megaVec;
 
       unsigned int vertex_index;
+      if (vtxs.size() == 1)
+      {
+        vlogsumpt2_.push_back( -999 );
+        vptasym_.push_back(-999);
+        vptbal_.push_back(-999);
+        vpull_conv_.push_back(-999);
+        vnConv_.push_back(-999);
+     }
       for( vertex_index = 0 ; vertex_index < vtxs.size() ; vertex_index++ ) {
             edm::Ptr<reco::Vertex> vtx = vtxs[vertex_index];
 
@@ -2806,6 +2822,14 @@ namespace flashgg {
       std::vector<std::vector<float>> megaVec;
 
       unsigned int vertex_index;
+      if (vtxs.size() == 1)
+      {
+        vlogsumpt2_.push_back( -999 );
+        vptasym_.push_back(-999);
+        vptbal_.push_back(-999);
+        vpull_conv_.push_back(-999);
+        vnConv_.push_back(-999);
+     }
       // if ( !initialized_ ){
       //   Initialize();
       // }
