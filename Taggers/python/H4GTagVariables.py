@@ -97,7 +97,10 @@ pho_variables = [
 dipho_variables = [
     "dp1_mass                := h4gDiPho1.mass() ",
     "dp2_mass                := h4gDiPho2.mass() ",
+    "dp1_mass_prime          := h4gDiPho1_prime.mass() ",
+    "dp2_mass_prime          := h4gDiPho2_prime.mass() ",
     "avg_dp_mass             := (h4gDiPho1.mass()+h4gDiPho2.mass())/2",
+    "avg_dp_mass_prime       := (h4gDiPho1_prime.mass()+h4gDiPho2_prime.mass())/2",
     "dp1_pt                  := h4gDiPho1.pt() ",
     "dp2_pt                  := h4gDiPho2.pt() ",
     "dp1_eta                 := h4gDiPho1.eta() ",
@@ -119,7 +122,8 @@ dipho_variables = [
     "absCosThetaStar_CS_old  := abs(getCosThetaStar_CS_old(6500))",
     "absCosTheta_pho_a1      := abs(CosThetaAngles()[0])",
     "absCosTheta_pho_a2      := abs(CosThetaAngles()[1])",
-    "diphoPair_MVA           := diphoPair_MVA"
+    "diphoPair_MVA           := diphoPair_MVA",
+    "cat_MVA_value           := cat_MVA_value"
 ]
 
 diphoAll_variables = [

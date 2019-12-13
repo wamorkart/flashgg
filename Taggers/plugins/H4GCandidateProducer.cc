@@ -121,10 +121,13 @@ namespace flashgg {
     edm::FileInPath vertexIdMVAweightfileH4G_;
     edm::FileInPath vertexProbMVAweightfileH4G_;
     edm::FileInPath diphoPairMVAweightfileH4G_;
+    edm::FileInPath CatMVAweightfileH4G;
 
     TMVA::Reader *VertexIdMva_;
     TMVA::Reader *VertexProbMva_;
     TMVA::Reader *DiphotonPairMva_;
+
+    double genMassH4G;
 
     void produce( Event &, const EventSetup & ) override;
 
@@ -239,7 +242,6 @@ namespace flashgg {
   cc_( consumesCollector() ),
   idSelector_( ParameterSet(), cc_ )
   {
-
   }
   //---standard
   H4GCandidateProducer::H4GCandidateProducer( const ParameterSet & pSet):
@@ -270,6 +272,10 @@ namespace flashgg {
     vertexProbMVAweightfileH4G_ = pSet.getParameter<edm::FileInPath>( "vertexProbMVAweightfileH4G" );
     diphoPairMVAweightfileH4G_ = pSet.getParameter<edm::FileInPath>( "diphoPairMVAweightfileH4G" );
 
+    CatMVAweightfileH4G = pSet.getParameter<edm::FileInPath>( "CatMVAweightfileH4G" );
+
+    double def_genMassH4G = 0;
+    genMassH4G = pSet.getUntrackedParameter<double>("mass",def_genMassH4G);
     VertexIdMva_ = new TMVA::Reader( "!Color:Silent" );
     VertexIdMva_->AddVariable( "ptAsym", &ptAsym );
     VertexIdMva_->AddVariable( "ptBal", &ptBal );
@@ -410,7 +416,7 @@ namespace flashgg {
     float gen_a1_mass = 0;
     float gen_a2_mass = 0;
     float gen_h_mass = 0;
-    float diphoPair_MVA;
+    float diphoPair_MVA =-999;;
     std::vector<edm::Ptr<reco::GenParticle>> genPhos;
     if( ! event.isRealData() )
     {
@@ -536,7 +542,7 @@ namespace flashgg {
       }
 
       std::sort(phoPtrVector.begin(), phoPtrVector.end(), [](const edm::Ptr<flashgg::Photon> a, const edm::Ptr<flashgg::Photon> b) {return a->pt() > b->pt(); });
-
+      // cout << "vtx size " << vertex->size() << endl;
       for( int v = 0; v < (int) vertex->size(); v++ )
       {
 
@@ -590,13 +596,13 @@ namespace flashgg {
            pullConv = vtxVar[3][vtx];
            nConv = vtxVar[4][vtx];
 
-           float mva_value_ = VertexIdMva_->EvaluateMVA( "BDT" );
+           float mva_value_bdt_ = VertexIdMva_->EvaluateMVA( "BDT" );
 
-           std::pair<unsigned int, float>pairToSort = std::make_pair( (unsigned int)vtx, mva_value_ );
+           std::pair<unsigned int, float>pairToSort = std::make_pair( (unsigned int)vtx, mva_value_bdt_ );
            sorter_.push_back( pairToSort );
 
-           if( mva_value_ > max_mva_value_ ) {
-                max_mva_value_ = mva_value_;
+           if( mva_value_bdt_ > max_mva_value_ ) {
+                max_mva_value_ = mva_value_bdt_;
                 selected_vertex_index_ = vtx;
            }
       }
@@ -820,23 +826,27 @@ namespace flashgg {
 
                      dipho1 = pho1.p4() + pho4.p4();
                      dipho1_energy = dipho1.energy();
-    	             dipho1_pt = dipho1.pt();
-    		     dipho1_eta = dipho1.eta();
+    	               dipho1_pt = dipho1.pt();
+    		             dipho1_eta = dipho1.eta();
                      dipho1_phi = dipho1.phi();
                      dipho1_dR = deltaR(pho1.eta(),pho1.phi(),pho4.eta(),pho4.phi());
                      dipho1_mass = dipho1.mass();
-                     deltaM1_gen1 = fabs(dipho1.mass()-gen_a1_mass);
-                     deltaM1_gen2 = fabs(dipho1.mass()-gen_a2_mass);
+                     // deltaM1_gen1 = fabs(dipho1.mass()-gen_a1_mass);
+                     // deltaM1_gen2 = fabs(dipho1.mass()-gen_a2_mass);
+                     deltaM1_gen1 = fabs(dipho1.mass()-genMassH4G);
+                     deltaM1_gen2 = fabs(dipho1.mass()-genMassH4G);
 
                      dipho2 = pho2.p4() + pho3.p4();
                      dipho2_energy = dipho2.energy();
                      dipho2_pt = dipho2.pt();
-  		     dipho2_eta = dipho2.eta();
+  		               dipho2_eta = dipho2.eta();
                      dipho2_phi = dipho2.phi();
                      dipho2_dR = deltaR(pho2.eta(),pho2.phi(),pho3.eta(),pho3.phi());
                      dipho2_mass = dipho2.mass();
-                     deltaM2_gen1 = fabs(dipho2.mass()-gen_a1_mass);
-                     deltaM2_gen2 = fabs(dipho2.mass()-gen_a2_mass);
+                     // deltaM2_gen1 = fabs(dipho2.mass()-gen_a1_mass);
+                     // deltaM2_gen2 = fabs(dipho2.mass()-gen_a2_mass);
+                     deltaM2_gen1 = fabs(dipho2.mass()-genMassH4G);
+                     deltaM2_gen2 = fabs(dipho2.mass()-genMassH4G);
 
                      dipair_energy = (dipho1+dipho2).energy();
                      dipair_pt = (dipho1+dipho2).pt();
@@ -874,7 +884,7 @@ namespace flashgg {
 
      }
 
-     H4GCandidate h4g(Vertices, slim_Vertices, vertex_diphoton, vertex_bdt, genVertex, BSPoint, vtxVar, MVA0, MVA1, MVA2, dZ1, dZ2, dZtrue, hgg_index, trueVtxIndex, randVtxIndex, selected_vertex_index_, tp_pt, nVertices, nConv, VertexProbMva_, genTotalWeight,diphoPhotons,diPhoPtrs, gen_a1_mass,gen_a2_mass,gen_h_mass,diphoton_pairing_indices_,diphoPair_MVA);
+     H4GCandidate h4g(Vertices, slim_Vertices, vertex_diphoton, vertex_bdt, genVertex, BSPoint, vtxVar, MVA0, MVA1, MVA2, dZ1, dZ2, dZtrue, hgg_index, trueVtxIndex, randVtxIndex, selected_vertex_index_, tp_pt, nVertices, nConv, VertexProbMva_, genTotalWeight,diphoPhotons,diPhoPtrs, gen_a1_mass,gen_a2_mass,gen_h_mass,diphoton_pairing_indices_,diphoPair_MVA,CatMVAweightfileH4G);
 
      H4GColl_->push_back(h4g);
     }

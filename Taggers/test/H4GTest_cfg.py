@@ -60,7 +60,7 @@ customize.options.register('isSignal',
 customize.options.register('mass',
                  '',
                  VarParsing.VarParsing.multiplicity.singleton,
-                 VarParsing.VarParsing.varType.string,
+                 VarParsing.VarParsing.varType.float,
                  "mass")
 
 from flashgg.MetaData.JobConfig import customize
@@ -170,8 +170,8 @@ if (customize.year == "2016"):
             secondaryFileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/mc/RunIISummer16MiniAODv2/SUSYGluGluToHToAA_AToGG_M-60_TuneCUETP8M1_13TeV_pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/C85D3FF6-84C8-E611-B11D-D4AE526A0B29.root"),
             #fileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/user/spigazzi/flashgg/Era2016_RR-17Jul2018_v2/legacyRun2FullV1/DiPhotonJetsBox_M40_80-Sherpa/Era2016_RR-17Jul2018_v2-legacyRun2FullV1-v0-RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/190715_222009/0000/myMicroAODOutputFile_62.root"),
             #secondaryFileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/mc/RunIISummer16MiniAODv3/DiPhotonJetsBox_M40_80-Sherpa/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v1/60000/36573481-50CD-E811-95FB-0242AC130004.root")
-            #fileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/user/spigazzi/flashgg/Era2016_RR-17Jul2018_v2/legacyRun2FullV1/DoubleEG/Era2016_RR-17Jul2018_v2-legacyRun2FullV1-v0-Run2016B-17Jul2018_ver2-v1/190605_220256/0000/myMicroAODOutputFile_932.root"),
-            #secondaryFileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/data/Run2016B/DoubleEG/MINIAOD/17Jul2018_ver2-v1/20000/D03AED69-308D-E811-AFFC-008CFA197CD0.root","root://cms-xrd-global.cern.ch//store/data/Run2016B/DoubleEG/MINIAOD/17Jul2018_ver2-v1/20000/FCFDB07D-378D-E811-89A0-008CFAE45144.root")
+            # fileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/user/spigazzi/flashgg/Era2016_RR-17Jul2018_v2/legacyRun2FullV1/DoubleEG/Era2016_RR-17Jul2018_v2-legacyRun2FullV1-v0-Run2016B-17Jul2018_ver2-v1/190605_220256/0000/myMicroAODOutputFile_932.root"),
+            # secondaryFileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/data/Run2016B/DoubleEG/MINIAOD/17Jul2018_ver2-v1/20000/D03AED69-308D-E811-AFFC-008CFA197CD0.root","root://cms-xrd-global.cern.ch//store/data/Run2016B/DoubleEG/MINIAOD/17Jul2018_ver2-v1/20000/FCFDB07D-378D-E811-89A0-008CFAE45144.root")
 
             )
 
@@ -188,34 +188,37 @@ if (customize.year == "2016"):
     process.FlashggH4GCandidate.vertexProbMVAweightfileH4G = cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_BDTVtxProb_H4G_Total_2016.xml")
     print "2016 diphoton Pairing"
     print "mass = ", customize.mass
-    if (customize.mass == "60"):
+    process.FlashggH4GCandidate.mass = cms.untracked.double(customize.mass)
+    if (customize.mass == 60):
         process.FlashggH4GCandidate.diphoPairMVAweightfileH4G= cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_diphoPairTMVA_H4G_M60.weights.xml")
+        process.FlashggH4GCandidate.CatMVAweightfileH4G = cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_CatMVA_H4G_60.weights.xml")
         print "BDT mass training ", process.FlashggH4GCandidate.diphoPairMVAweightfileH4G
-    elif (customize.mass == "55"):
+    elif (customize.mass == 55):
         process.FlashggH4GCandidate.diphoPairMVAweightfileH4G= cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_diphoPairTMVA_H4G_M55.weights.xml")
         print "BDT mass training ", process.FlashggH4GCandidate.diphoPairMVAweightfileH4G
-    elif (customize.mass == "50"):
+    elif (customize.mass == 50):
         process.FlashggH4GCandidate.diphoPairMVAweightfileH4G= cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_diphoPairTMVA_H4G_M50.weights.xml")
         print "BDT mass training ", process.FlashggH4GCandidate.diphoPairMVAweightfileH4G
-    elif (customize.mass == "45"):
+        process.FlashggH4GCandidate.CatMVAweightfileH4G = cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_CatMVA_H4G_60.weights.xml")
+    elif (customize.mass == 45):
         process.FlashggH4GCandidate.diphoPairMVAweightfileH4G= cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_diphoPairTMVA_H4G_M45.weights.xml")
         print "BDT mass training ", process.FlashggH4GCandidate.diphoPairMVAweightfileH4G
-    elif (customize.mass == "40"):
+    elif (customize.mass == 40):
         process.FlashggH4GCandidate.diphoPairMVAweightfileH4G= cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_diphoPairTMVA_H4G_M40.weights.xml")
         print "BDT mass training ", process.FlashggH4GCandidate.diphoPairMVAweightfileH4G
-    elif (customize.mass == "35"):
+    elif (customize.mass == 35):
         process.FlashggH4GCandidate.diphoPairMVAweightfileH4G= cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_diphoPairTMVA_H4G_M35.weights.xml")
         print "BDT mass training ", process.FlashggH4GCandidate.diphoPairMVAweightfileH4G
-    elif (customize.mass == "30"):
+    elif (customize.mass == 30):
         process.FlashggH4GCandidate.diphoPairMVAweightfileH4G= cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_diphoPairTMVA_H4G_M30.weights.xml")
         print "BDT mass training ", process.FlashggH4GCandidate.diphoPairMVAweightfileH4G
-    elif (customize.mass == "25"):
+    elif (customize.mass == 25):
         process.FlashggH4GCandidate.diphoPairMVAweightfileH4G= cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_diphoPairTMVA_H4G_M25.weights.xml")
         print "BDT mass training ", process.FlashggH4GCandidate.diphoPairMVAweightfileH4G
-    elif (customize.mass == "20"):
+    elif (customize.mass == 20):
         process.FlashggH4GCandidate.diphoPairMVAweightfileH4G= cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_diphoPairTMVA_H4G_M20.weights.xml")
         print "BDT mass training ", process.FlashggH4GCandidate.diphoPairMVAweightfileH4G
-    elif (customize.mass == "15"):
+    elif (customize.mass == 15):
         process.FlashggH4GCandidate.diphoPairMVAweightfileH4G= cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_diphoPairTMVA_H4G_M15.weights.xml")
         print "BDT mass training ", process.FlashggH4GCandidate.diphoPairMVAweightfileH4G
     # process.FlashggH4GCandidate.diphoPairMVAweightfileH4G= cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_diPairBDT_H4G_M-60_2016.xml")
