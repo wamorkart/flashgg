@@ -744,23 +744,23 @@ namespace flashgg {
 
                      auto dipho1 = pho1.p4() + pho2.p4();
                      dipho1_energy = dipho1.energy();
-    	             dipho1_pt = dipho1.pt();
-    		     dipho1_eta = dipho1.eta();
+    	               dipho1_pt = dipho1.pt();
+    		             dipho1_eta = dipho1.eta();
                      dipho1_phi = dipho1.phi();
                      dipho1_dR = deltaR(pho1.eta(),pho1.phi(),pho2.eta(),pho2.phi());
                      dipho1_mass = dipho1.mass();
-                     deltaM1_gen1 = fabs(dipho1.mass()-gen_a1_mass);
-                     deltaM1_gen2 = fabs(dipho1.mass()-gen_a2_mass);
+                     deltaM1_gen1 = fabs(dipho1.mass()-genMassH4G);
+                     deltaM1_gen2 = fabs(dipho1.mass()-genMassH4G);
 
                      auto dipho2 = pho3.p4() + pho4.p4();
                      dipho2_energy = dipho2.energy();
                      dipho2_pt = dipho2.pt();
-  		     dipho2_eta = dipho2.eta();
+  		               dipho2_eta = dipho2.eta();
                      dipho2_phi = dipho2.phi();
                      dipho2_dR = deltaR(pho3.eta(),pho3.phi(),pho4.eta(),pho4.phi());
                      dipho2_mass = dipho2.mass();
-                     deltaM2_gen1 = fabs(dipho2.mass()-gen_a1_mass);
-                     deltaM2_gen2 = fabs(dipho2.mass()-gen_a2_mass);
+                     deltaM2_gen1 = fabs(dipho2.mass()-genMassH4G);
+                     deltaM2_gen2 = fabs(dipho2.mass()-genMassH4G);
 
                      dipair_energy = (dipho1+dipho2).energy();
                      dipair_pt = (dipho1+dipho2).pt();
@@ -785,23 +785,23 @@ namespace flashgg {
 
                      dipho1 = pho1.p4() + pho3.p4();
                      dipho1_energy = dipho1.energy();
-    	             dipho1_pt = dipho1.pt();
-    		     dipho1_eta = dipho1.eta();
+    	               dipho1_pt = dipho1.pt();
+    		             dipho1_eta = dipho1.eta();
                      dipho1_phi = dipho1.phi();
                      dipho1_dR = deltaR(pho1.eta(),pho1.phi(),pho3.eta(),pho3.phi());
                      dipho1_mass = dipho1.mass();
-                     deltaM1_gen1 = fabs(dipho1.mass()-gen_a1_mass);
-                     deltaM1_gen2 = fabs(dipho1.mass()-gen_a2_mass);
+                     deltaM1_gen1 = fabs(dipho1.mass()-genMassH4G);
+                     deltaM1_gen2 = fabs(dipho1.mass()-genMassH4G);
 
                      dipho2 = pho2.p4() + pho4.p4();
                      dipho2_energy = dipho2.energy();
                      dipho2_pt = dipho2.pt();
-  		     dipho2_eta = dipho2.eta();
+  		               dipho2_eta = dipho2.eta();
                      dipho2_phi = dipho2.phi();
                      dipho2_dR = deltaR(pho2.eta(),pho2.phi(),pho4.eta(),pho4.phi());
                      dipho2_mass = dipho2.mass();
-                     deltaM2_gen1 = fabs(dipho2.mass()-gen_a1_mass);
-                     deltaM2_gen2 = fabs(dipho2.mass()-gen_a2_mass);
+                     deltaM2_gen1 = fabs(dipho2.mass()-genMassH4G);
+                     deltaM2_gen2 = fabs(dipho2.mass()-genMassH4G);
 
                      dipair_energy = (dipho1+dipho2).energy();
                      dipair_pt = (dipho1+dipho2).pt();
