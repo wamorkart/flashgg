@@ -21,7 +21,7 @@ process.TFileService = cms.Service("TFileService",
                                    fileName = cms.string("test.root")
 )
 
-process.load("flashgg.Taggers.flashggUpdatedIdMVADiPhotons_cfi") 
+process.load("flashgg.Taggers.flashggUpdatedIdMVADiPhotons_cfi")
 process.flashggUpdatedIdMVADiPhotons.reRunRegression = cms.bool(False)
 process.flashggUpdatedIdMVADiPhotons.doNon5x5transformation = cms.bool(False)
 process.flashggUpdatedIdMVADiPhotons.do5x5correction = cms.bool(False)
@@ -32,22 +32,22 @@ process.kinPreselDiPhotons = flashggPreselectedDiPhotons.clone(
 src = cms.InputTag("flashggUpdatedIdMVADiPhotons"),
 cut=cms.string(
         "mass > 95"
-        " && leadingPhoton.pt > 18 && subLeadingPhoton.pt > 18"
+        " && leadingPhoton.pt > 10 && subLeadingPhoton.pt > 10"
         " && abs(leadingPhoton.superCluster.eta)<2.5 && abs(subLeadingPhoton.superCluster.eta)<2.5 "
         " && ( abs(leadingPhoton.superCluster.eta)<1.4442 || abs(leadingPhoton.superCluster.eta)>1.566)"
         " && ( abs(subLeadingPhoton.superCluster.eta)<1.4442 || abs(subLeadingPhoton.superCluster.eta)>1.566)"
-        " && (leadingPhoton.pt > 14 && leadingPhoton.hadTowOverEm < 0.15 && (leadingPhoton.full5x5_r9>0.8 || leadingPhoton.chargedHadronIso<20 || leadingPhoton.chargedHadronIso<(0.3*leadingPhoton.pt)))"
-        " && (subLeadingPhoton.pt > 14 && subLeadingPhoton.hadTowOverEm < 0.15 && (subLeadingPhoton.full5x5_r9>0.8 || subLeadingPhoton.chargedHadronIso<20 || subLeadingPhoton.chargedHadronIso<(0.3*subLeadingPhoton.pt)))"
+        " && (leadingPhoton.pt > 10 && leadingPhoton.hadTowOverEm < 0.15 && (leadingPhoton.full5x5_r9>0.8 || leadingPhoton.chargedHadronIso<20 || leadingPhoton.chargedHadronIso<(0.3*leadingPhoton.pt)))"
+        " && (subLeadingPhoton.pt > 10 && subLeadingPhoton.hadTowOverEm < 0.15 && (subLeadingPhoton.full5x5_r9>0.8 || subLeadingPhoton.chargedHadronIso<20 || subLeadingPhoton.chargedHadronIso<(0.3*subLeadingPhoton.pt)))"
         )
 )
 
 
 process.flashggSinglePhotonViews = cms.EDProducer("FlashggSinglePhotonViewProducer",
-                                                  DiPhotonTag=cms.InputTag('kinPreselDiPhotons'),                                         
+                                                  DiPhotonTag=cms.InputTag('kinPreselDiPhotons'),
                                                   maxCandidates = cms.int32(1)
                                                   )
 
-process.load("flashgg.Taggers.photonViewDumper_cfi") ##  import diphotonDumper 
+process.load("flashgg.Taggers.photonViewDumper_cfi") ##  import diphotonDumper
 import flashgg.Taggers.dumperConfigTools as cfgTools
 
 process.photonViewDumper.src = "flashggSinglePhotonViews"
@@ -60,8 +60,8 @@ variables=["pt                     := photon.pt",
            "energy                 := photon.energy",
            "eta                    := photon.eta",
            "phi                    := photon.phi",
-           "scEta                  := photon.superCluster.eta", 
-           "scPhi                  := photon.superCluster.phi", 
+           "scEta                  := photon.superCluster.eta",
+           "scPhi                  := photon.superCluster.phi",
            "SCRawE                 := photon.superCluster.rawEnergy",
            "etaWidth               := photon.superCluster.etaWidth",
            "phiWidth               := photon.superCluster.phiWidth",
@@ -74,10 +74,10 @@ variables=["pt                     := photon.pt",
            "trkSumPtHollowConeDR03 := photon.trkSumPtHollowConeDR03",
            "hadTowOverEm           := photon.hadTowOverEm",
            "idMVA                  := phoIdMvaWrtChosenVtx",
-           #"genIso                 := photon.userFloat('genIso')", 
+           #"genIso                 := photon.userFloat('genIso')",
            "eTrue                  := ? photon.hasMatchedGenPhoton ? photon.matchedGenPhoton.energy : 0",
            "sigmaIetaIeta          := photon.full5x5_sigmaIetaIeta",
-           "r9                     := photon.full5x5_r9", 
+           "r9                     := photon.full5x5_r9",
            "esEffSigmaRR           := photon.esEffSigmaRR",
            "s4                     := photon.s4",
            "covIEtaIPhi            := photon.sieip",
@@ -103,7 +103,7 @@ cfgTools.addCategory(process.photonViewDumper,
                      -1 ## if nSubcat is -1 do not store anythings
                      )
 
-# interestng categories 
+# interestng categories
 cfgTools.addCategories(process.photonViewDumper,
                        ## categories definition
                        ## cuts are applied in cascade. Events getting to these categories have already failed the "Reject" selection
@@ -113,7 +113,7 @@ cfgTools.addCategories(process.photonViewDumper,
                        ## variables to be dumped in trees/datasets. Same variables for all categories
                        ## if different variables wanted for different categories, can add categorie one by one with cfgTools.addCategory
                        variables=variables,
-                       ## histograms to be plotted. 
+                       ## histograms to be plotted.
                        ## the variables need to be defined first
                        histograms=histograms,
                        )
@@ -128,4 +128,3 @@ process.p1 = cms.Path(process.flashggUpdatedIdMVADiPhotons*
 from flashgg.MetaData.JobConfig import customize
 customize.setDefault("maxEvents",10000)
 customize(process)
-
