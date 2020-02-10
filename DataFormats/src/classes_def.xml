@@ -170,8 +170,8 @@
 <class name="edm::Wrapper<std::vector<flashgg::VHHadronicTag> >"/>
 <class name="edm::Ptr<flashgg::DiPhotonTagBase>"/>
 <class name="edm::Wrapper<edm::Ptr<flashgg::DiPhotonTagBase> >"/>
-<class name="edm::Ptr<reco::Vertex>"/> 
-<class name="std::vector<edm::Ptr<reco::Vertex> >"/> 
+<class name="edm::Ptr<reco::Vertex>"/>
+<class name="std::vector<edm::Ptr<reco::Vertex> >"/>
 <class name="flashgg::Photon" ClassVersion="13">
  <version ClassVersion="13" checksum="1109558243"/>
  <version ClassVersion="12" checksum="1503356172"/>
@@ -382,7 +382,8 @@
 <class name="std::vector<flashgg::DoubleHTag>"/>
 <class name="edm::Wrapper<std::vector<flashgg::DoubleHTag> >"/>
 
-<class name="flashgg::H4GCandidate" ClassVersion="50">
+<class name="flashgg::H4GCandidate" ClassVersion="51">
+ <version ClassVersion="51" checksum="234628937"/>
  <version ClassVersion="50" checksum="3400712885"/>
  <version ClassVersion="49" checksum="3011246713"/>
  <version ClassVersion="48" checksum="234628937"/>
@@ -398,5 +399,40 @@
 </class>
 <class name="std::vector<flashgg::H4GCandidate>"/>
 <class name="edm::Wrapper<std::vector<flashgg::H4GCandidate> >"/>
+
+<class name="flashgg::H4GTag" ClassVersion="22">
+ <version ClassVersion="22" checksum="3413345734"/>
+ <version ClassVersion="21" checksum="149403235"/>
+ <version ClassVersion="20" checksum="3413345734"/>
+ <version ClassVersion="19" checksum="2820732737"/>
+ <version ClassVersion="18" checksum="2067843869"/>
+ <version ClassVersion="17" checksum="2820732737"/>
+ <version ClassVersion="16" checksum="1487356339"/>
+ <version ClassVersion="15" checksum="3170171275"/>
+ <version ClassVersion="14" checksum="470517199"/>
+ <version ClassVersion="13" checksum="1264868891"/>
+ <version ClassVersion="12" checksum="1782830055"/>
+  <version ClassVersion="10" checksum="2099650607"/>
+  <version ClassVersion="11" checksum="2809364010"/>
+</class>
+<class name="std::vector<flashgg::H4GTag>"/>
+<class name="edm::Wrapper<std::vector<flashgg::H4GTag> >"/>
+
+<class name="flashgg::HHWWggTag" ClassVersion="20">
+ <version ClassVersion="20" checksum="3836019979"/>
+ <version ClassVersion="19" checksum="1527657067"/>
+ <version ClassVersion="18" checksum="2369756180"/>
+ <version ClassVersion="17" checksum="2590506898"/>
+ <version ClassVersion="16" checksum="2985469946"/>
+ <version ClassVersion="15" checksum="3170171275"/>
+ <version ClassVersion="14" checksum="470517199"/>
+ <version ClassVersion="13" checksum="1264868891"/>
+ <version ClassVersion="12" checksum="1782830055"/>
+  <version ClassVersion="10" checksum="2099650607"/>
+  <version ClassVersion="11" checksum="2809364010"/>
+</class>
+<class name="std::vector<flashgg::HHWWggTag>"/>
+<class name="edm::Wrapper<std::vector<flashgg::HHWWggTag> >"/>
+
 
 </lcgdict>
