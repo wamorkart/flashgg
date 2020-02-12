@@ -22,8 +22,8 @@ class H4GCustomize():
             # "HHbbggMVA := MVA()"
         ]
         variables = [
-            "pho1_MVA := lp_Hgg_MVA",
-            "pho2_MVA := slp_Hgg_MVA"
+            # "dipho_pt := dipho.pt()"
+            # "pho2_MVA := slp_Hgg_MVA"
             # Cut flow variables
             # "passPS[2,0,2] := Cut_Variables[0]",
             # "passPhotonSels[2,0,2] := Cut_Variables[1]",
@@ -185,11 +185,11 @@ class H4GCustomize():
     def systematicVariables(self):
     #   systematicVariables=["CMS_hgg_mass[160,100,180]:=diPhoton().mass","Mjj[120,70,190]:=dijet().M()","HHbbggMVA[100,0,1.]:=MVA()","MX[300,250,5000]:=MX()"]
       systematicVariables=[
-          "CMS_hgg_mass[160,100,180]:=diPhoton().mass",
-          "lp_E[100,0,100] := Leading_Photon.p4().E()",
-          "slp_E[100,0,100] := Subleading_Photon.p4().E()",
-          "lp_initE[100,0,100] := Leading_Photon.energyAtStep('initial')",
-          "slp_initE[100,0,100] := Subleading_Photon.energyAtStep('initial')", # also want final energies
+          # "CMS_hgg_mass[160,100,180]:=diPhoton().mass",
+          # "lp_E[100,0,100] := Leading_Photon.p4().E()",
+          # "slp_E[100,0,100] := Subleading_Photon.p4().E()",
+          # "lp_initE[100,0,100] := Leading_Photon.energyAtStep('initial')",
+          # "slp_initE[100,0,100] := Subleading_Photon.energyAtStep('initial')", # also want final energies
         #  "jet0_btag                       := ? JetVector.size() >= 1 ? JetVector[0].bDiscriminator('mini_pfDeepFlavourJetTags:probb') : -99 ",
       ]
     #   systematicVariables=[]

@@ -49,7 +49,7 @@ namespace flashgg {
         virtual ~FunctorWrapper() {} ; //delete func_; };
 
         virtual float operator()( const ObjectT &obj ) const { return ( *func_ )( obj ); };
-        
+
         std::shared_ptr<FunctorT> ptr() { return func_; };
 
     private:
@@ -67,7 +67,7 @@ namespace flashgg {
         virtual ~FunctorMVAWrapper() {} ; //delete func_; };
 
         virtual float operator()( const ObjectT &obj ) const { return ( *func_ )( obj )[0]; };
-        
+
         std::shared_ptr<FunctorT> ptr() { return func_; };
 
     private:
@@ -124,7 +124,7 @@ namespace flashgg {
         void bookTree( TFileDirectory &fs, const char *weightVar, const std::map<std::string, std::string> &replacements );
         void bookRooDataset( RooWorkspace &ws, const char *weightVar, const std::map<std::string, std::string> &replacements);
         void compressPdfWeightDatasets(RooWorkspace *ws);
-        
+
 
         void fill( const object_type &obj, double weight, vector<double>, int n_cand = 0, int stage0cat = -999);
         string  GetName();
@@ -150,7 +150,7 @@ namespace flashgg {
         int n_cand_;
         float weight_;
         RooArgSet rooVars_;
-        RooArgSet rooVars_pdfWeights_;        
+        RooArgSet rooVars_pdfWeights_;
         RooAbsData *dataset_;
         RooAbsData *dataset_pdfWeights_;
         TTree *tree_;
@@ -171,14 +171,14 @@ namespace flashgg {
 
     template<class F, class O>
     CategoryDumper<F, O>::CategoryDumper( const std::string &name, const edm::ParameterSet &cfg, GlobalVariablesDumper *dumper ):
-        dataset_( 0 ), 
-        dataset_pdfWeights_( 0 ), 
-        tree_( 0 ), 
-        globalVarsDumper_( dumper ), 
-        hbooked_( false ), 
-        binnedOnly_ (false), 
-        dumpPdfWeights_ (false ), 
-        nPdfWeights_ (0), 
+        dataset_( 0 ),
+        dataset_pdfWeights_( 0 ),
+        tree_( 0 ),
+        globalVarsDumper_( dumper ),
+        hbooked_( false ),
+        binnedOnly_ (false),
+        dumpPdfWeights_ (false ),
+        nPdfWeights_ (0),
         nAlphaSWeights_(0),
         nScaleWeights_(0),
         splitPdfByStage0Cat_( false )
@@ -189,7 +189,7 @@ namespace flashgg {
         if( cfg.existsAs<vector<string> >( "dumpOnly" ) ) {
             dumpOnly_ = cfg.getParameter<vector<string> >( "dumpOnly" );
         }
-        
+
         if( cfg.existsAs<bool >( "binnedOnly" ) ) {
             binnedOnly_ = cfg.getParameter<bool >( "binnedOnly" );
         }
@@ -248,7 +248,7 @@ namespace flashgg {
         //##########
         auto globalExtraFloatNames = globalVarsDumper_->getExtraFloatNames();
         for( auto &extraFloatName : globalExtraFloatNames ) {
-            //            std::cout<<"adding wrapper for extra float variable "<<extraFloatName<<std::endl; 
+            //            std::cout<<"adding wrapper for extra float variable "<<extraFloatName<<std::endl;
 //            auto name = mva.getUntrackedParameter<string>( "name" );
             auto nbins =  100 ;
             auto vmin =  numeric_limits<double>::lowest();
@@ -345,6 +345,7 @@ namespace flashgg {
     template<class F, class O>
     void CategoryDumper<F, O>::bookTree( TFileDirectory &fs, const char *weightName, const std::map<std::string, std::string> &replacements )
     {
+        cout << "[in Taggers/interface/CategoryDumper.h - bookTree] - Tree is getting booked" << endl;
         tree_ = fs.make<TTree>( formatString( name_, replacements ).c_str(), formatString( name_, replacements ).c_str() );
         tree_->Branch( "candidate_id", &n_cand_, "candidate_id/I" );
         tree_->Branch( weightName, &weight_ );
@@ -368,7 +369,7 @@ namespace flashgg {
             }
         }
     }
-    
+
     template<class F, class O>
     void CategoryDumper<F, O>::compressPdfWeightDatasets( RooWorkspace * ws)
     {
@@ -458,7 +459,7 @@ namespace flashgg {
             dataset_pdfWeights_ = 0;
         } else {
             std::cout << "[ERROR], no pdfweight dataset to compress!!" << std::endl;
-        }        
+        }
     }
 
     template<class F, class O>
@@ -469,7 +470,7 @@ namespace flashgg {
     }
 
     RooArgSet  rooVars_pdfWeights0 ;
-    
+
     for( size_t iv = 0; iv < names_.size(); ++iv ) {
         auto &name = names_[iv];
         auto &var = variables_[iv];
@@ -483,7 +484,7 @@ namespace flashgg {
         if(binnedOnly_ && (nbins==0)){
             throw cms::Exception( "Dumper Binning" ) << "One or more variable which is to be dumped in a RooDataHist has not been allocated any binning options. Please specify these in your dumper configuration using the format variable[nBins,min,max] := variable definition ";
         }
-        if( nbins >= 0 ) { 
+        if( nbins >= 0 ) {
             rooVar.setMin( vmin );
             rooVar.setMax( vmax );
             rooVar.setBins( nbins );
@@ -516,7 +517,7 @@ namespace flashgg {
     rooVars_pdfWeights_.add(*((RooArgSet*) rooVars_pdfWeights0.selectByName("stage0cat")),true);
     //    std::cout << " after     rooVars_pdfWeights_.add(*((RooArgSet*) rooVars_pdfWeights0.selectByName(\"stage0cat\")),true);" << std::endl;
     rooVars_pdfWeights_.add(*ws.var( weightVar ),true);
-    
+
     std::string dsetName = formatString( name_, replacements );
     if( ! binnedOnly_ ) {
         RooDataSet dset( dsetName.c_str(), dsetName.c_str(), rooVars_, weightVar );
@@ -537,68 +538,87 @@ namespace flashgg {
 
     template<class F, class O>
 string CategoryDumper<F, O>::GetName( )
-{   
+{
     return name_ ;
 }
 
     template<class F, class O>
 bool CategoryDumper<F, O>::isBinnedOnly( )
-{   
+{
     return binnedOnly_ ;
 }
 
     template<class F, class O>
     void CategoryDumper<F, O>::fill( const object_type &obj, double weight, vector<double> pdfWeights, int n_cand, int stage0cat)
-{  
+{
+    cout << "[in Taggers/interface/CategoryDumper.h - CategoryDumper<F, O>::fill]" << endl;
     n_cand_ = n_cand;
     weight_ = weight;
     if( dataset_ && (!binnedOnly_) ) {
+      cout << "[in categorydumper.h]: step 1" << endl;
         dynamic_cast<RooRealVar &>( rooVars_["weight"] ).setVal( weight_ );
     }
     if (dumpPdfWeights_){
+      cout << "[in categorydumper.h]: step 2" << endl;
         if( tree_ ) {
+          cout << "[in categorydumper.h]: step 3" << endl;
             std::copy(pdfWeights.begin(),pdfWeights.end(),variables_pdfWeights_.begin());
         }
         if( dataset_pdfWeights_ ) {
+          cout << "[in categorydumper.h]: step 4" << endl;
             dynamic_cast<RooRealVar &>( rooVars_pdfWeights_["weight"] ).setVal( weight_ );
-            if ((nPdfWeights_+ nAlphaSWeights_ + nScaleWeights_) != (int) (pdfWeights.size())){ 
+            if ((nPdfWeights_+ nAlphaSWeights_ + nScaleWeights_) != (int) (pdfWeights.size())){
+              cout << "[in categorydumper.h]: step 5" << endl;
                 throw cms::Exception( "Configuration" ) << " Specified number of pdfWeights (" << nPdfWeights_ <<") plus alphaSWeights ("<<nAlphaSWeights_
                                                         <<") plus scaleWeights (" << nScaleWeights_ << ") does not match length of pdfWeights Vector ("
                                                         << pdfWeights.size() << ")." ;
             }
             for ( int i =0; i< nPdfWeights_; i++) {
+              cout << "[in categorydumper.h]: step 6" << endl;
                 dynamic_cast<RooRealVar &>( rooVars_pdfWeights_[Form("pdfWeight_%d",i)] ).setVal( pdfWeights[i] );
             }
             for ( int i =0; i<nAlphaSWeights_  ; i++) {
-                dynamic_cast<RooRealVar &>( rooVars_pdfWeights_[Form("alphaSWeight_%d",i)] ).setVal( pdfWeights[i+nPdfWeights_] ); // alpha S weights currently stored at the end of pdfweight vector 
+              cout << "[in categorydumper.h]: step 7" << endl;
+                dynamic_cast<RooRealVar &>( rooVars_pdfWeights_[Form("alphaSWeight_%d",i)] ).setVal( pdfWeights[i+nPdfWeights_] ); // alpha S weights currently stored at the end of pdfweight vector
             }
             for ( int i =0; i< nScaleWeights_; i++) {
+              cout << "[in categorydumper.h]: step 8" << endl;
                 dynamic_cast<RooRealVar &>( rooVars_pdfWeights_[Form("scaleWeight_%d",i)] ).setVal( pdfWeights[i+nPdfWeights_+nAlphaSWeights_] ); // and scale weights stored after that!
                 dynamic_cast<RooRealVar &>( rooVars_[Form("scaleWeight_%d",i)] ).setVal( pdfWeights[i+nPdfWeights_+nAlphaSWeights_] ); // and scale weights stored after that!
             }
             if ( splitPdfByStage0Cat_ && stage0cat > -1 ) {
+              cout << "[in categorydumper.h]: step 9" << endl;
                 dynamic_cast<RooRealVar &>( rooVars_pdfWeights_["stage0cat"]).setVal( stage0cat );
                 //                std::cout << "In CategoryDumper<F, O>::fill set stage0cat to " << stage0cat << std::endl;
             }
         }
     }
-    
+    cout << "[in categorydumper.h]: step 10" << endl;
+
     for( size_t ivar = 0; ivar < names_.size(); ++ivar ) {
+      cout << "[in categorydumper.h]: step 11" << endl;
         auto name = names_[ivar].c_str();
         auto &var = variables_[ivar];
         auto &val = std::get<0>( var );
         val = ( *std::get<1>( var ) )( obj );
         if( dataset_ ) {
+          cout << "[in categorydumper.h]: step 12" << endl;
             dynamic_cast<RooRealVar &>( rooVars_[name] ).setVal( val );
             if (dumpPdfWeights_) {
+              cout << "[in categorydumper.h]: step 13" << endl;
                 if( rooVars_pdfWeights_.find(name) != 0 ) {
+                  cout << "[in categorydumper.h]: step 14" << endl;
                     if ( val == 0. ) { std::cout << " WARNING we have a weight 0 that we're pushing back into rooVars_pdfWeights_[ " << name << " ] " << std::endl; }
-                    dynamic_cast<RooRealVar &>( rooVars_pdfWeights_[name] ).setVal( val ); 
+                    dynamic_cast<RooRealVar &>( rooVars_pdfWeights_[name] ).setVal( val );
                 }
             }
         }
     }
+    cout << "[in categorydumper.h]: step 15" << endl;
     if( tree_ ) { tree_->Fill(); }
+    // Debugging H4G
+        cout << "[in Taggers/interface/CategoryDumper.h] - Filling tree " << endl;
+         cout << "[in Taggers/interface/CategoryDumper.h] - tree_ = " << tree_ << endl;
     if( dataset_ ) {
         dataset_->add( rooVars_, weight_ );
         if (dumpPdfWeights_ && dataset_pdfWeights_) {
@@ -637,4 +657,3 @@ inline bool operator==( const std::string &lh, const flashgg::histo_info &rh ) {
 // c-basic-offset:4
 // End:
 // vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
-
