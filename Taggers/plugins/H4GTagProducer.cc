@@ -66,6 +66,10 @@ namespace flashgg {
     EDGetTokenT<View<reco::GenParticle> > genParticleToken_;
     Handle<View<reco::GenParticle> > genParticle;
 
+    //---ID selector
+    // ConsumesCollector cc_;
+    // CutBasedDiPhotonObjectSelector idSelector_;
+
     std::vector< std::string > systematicsLabels;
     std::vector<std::string> inputDiPhotonSuffixes_;
     string systLabel_;
@@ -73,7 +77,10 @@ namespace flashgg {
   H4GTagProducer::H4GTagProducer( const ParameterSet & pSet):
   diphotonToken_( consumes<View<flashgg::DiPhotonCandidate> >( pSet.getParameter<InputTag> ( "DiPhotonTag" ) ) ),
   genParticleToken_( consumes<View<reco::GenParticle> >( pSet.getParameter<InputTag> ( "GenParticleTag" ) ) ),
+  // cc_( consumesCollector() ),
+  // idSelector_( pSet.getParameter<ParameterSet> ( "idSelection" ), cc_ ),
   systLabel_( pSet.getParameter<string> ( "SystLabel" ) )
+
   {
     inputDiPhotonName_= pSet.getParameter<std::string > ( "DiPhotonName" );
     inputDiPhotonSuffixes_= pSet.getParameter<std::vector<std::string> > ( "DiPhotonSuffixes" );
@@ -125,19 +132,114 @@ namespace flashgg {
     truths->push_back( truth_obj );
 }
 
+std::vector< flashgg::Photon> pho_vec;
+int n_pho=0;
+// // read diphotons
+// for (unsigned int diphoton_idx = 0; diphoton_idx < diPhotonTokens_.size(); diphoton_idx++) {//looping over all diphoton systematics
+//   Handle<View<flashgg::DiPhotonCandidate> > diPhotons;
+//   event.getByToken( diPhotonTokens_[diphoton_idx], diPhotons );
+//
+//   std::unique_ptr<vector<H4GTag> > H4Gtags( new vector<H4GTag> );
+//   // loop over diphotons
+//   for( unsigned int candIndex = 0; candIndex < diPhotons->size() ; candIndex++ ) {
+//       edm::Ptr<flashgg::DiPhotonCandidate> dipho = diPhotons->ptrAt( candIndex );
+     //  // create photons out of diphotons
+     //  flashgg::DiPhotonCandidate * thisDPPointer = const_cast<flashgg::DiPhotonCandidate *>(dipho.get());
+     //  thisDPPointer->makePhotonsPersistent();
+     //  auto pho1 = thisDPPointer->getLeadingPhoton();
+     //  auto pho2 = thisDPPointer->getSubLeadingPhoton();
+     //
+     //  if (pho_vec.size() == 0 ){
+     //   pho_vec.push_back(pho1);
+     //   pho_vec.push_back(pho2);
+     //   n_pho +=2;
+     //   continue;
+     // }
+     // else {
+     //   float minDR1 = 999, minDR2 = 999;
+     //   for (size_t p=0; p < pho_vec.size(); p++){
+     //     float deltar1 = sqrt(pow(pho_vec[p].superCluster()->eta()-pho1.superCluster()->eta(),2)+pow(pho_vec[p].superCluster()->phi()-pho1.superCluster()->phi(),2));
+     //     float deltar2 = sqrt(pow(pho_vec[p].superCluster()->eta()-pho2.superCluster()->eta(),2)+pow(pho_vec[p].superCluster()->phi()-pho2.superCluster()->phi(),2));
+     //     if (deltar1 < minDR1) minDR1 = deltar1;
+     //     if (deltar2 < minDR2) minDR2 = deltar2;
+     //   }
+     //   if (minDR1 > 0.00001)
+     //   {
+     //     n_pho++;
+     //     pho_vec.push_back(pho1);
+     //   }
+     //   if (minDR2 > 0.00001)
+     //   {
+     //     n_pho++;
+     //     pho_vec.push_back(pho2);
+     //   }
+     // }
+//
+//       H4GTag tag_obj(dipho);
+//       tag_obj.setDiPhotonIndex( candIndex );
+//       tag_obj.setSystLabel( inputDiPhotonSuffixes_[diphoton_idx] );
+//       tag_obj.setCategoryNumber( 0 );
+//       tag_obj.includeWeights( *dipho );
+//       H4Gtags->push_back(tag_obj);
+//       if( ! event.isRealData() ) {
+//                 H4Gtags->back().setTagTruth( edm::refToPtr( edm::Ref<vector<TagTruthBase> >( rTagTruth, 0 ) ) );
+//               }
+//
+//     }
+//     event.put( std::move( H4Gtags ) );
+//     event.put(std::move(truths));
+//
+// }
+
     Handle<View<flashgg::DiPhotonCandidate> > diPhotons;
     event.getByToken( diphotonToken_, diphotons );
 
 
     std::unique_ptr<vector<H4GTag> > H4Gtags( new vector<H4GTag> );
     if (diphotons->size() > 0){
-      for( unsigned int diphoIndex = 0; diphoIndex < 1; diphoIndex++ ) {
+      cout << "# of diphotons " << diphotons->size() << endl;
+      for( unsigned int diphoIndex = 0; diphoIndex < diphotons->size(); diphoIndex++ ) {
         edm::Ptr<flashgg::DiPhotonCandidate> dipho = diphotons->ptrAt( diphoIndex );
+
+        cout << "[in tagproducer ] dipho pt " << dipho->pt() << endl;
+
+        // create photons out of diphotons
+        flashgg::DiPhotonCandidate * thisDPPointer = const_cast<flashgg::DiPhotonCandidate *>(dipho.get());
+        thisDPPointer->makePhotonsPersistent();
+        auto pho1 = thisDPPointer->getLeadingPhoton();
+        auto pho2 = thisDPPointer->getSubLeadingPhoton();
+
+        if (pho_vec.size() == 0 ){
+         pho_vec.push_back(pho1);
+         pho_vec.push_back(pho2);
+         n_pho +=2;
+         continue;
+       }
+       else {
+         float minDR1 = 999, minDR2 = 999;
+         for (size_t p=0; p < pho_vec.size(); p++){
+           float deltar1 = sqrt(pow(pho_vec[p].superCluster()->eta()-pho1.superCluster()->eta(),2)+pow(pho_vec[p].superCluster()->phi()-pho1.superCluster()->phi(),2));
+           float deltar2 = sqrt(pow(pho_vec[p].superCluster()->eta()-pho2.superCluster()->eta(),2)+pow(pho_vec[p].superCluster()->phi()-pho2.superCluster()->phi(),2));
+           if (deltar1 < minDR1) minDR1 = deltar1;
+           if (deltar2 < minDR2) minDR2 = deltar2;
+         }
+         if (minDR1 > 0.00001)
+         {
+           n_pho++;
+           pho_vec.push_back(pho1);
+         }
+         if (minDR2 > 0.00001)
+         {
+           n_pho++;
+           pho_vec.push_back(pho2);
+         }
+       }
+
         H4GTag tag_obj(dipho);
         tag_obj.setSystLabel( systLabel_);
-        tag_obj.setDiPhotonIndex( diphoIndex );
+        // tag_obj.setDiPhotonIndex( diphoIndex );
         tag_obj.setCategoryNumber( 0 );
-        tag_obj.includeWeights( *dipho );
+        // tag_obj.includeWeights( *dipho );
         H4Gtags->push_back( tag_obj );
 
         if( ! event.isRealData() ) {

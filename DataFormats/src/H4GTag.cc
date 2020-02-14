@@ -22,7 +22,12 @@ H4GTag::~H4GTag() {}
 H4GTag::H4GTag(edm::Ptr<flashgg::DiPhotonCandidate> dipho)
 {
   dipho_ = dipho;
+  cout << "dipho pt " << dipho->pt() << endl;
 }
+
+// vector< flashgg::Photon> H4GTag::getPhotons() const {
+
+// }
 
 H4GTag *H4GTag::clone() const
 {
