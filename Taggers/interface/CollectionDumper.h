@@ -668,7 +668,7 @@ namespace flashgg {
 
         auto cat = classifier_( cand );
         auto which = dumpers_.find( cat.first );
-
+        //auto which = dumpers_.find("H4GTag");
         cout << "[in collectiondumper.h]: cat.first" << cat.first << endl;
         cout << "[in Taggers/interface/CollectionDumper.h] - dumpers_.size() = " << dumpers_.size() << endl;
 
