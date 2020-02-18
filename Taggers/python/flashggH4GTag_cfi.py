@@ -18,12 +18,13 @@ flashggH4GTag = cms.EDProducer("FlashggH4GTagProducer",
                                     globalVariables=globalVariables,
                                     PhotonTag = cms.InputTag('flashggRandomizedPhotons'),
                                     # DiPhotonTag = cms.InputTag('flashggDiPhotonSystematics'),
-                                    DiPhotonTag = cms.InputTag('flashggPreselectedDiPhotons'),
+                                    DiPhotonTag = cms.InputTag('flashggDiPhotons'),
+                                    idSelection     = cms.PSet(),
                                     SystLabel = cms.string(""),
                                     JetsName = cms.string("bRegProducer"), #
                                     JetsCollSize = cms.uint32(maxJetCollections), #
                                     JetsSuffixes = cms.vstring(''), #nominal and systematic variations
-                                    DiPhotonName = cms.string('flashggPreselectedDiPhotons'), #
+                                    DiPhotonName = cms.string('flashggDiPhotons'), #
                                     VertexTag = cms.InputTag('offlineSlimmedPrimaryVertices'),
                                     GenParticleTag         = cms.InputTag('flashggPrunedGenParticles'),
                                     ElectronTag            = cms.InputTag('flashggSelectedElectrons'),
@@ -69,6 +70,7 @@ flashggH4GTag = cms.EDProducer("FlashggH4GTagProducer",
                                     # bTag = cms.string(flashggDeepCSV),
                                     # btagThresh = cms.double(100)     # no btag (Save all btags < 100)
                                     btagThresh = cms.double(0.45),
-                                    doHHWWggTagCutFlowAnalysis = cms.bool(False) # save events for cut flow analysis
+                                    doHHWWggTagCutFlowAnalysis = cms.bool(False) # save events for cut flow analysis,
+
                                     )
 # flashggHHWWggTagSequence = cms.Sequence( flashggHHWWggTag ) # not used

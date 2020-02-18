@@ -67,8 +67,8 @@ namespace flashgg {
     Handle<View<reco::GenParticle> > genParticle;
 
     //---ID selector
-    // ConsumesCollector cc_;
-    // CutBasedDiPhotonObjectSelector idSelector_;
+    ConsumesCollector cc_;
+    CutBasedDiPhotonObjectSelector idSelector_;
 
     std::vector< std::string > systematicsLabels;
     std::vector<std::string> inputDiPhotonSuffixes_;
@@ -77,8 +77,8 @@ namespace flashgg {
   H4GTagProducer::H4GTagProducer( const ParameterSet & pSet):
   diphotonToken_( consumes<View<flashgg::DiPhotonCandidate> >( pSet.getParameter<InputTag> ( "DiPhotonTag" ) ) ),
   genParticleToken_( consumes<View<reco::GenParticle> >( pSet.getParameter<InputTag> ( "GenParticleTag" ) ) ),
-  // cc_( consumesCollector() ),
-  // idSelector_( pSet.getParameter<ParameterSet> ( "idSelection" ), cc_ ),
+  cc_( consumesCollector() ),
+  idSelector_( pSet.getParameter<ParameterSet> ( "idSelection" ), cc_ ),
   systLabel_( pSet.getParameter<string> ( "SystLabel" ) )
 
   {
@@ -134,6 +134,7 @@ namespace flashgg {
 
 std::vector< flashgg::Photon> pho_vec;
 int n_pho=0;
+
 // // read diphotons
 // for (unsigned int diphoton_idx = 0; diphoton_idx < diPhotonTokens_.size(); diphoton_idx++) {//looping over all diphoton systematics
 //   Handle<View<flashgg::DiPhotonCandidate> > diPhotons;
@@ -194,62 +195,48 @@ int n_pho=0;
     Handle<View<flashgg::DiPhotonCandidate> > diPhotons;
     event.getByToken( diphotonToken_, diphotons );
 
+    //---at least one diphoton should pass the low mass hgg pre-selection
+    bool atLeastOneDiphoPass = false;
+    for( unsigned int dpIndex = 0; dpIndex < diphotons->size(); dpIndex++ )
+    {
+      edm::Ptr<flashgg::DiPhotonCandidate> thisDPPtr = diphotons->ptrAt( dpIndex );
+      flashgg::DiPhotonCandidate * thisDPPointer = const_cast<flashgg::DiPhotonCandidate *>(thisDPPtr.get());
+      atLeastOneDiphoPass |= idSelector_(*thisDPPointer, event);
+    }
+
+    cout << "atLeastOneDiphoPass: " << atLeastOneDiphoPass << endl;
 
     std::unique_ptr<vector<H4GTag> > H4Gtags( new vector<H4GTag> );
-    if (diphotons->size() > 0){
+    // if (diphotons->size() > 0){
       cout << "# of diphotons " << diphotons->size() << endl;
       for( unsigned int diphoIndex = 0; diphoIndex < diphotons->size(); diphoIndex++ ) {
         edm::Ptr<flashgg::DiPhotonCandidate> dipho = diphotons->ptrAt( diphoIndex );
 
         cout << "[in tagproducer ] dipho pt " << dipho->pt() << endl;
 
-        // create photons out of diphotons
-        flashgg::DiPhotonCandidate * thisDPPointer = const_cast<flashgg::DiPhotonCandidate *>(dipho.get());
-        thisDPPointer->makePhotonsPersistent();
-        auto pho1 = thisDPPointer->getLeadingPhoton();
-        auto pho2 = thisDPPointer->getSubLeadingPhoton();
-
-        if (pho_vec.size() == 0 ){
-         pho_vec.push_back(pho1);
-         pho_vec.push_back(pho2);
-         n_pho +=2;
-         continue;
-       }
-       else {
-         float minDR1 = 999, minDR2 = 999;
-         for (size_t p=0; p < pho_vec.size(); p++){
-           float deltar1 = sqrt(pow(pho_vec[p].superCluster()->eta()-pho1.superCluster()->eta(),2)+pow(pho_vec[p].superCluster()->phi()-pho1.superCluster()->phi(),2));
-           float deltar2 = sqrt(pow(pho_vec[p].superCluster()->eta()-pho2.superCluster()->eta(),2)+pow(pho_vec[p].superCluster()->phi()-pho2.superCluster()->phi(),2));
-           if (deltar1 < minDR1) minDR1 = deltar1;
-           if (deltar2 < minDR2) minDR2 = deltar2;
-         }
-         if (minDR1 > 0.00001)
-         {
-           n_pho++;
-           pho_vec.push_back(pho1);
-         }
-         if (minDR2 > 0.00001)
-         {
-           n_pho++;
-           pho_vec.push_back(pho2);
-         }
-       }
-
+        cout << "before creating tag object " << endl;
         H4GTag tag_obj(dipho);
+        cout << "after creating tag object " << endl;
         tag_obj.setSystLabel( systLabel_);
         // tag_obj.setDiPhotonIndex( diphoIndex );
         tag_obj.setCategoryNumber( 0 );
         // tag_obj.includeWeights( *dipho );
+        cout << "before pushing tag object " << endl;
         H4Gtags->push_back( tag_obj );
+
+        cout << "after pushing tag object " << endl;
+
 
         if( ! event.isRealData() ) {
                   H4Gtags->back().setTagTruth( edm::refToPtr( edm::Ref<vector<TagTruthBase> >( rTagTruth, 0 ) ) );
                 }
 
       }
-    }
+    // }
+    cout << "before putting in the event " << endl;
     event.put( std::move( H4Gtags ) );
     event.put(std::move(truths));
+    cout << "after putting in the event " << endl;
   }
 }
 

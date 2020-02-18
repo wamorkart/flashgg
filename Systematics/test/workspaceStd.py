@@ -7,7 +7,7 @@ from flashgg.Systematics.SystematicDumperDefaultVariables import minimalVariable
 from flashgg.Systematics.SystematicDumperDefaultVariables import minimalVariablesHTXS,systematicVariablesHTXS
 import os
 from flashgg.MetaData.MetaConditionsReader import *
-# from flashgg.Systematics.flashggDiPhotonSystematics_cfi import flashggDiPhotonSystematics
+from flashgg.Taggers.flashggPreselectedDiPhotons_LowMass_cfi import flashggPreselectedDiPhotonsLowMass
 
 # SYSTEMATICS SECTION
 dropVBFInNonGold = False  # for 2015 only!
@@ -241,6 +241,16 @@ if customize.tthTagsOnly or customize.H4GTagsOnly:
 #     process.flashggDiPhotons.vertexProbMVAweightfile = "flashgg/MicroAOD/data/TMVAClassification_BDTVtxId_SL_2016.xml"
 #     process.flashggDiPhotons.vertexIdMVAweightfile = "flashgg/MicroAOD/data/TMVAClassification_BDTVtxId_SL_2016.xml"
 
+# if customize.HHWWggTagsOnly:
+#     print 'customizing for H4G'
+#     process.load("flashgg/Taggers/python/flashggPreselectedDiPhotons_LowMass_cfi")
+#     process.flashggH4GTag.idSelection = cms.PSet(
+#             rho = flashggPreselectedDiPhotonsLowMass.rho,
+#             cut = flashggPreselectedDiPhotonsLowMass.cut,
+#             variables = flashggPreselectedDiPhotonsLowMass.variables,
+#             categories = flashggPreselectedDiPhotonsLowMass.categories
+#     )
+
 print 'here we print the tag sequence before'
 print process.flashggTagSequence
 if customize.doFiducial:
@@ -276,6 +286,11 @@ if customize.tthTagsOnly:
     process.flashggTagSequence.remove(process.flashggTTHDiLeptonTag)
     process.flashggTagSequence.remove(process.flashggTHQLeptonicTag)
 
+if customize.H4GTagsOnly:
+    process.flashggTagSequence.remove(process.flashggPreselectedDiPhotons)
+    process.flashggTagSequence.remove(process.flashggDiPhotonMVA)
+
+
 else:
     if not customize.doSystematics: # allow memory-intensive ttH MVAs if we are not running systematics
         allowLargettHMVAs(process)
@@ -293,6 +308,13 @@ if customize.doH4GTag:
     # exit(0)
     minimalVariables += h4gc.variablesToDump()
     systematicVariables = h4gc.systematicVariables()
+
+    process.load("flashgg/Taggers/flashggPreselectedDiPhotons_LowMass_cfi")
+    process.flashggH4GTag.idSelection = cms.PSet(
+                rho = flashggPreselectedDiPhotonsLowMass.rho,
+                cut = flashggPreselectedDiPhotonsLowMass.cut,
+                variables = flashggPreselectedDiPhotonsLowMass.variables,
+                categories = flashggPreselectedDiPhotonsLowMass.categories)
 
 process.flashggTHQLeptonicTag.processId = cms.string(str(customize.processId))
 
@@ -793,6 +815,8 @@ if customize.doBJetRegression:
 if customize.doDoubleHTag:
     hhc.doubleHTagRunSequence(systlabels,jetsystlabels,phosystlabels)
 
+# if customize.doH4GTag:
+#     hhc.doubleHTagRunSequence(systlabels,jetsystlabels,phosystlabels)
 # if customize.doHHWWggTag:
 #     hhwwggc.HHWWggTagRunSequence(systlabels,jetsystlabels,phosystlabels)
 
