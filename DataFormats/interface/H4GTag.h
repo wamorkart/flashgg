@@ -28,10 +28,8 @@ namespace flashgg{
     H4GTag();
     ~H4GTag();
 
-    H4GTag(edm::Ptr<DiPhotonCandidate>);
+    H4GTag(edm::Ptr<DiPhotonCandidate>,vector<edm::Ptr<flashgg::DiPhotonCandidate>>);
     virtual H4GTag *clone() const override;
-
-
   };
 }
 

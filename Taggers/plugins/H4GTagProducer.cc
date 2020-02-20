@@ -1,7 +1,3 @@
-// Abe Tishelman-Charny
-// November 2019
-// Derived from HH->WWgg event dumper and HH->bbgg tagger
-
 #include "FWCore/Framework/interface/EDProducer.h"
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
@@ -51,14 +47,22 @@ namespace flashgg {
   class H4GTagProducer : public EDProducer
   {
   public:
+    //---typedef
     typedef math::XYZTLorentzVector LorentzVector;
 
-    H4GTagProducer( const ParameterSet &);
+    //---ctors
+    // HHWWggTagProducer();
+    H4GTagProducer( const ParameterSet & );
+
+    //---Outtree
+    edm::Service<TFileService> fs;
+
 
   private:
-    void produce( Event &, const EventSetup &) override;
+    void produce( Event &, const EventSetup & ) override;
     std::vector<edm::EDGetTokenT<edm::View<DiPhotonCandidate> > > diPhotonTokens_;
     std::string inputDiPhotonName_;
+
 
     EDGetTokenT<View<DiPhotonCandidate> > diphotonToken_;
     Handle<View<flashgg::DiPhotonCandidate> > diphotons;
@@ -66,179 +70,140 @@ namespace flashgg {
     EDGetTokenT<View<reco::GenParticle> > genParticleToken_;
     Handle<View<reco::GenParticle> > genParticle;
 
-    //---ID selector
-    ConsumesCollector cc_;
-    CutBasedDiPhotonObjectSelector idSelector_;
+    string systLabel_;
+
+
 
     std::vector< std::string > systematicsLabels;
     std::vector<std::string> inputDiPhotonSuffixes_;
-    string systLabel_;
+
+
+    edm::InputTag genInfo_;
+    edm::EDGetTokenT<GenEventInfoProduct> genInfoToken_;
   };
-  H4GTagProducer::H4GTagProducer( const ParameterSet & pSet):
-  diphotonToken_( consumes<View<flashgg::DiPhotonCandidate> >( pSet.getParameter<InputTag> ( "DiPhotonTag" ) ) ),
-  genParticleToken_( consumes<View<reco::GenParticle> >( pSet.getParameter<InputTag> ( "GenParticleTag" ) ) ),
-  cc_( consumesCollector() ),
-  idSelector_( pSet.getParameter<ParameterSet> ( "idSelection" ), cc_ ),
-  systLabel_( pSet.getParameter<string> ( "SystLabel" ) )
-
-  {
-    inputDiPhotonName_= pSet.getParameter<std::string > ( "DiPhotonName" );
-    inputDiPhotonSuffixes_= pSet.getParameter<std::vector<std::string> > ( "DiPhotonSuffixes" );
-    std::vector<edm::InputTag>  diPhotonTags;
-    for (auto & suffix : inputDiPhotonSuffixes_){
-      systematicsLabels.push_back(suffix);
-      std::string inputName = inputDiPhotonName_;
-      inputName.append(suffix);
-      if (!suffix.empty()) diPhotonTags.push_back(edm::InputTag(inputName));
-      else  diPhotonTags.push_back(edm::InputTag(inputDiPhotonName_));
-    }
-    for( auto & tag : diPhotonTags ) { diPhotonTokens_.push_back( consumes<edm::View<flashgg::DiPhotonCandidate> >( tag ) ); }
-
-    produces<vector<H4GTag>>();
-    produces<vector<TagTruthBase>>();
-  }
-  void H4GTagProducer::produce( Event &event, const EventSetup &)
-  {
-    event.getByToken( diphotonToken_, diphotons );
 
 
-    std::unique_ptr<vector<TagTruthBase> > truths( new vector<TagTruthBase> );
-    edm::RefProd<vector<TagTruthBase> > rTagTruth = event.getRefBeforePut<vector<TagTruthBase> >();
+    //---standard
+    H4GTagProducer::H4GTagProducer( const ParameterSet & pSet):
+    diphotonToken_( consumes<View<flashgg::DiPhotonCandidate> >( pSet.getParameter<InputTag> ( "DiPhotonTag" ) ) ),
+    genParticleToken_( consumes<View<reco::GenParticle> >( pSet.getParameter<InputTag> ( "GenParticleTag" ) ) ),
+    systLabel_( pSet.getParameter<string> ( "SystLabel" ) )
 
-    TagTruthBase truth_obj;
 
-    if( ! event.isRealData() ) {
-    Handle<View<reco::GenParticle> > genParticles;
-    std::vector<edm::Ptr<reco::GenParticle> > selHiggses;
-    event.getByToken( genParticleToken_, genParticles );
-    reco::GenParticle::Point higgsVtx(0.,0.,0.);
-    for( unsigned int genLoop = 0 ; genLoop < genParticles->size(); genLoop++ ) {
-        int pdgid = genParticles->ptrAt( genLoop )->pdgId();
-        // if( pdgid == 25 || pdgid == 22 ) { // not so sure if this is correct for HHWWgg because of potential photons from hadronization
-        if( pdgid == 25 ) {
-            higgsVtx = genParticles->ptrAt( genLoop )->vertex();
-            // gen_vertex_z = higgsVtx.z();
-            break;
-        }
-    }
-    for( unsigned int genLoop = 0 ; genLoop < genParticles->size(); genLoop++ ) {
-        edm::Ptr<reco::GenParticle> genPar = genParticles->ptrAt(genLoop);
-        if (selHiggses.size()>1) break;
-      if (genPar->pdgId()==25 && genPar->isHardProcess()){
-          selHiggses.push_back(genPar);
-      }
-    }
-    truth_obj.setGenPV( higgsVtx );
-    truths->push_back( truth_obj );
-}
-
-std::vector< flashgg::Photon> pho_vec;
-int n_pho=0;
-
-// // read diphotons
-// for (unsigned int diphoton_idx = 0; diphoton_idx < diPhotonTokens_.size(); diphoton_idx++) {//looping over all diphoton systematics
-//   Handle<View<flashgg::DiPhotonCandidate> > diPhotons;
-//   event.getByToken( diPhotonTokens_[diphoton_idx], diPhotons );
-//
-//   std::unique_ptr<vector<H4GTag> > H4Gtags( new vector<H4GTag> );
-//   // loop over diphotons
-//   for( unsigned int candIndex = 0; candIndex < diPhotons->size() ; candIndex++ ) {
-//       edm::Ptr<flashgg::DiPhotonCandidate> dipho = diPhotons->ptrAt( candIndex );
-     //  // create photons out of diphotons
-     //  flashgg::DiPhotonCandidate * thisDPPointer = const_cast<flashgg::DiPhotonCandidate *>(dipho.get());
-     //  thisDPPointer->makePhotonsPersistent();
-     //  auto pho1 = thisDPPointer->getLeadingPhoton();
-     //  auto pho2 = thisDPPointer->getSubLeadingPhoton();
-     //
-     //  if (pho_vec.size() == 0 ){
-     //   pho_vec.push_back(pho1);
-     //   pho_vec.push_back(pho2);
-     //   n_pho +=2;
-     //   continue;
-     // }
-     // else {
-     //   float minDR1 = 999, minDR2 = 999;
-     //   for (size_t p=0; p < pho_vec.size(); p++){
-     //     float deltar1 = sqrt(pow(pho_vec[p].superCluster()->eta()-pho1.superCluster()->eta(),2)+pow(pho_vec[p].superCluster()->phi()-pho1.superCluster()->phi(),2));
-     //     float deltar2 = sqrt(pow(pho_vec[p].superCluster()->eta()-pho2.superCluster()->eta(),2)+pow(pho_vec[p].superCluster()->phi()-pho2.superCluster()->phi(),2));
-     //     if (deltar1 < minDR1) minDR1 = deltar1;
-     //     if (deltar2 < minDR2) minDR2 = deltar2;
-     //   }
-     //   if (minDR1 > 0.00001)
-     //   {
-     //     n_pho++;
-     //     pho_vec.push_back(pho1);
-     //   }
-     //   if (minDR2 > 0.00001)
-     //   {
-     //     n_pho++;
-     //     pho_vec.push_back(pho2);
-     //   }
-     // }
-//
-//       H4GTag tag_obj(dipho);
-//       tag_obj.setDiPhotonIndex( candIndex );
-//       tag_obj.setSystLabel( inputDiPhotonSuffixes_[diphoton_idx] );
-//       tag_obj.setCategoryNumber( 0 );
-//       tag_obj.includeWeights( *dipho );
-//       H4Gtags->push_back(tag_obj);
-//       if( ! event.isRealData() ) {
-//                 H4Gtags->back().setTagTruth( edm::refToPtr( edm::Ref<vector<TagTruthBase> >( rTagTruth, 0 ) ) );
-//               }
-//
-//     }
-//     event.put( std::move( H4Gtags ) );
-//     event.put(std::move(truths));
-//
-// }
-
-    Handle<View<flashgg::DiPhotonCandidate> > diPhotons;
-    event.getByToken( diphotonToken_, diphotons );
-
-    //---at least one diphoton should pass the low mass hgg pre-selection
-    bool atLeastOneDiphoPass = false;
-    for( unsigned int dpIndex = 0; dpIndex < diphotons->size(); dpIndex++ )
     {
-      edm::Ptr<flashgg::DiPhotonCandidate> thisDPPtr = diphotons->ptrAt( dpIndex );
-      flashgg::DiPhotonCandidate * thisDPPointer = const_cast<flashgg::DiPhotonCandidate *>(thisDPPtr.get());
-      atLeastOneDiphoPass |= idSelector_(*thisDPPointer, event);
+
+      inputDiPhotonName_= pSet.getParameter<std::string > ( "DiPhotonName" );
+      inputDiPhotonSuffixes_= pSet.getParameter<std::vector<std::string> > ( "DiPhotonSuffixes" );
+      std::vector<edm::InputTag>  diPhotonTags;
+      for (auto & suffix : inputDiPhotonSuffixes_){
+          systematicsLabels.push_back(suffix);
+          std::string inputName = inputDiPhotonName_;
+          inputName.append(suffix);
+          if (!suffix.empty()) diPhotonTags.push_back(edm::InputTag(inputName));
+          else  diPhotonTags.push_back(edm::InputTag(inputDiPhotonName_));
+      }
+      for( auto & tag : diPhotonTags ) { diPhotonTokens_.push_back( consumes<edm::View<flashgg::DiPhotonCandidate> >( tag ) ); }
+
+
+
+      genInfo_ = pSet.getUntrackedParameter<edm::InputTag>( "genInfo", edm::InputTag("generator") );
+      genInfoToken_ = consumes<GenEventInfoProduct>( genInfo_ );
+
+
+      produces<vector<H4GTag>>();
+
+      produces<vector<TagTruthBase>>();
+      // cout << "**************************** in H4GTagProducer.cc **********************************************" << endl;
     }
 
-    cout << "atLeastOneDiphoPass: " << atLeastOneDiphoPass << endl;
 
-    std::unique_ptr<vector<H4GTag> > H4Gtags( new vector<H4GTag> );
-    // if (diphotons->size() > 0){
-      cout << "# of diphotons " << diphotons->size() << endl;
-      for( unsigned int diphoIndex = 0; diphoIndex < diphotons->size(); diphoIndex++ ) {
-        edm::Ptr<flashgg::DiPhotonCandidate> dipho = diphotons->ptrAt( diphoIndex );
+    void H4GTagProducer::produce( Event &event, const EventSetup & )
+    {
 
-        cout << "[in tagproducer ] dipho pt " << dipho->pt() << endl;
+      // cout << "[H4GTagProducer.cc] - Beginning of H4GTagProducer::produce" << endl;
 
-        cout << "before creating tag object " << endl;
-        H4GTag tag_obj(dipho);
-        cout << "after creating tag object " << endl;
-        tag_obj.setSystLabel( systLabel_);
-        // tag_obj.setDiPhotonIndex( diphoIndex );
-        tag_obj.setCategoryNumber( 0 );
-        // tag_obj.includeWeights( *dipho );
-        cout << "before pushing tag object " << endl;
-        H4Gtags->push_back( tag_obj );
+      // update global variables
+      // globalVariablesComputer_.update(event);
 
-        cout << "after pushing tag object " << endl;
+      // Get particle objects
+
+      event.getByToken( diphotonToken_, diphotons );
+
+      std::unique_ptr<vector<TagTruthBase> > truths( new vector<TagTruthBase> );
+      edm::RefProd<vector<TagTruthBase> > rTagTruth = event.getRefBeforePut<vector<TagTruthBase> >();
+
+//-----------------------------------------------------------------------------------------------------------
 
 
-        if( ! event.isRealData() ) {
+      // MC truth
+      TagTruthBase truth_obj;
+      // double genMhh=0.;
+      if( ! event.isRealData() ) {
+          Handle<View<reco::GenParticle> > genParticles;
+          std::vector<edm::Ptr<reco::GenParticle> > selHiggses;
+          event.getByToken( genParticleToken_, genParticles );
+          reco::GenParticle::Point higgsVtx(0.,0.,0.);
+          for( unsigned int genLoop = 0 ; genLoop < genParticles->size(); genLoop++ ) {
+              int pdgid = genParticles->ptrAt( genLoop )->pdgId();
+              // if( pdgid == 25 || pdgid == 22 ) { // not so sure if this is correct for HHWWgg because of potential photons from hadronization
+              if( pdgid == 25 ) {
+                  higgsVtx = genParticles->ptrAt( genLoop )->vertex();
+                  // gen_vertex_z = higgsVtx.z();
+                  break;
+              }
+          }
+          for( unsigned int genLoop = 0 ; genLoop < genParticles->size(); genLoop++ ) {
+              edm::Ptr<reco::GenParticle> genPar = genParticles->ptrAt(genLoop);
+              if (selHiggses.size()>1) break;
+            if (genPar->pdgId()==25 && genPar->isHardProcess()){
+                selHiggses.push_back(genPar);
+            }
+          }
+
+          truth_obj.setGenPV( higgsVtx );
+          truths->push_back( truth_obj );
+      }
+
+        Handle<View<flashgg::DiPhotonCandidate> > diPhotons;
+
+        //---
+        event.getByToken( diphotonToken_, diphotons ); // without looping over diphoton systematics
+        //---
+        std::unique_ptr<vector<H4GTag> > H4Gtags( new vector<H4GTag> );
+
+        if (diphotons->size() > 0){ // without systematics (?)
+          edm::Ptr<flashgg::DiPhotonCandidate> dipho;
+          vector<edm::Ptr<flashgg::DiPhotonCandidate>> diphoVec;
+        for( unsigned int diphoIndex = 0; diphoIndex < diphotons->size(); diphoIndex++ ) { // only look at highest pt dipho
+
+           dipho = diphotons->ptrAt( diphoIndex ); // without systematic look (?)
+           diphoVec.push_back(dipho);
+          }
+            int catnum = 0;
+
+                H4GTag tag_obj(dipho, diphoVec);
+
+                tag_obj.setSystLabel( systLabel_);
+                // tag_obj.setDiPhotonIndex( diphoIndex );
+                // tag_obj.setMVA( -0.9 );
+                tag_obj.setCategoryNumber( catnum );
+                // tag_obj.includeWeights( *dipho );
+                // tag_obj.setEventNumber(event.id().event() );
+                // cout << "Pushing back tag object w/ electron" << endl;
+                H4Gtags->push_back( tag_obj );
+                if( ! event.isRealData() ) {
                   H4Gtags->back().setTagTruth( edm::refToPtr( edm::Ref<vector<TagTruthBase> >( rTagTruth, 0 ) ) );
                 }
 
-      }
-    // }
-    cout << "before putting in the event " << endl;
-    event.put( std::move( H4Gtags ) );
-    event.put(std::move(truths));
-    cout << "after putting in the event " << endl;
-  }
-}
+        // } // only look at highest pt dipho
 
-typedef flashgg::H4GTagProducer FlashggH4GTagProducer;
-DEFINE_FWK_MODULE( FlashggH4GTagProducer );
+      } // if at least 1 PS diphoton
+      event.put( std::move( H4Gtags ) );
+      event.put( std::move( truths ) );
+
+    } // H4GTagProducer::produce
+
+  } // namespace flashgg
+
+  typedef flashgg::H4GTagProducer FlashggH4GTagProducer;
+  DEFINE_FWK_MODULE( FlashggH4GTagProducer );
