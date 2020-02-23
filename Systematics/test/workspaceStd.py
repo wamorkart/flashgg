@@ -287,8 +287,13 @@ if customize.tthTagsOnly:
     process.flashggTagSequence.remove(process.flashggTHQLeptonicTag)
 
 if customize.H4GTagsOnly:
+    # process.load("flashgg/Taggers/vtxH4GSequence")
+    # from flashgg.MicroAOD.flashggTkVtxMap_cfi import flashggVertexMapUnique
+
     process.flashggTagSequence.remove(process.flashggPreselectedDiPhotons)
     process.flashggTagSequence.remove(process.flashggDiPhotonMVA)
+    # print "printing tagsequence " , process.flashggTagSequence
+    # process.flashggTagSequence.insert(0,process.vtxH4GSequence)
 
 
 else:
@@ -319,6 +324,12 @@ if customize.doH4GTag:
 process.flashggTHQLeptonicTag.processId = cms.string(str(customize.processId))
 
 print 'here we print the tag sequence after'
+
+# process.load("flashgg/MicroAOD/flashggTkVtxMap_cfi")
+
+# process.load("flashgg/Taggers/vtxH4GSequence")
+# process.flashggTagSequence.insert(1,process.flashggVertexMapUnique)
+# process.flashggTagSequence.replace(flashggH4GTag+flashggTagSorter,flashggVertexMapUnique+flashggH4GTag+flashggTagSorter)
 print process.flashggTagSequence
 
 if customize.doFiducial:
@@ -749,8 +760,11 @@ process.flashggMetFilters.requiredFilterNames = cms.untracked.vstring([filter.en
 # HHWWggTagsOnly requires zeroeth vertex, but not modifySystematicsWorkflowForttH
 if customize.tthTagsOnly or customize.H4GTagsOnly:
     #debug
+    process.load("flashgg/MicroAOD/flashggTkVtxMap_cfi")
+
     process.content = cms.EDAnalyzer("EventContentAnalyzer")
-    process.p = cms.Path(process.dataRequirements*
+    process.p = cms.Path(process.flashggVertexMapUnique*
+                         process.dataRequirements*
                          process.flashggMetFilters*
                          process.genFilter*
                          process.flashggDiPhotons* # needed for 0th vertex from microAOD

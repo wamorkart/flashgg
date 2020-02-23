@@ -19,6 +19,7 @@
 #include "flashgg/DataFormats/interface/DiPhotonTagBase.h"
 
 #include "flashgg/Taggers/interface/FunctionHelpers.h"
+#include "TMVA/Reader.h"
 
 namespace flashgg{
 
@@ -28,8 +29,20 @@ namespace flashgg{
     H4GTag();
     ~H4GTag();
 
-    H4GTag(edm::Ptr<DiPhotonCandidate>,vector<edm::Ptr<flashgg::DiPhotonCandidate>>);
+    H4GTag(edm::Ptr<DiPhotonCandidate>,vector<edm::Ptr<reco::Vertex>>,edm::Ptr<reco::Vertex>,reco::GenParticle::Point,int,TMVA::Reader *,vector< flashgg::Photon>,vector<int>, float );
     virtual H4GTag *clone() const override;
+
+    const float pho1_MVA() const { return pho1_MVA_; };
+    const float pho2_MVA() const { return pho2_MVA_; };
+    const float pho3_MVA() const { return pho3_MVA_; };
+    const float pho4_MVA() const { return pho4_MVA_; };
+
+  private:
+    float BS_factor_BDTVtx_;
+    float pho1_MVA_;
+    float pho2_MVA_;
+    float pho3_MVA_;
+    float pho4_MVA_;
   };
 }
 

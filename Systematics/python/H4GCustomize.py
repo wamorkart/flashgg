@@ -22,6 +22,10 @@ class H4GCustomize():
             # "HHbbggMVA := MVA()"
         ]
         variables = [
+            "pho1_MVA  := pho1_MVA ",
+            "pho2_MVA  := pho2_MVA ",
+            "pho3_MVA  := pho3_MVA ",
+            "pho4_MVA  := pho4_MVA "
             # "dipho_pt := dipho.pt()"
             # "pho2_MVA := slp_Hgg_MVA"
             # Cut flow variables
