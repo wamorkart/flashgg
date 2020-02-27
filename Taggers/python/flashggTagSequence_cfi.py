@@ -10,7 +10,7 @@ def flashggPrepareTagSequence(process, options):
     setup_flashggDifferentialPhoIdInputsCorrection(process, options)
     flashggPreselectedDiPhotons.src = "flashggDifferentialPhoIdInputsCorrection"
 
-    flashggTagSequence = cms.Sequence(flashggDifferentialPhoIdInputsCorrection
+    flashggTagSequence = cms.Sequence(  flashggDifferentialPhoIdInputsCorrection
                                       * flashggPreselectedDiPhotons
                                       * flashggDiPhotonMVA
                                       * flashggUnpackedJets
@@ -22,8 +22,8 @@ def flashggPrepareTagSequence(process, options):
                                           + flashggTTHDiLeptonTag
                                           + flashggTTHLeptonicTag
 					  + flashggTHQLeptonicTag
-#                                     + flashggTTHHadronicTTag                                      
-#                                     + flashggTTHHadronicLTag                                      
+#                                     + flashggTTHHadronicTTag
+#                                     + flashggTTHHadronicLTag
                                           + flashggTTHHadronicTag
                                       #############old VH tags##############
                                       #                  + flashggVHEtTag

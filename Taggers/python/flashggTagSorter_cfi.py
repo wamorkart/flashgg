@@ -2,7 +2,7 @@ import FWCore.ParameterSet.Config as cms
 from flashgg.Taggers.flashggTags_cff import HTXSInputTags
 
 flashggTagSorter = cms.EDProducer('FlashggTagSorter',
-                                  DiPhotonTag = cms.InputTag('flashggDiPhotons'),
+                                  DiPhotonTag = cms.InputTag('flashggDiPhotonSystematics'),
 
                                   # DiPhotonTag = cms.InputTag('flashggPreselectedDiPhotons'),
                                   # Top of list is highest priority
@@ -25,7 +25,7 @@ flashggTagSorter = cms.EDProducer('FlashggTagSorter',
         cms.PSet(TagName = cms.InputTag('flashggUntagged'))
         ###                                                                 cms.PSet(TagName = cms.InputTag('flashggSigmaMoMpToMTag'))
         ),
-                                  MassCutUpper=cms.double(18000.),
+                                  MassCutUpper=cms.double(1000000000000.),
                                   MassCutLower=cms.double(0),
                                   MinObjectWeightException = cms.double(0.0),
                                   MaxObjectWeightException = cms.double(10.),

@@ -3,7 +3,8 @@ import importlib
 import FWCore.ParameterSet.Config as cms
 
 flashggDiPhotonSystematics = cms.EDProducer('FlashggDiPhotonSystematicProducer',
-                src = cms.InputTag("flashggDifferentialPhoIdInputsCorrection"),
+                #src = cms.InputTag("flashggDifferentialPhoIdInputsCorrection"),
+                src = cms.InputTag("flashggDiPhotons"),
                 SystMethods2D = cms.VPSet(),
                 SystMethods = cms.VPSet()
 )
@@ -37,5 +38,5 @@ def setupDiPhotonSystematics( process, options ):
    flashggDiPhotonSystematics.SystMethods.append(sysmodule.LooseMvaSF)
    flashggDiPhotonSystematics.SystMethods.append(sysmodule.SigmaEOverEShift)
    flashggDiPhotonSystematics.SystMethods.append(sysmodule.SigmaEOverESmearing)
-   #flashggDiPhotonSystematics.SystMethods.append(sysmodule.FracRVWeight)
+   flashggDiPhotonSystematics.SystMethods.append(sysmodule.FracRVWeight)
    #flashggDiPhotonSystematics.SystMethods.append(sysmodule.FracRVNvtxWeight)

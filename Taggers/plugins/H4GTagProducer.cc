@@ -37,6 +37,7 @@
 #include "flashgg/DataFormats/interface/WHLeptonicTag.h"
 
 #include "flashgg/Taggers/interface/LeptonSelection.h"
+#include "TTree.h"
 #include "TMVA/Reader.h"
 #include <vector>
 #include <algorithm>
@@ -107,11 +108,11 @@ int mcTrueVertexIndex( const std::vector<edm::Ptr<reco::GenParticle> > &genParti
       typedef math::XYZTLorentzVector LorentzVector;
 
       //---ctors
-      // HHWWggTagProducer();
       H4GTagProducer( const ParameterSet & );
 
       //---Outtree
-      edm::Service<TFileService> fs;
+      // edm::Service<TFileService> fs;
+      // TFile* outFile;
       TTree* tree_pairBDT_sig;
       TTree* tree_pairBDT_bkg;
 
@@ -284,7 +285,10 @@ int mcTrueVertexIndex( const std::vector<edm::Ptr<reco::GenParticle> > &genParti
       DiphotonPairMva_->AddVariable( "dipair_dR", &dipair_dR );
       DiphotonPairMva_->BookMVA( "BDT", diphoPairMVAweightfileH4G_.fullPath() );
 
+      cout << "value of saveDiphoPairingTree " << saveDiphoPairingTree_ << endl;
+      cout << "VTX XML PATH " << vertexIdMVAweightfileH4G_ << endl;
       if(saveDiphoPairingTree_){
+        // outFile = new TFile("testtree.root", "RECREATE");
         tree_pairBDT_sig = new TTree("diphotonPair_BDT_sig","diphotonPair_BDT_sig");
         tree_pairBDT_sig->Branch("eventId",&eventId,"eventId/I");
         tree_pairBDT_sig->Branch("dipho1_energy",&dipho1_energy,"dipho1_energy/F");
@@ -379,7 +383,7 @@ int mcTrueVertexIndex( const std::vector<edm::Ptr<reco::GenParticle> > &genParti
       Handle<VertexCandidateMap> vertexCandidateMap;
       event.getByToken( vertexCandidateMapToken_, vertexCandidateMap );
 
-      int hgg_index = -999;
+      // int hgg_index = -999;
 
       genPhoton_p4.clear();
 
@@ -488,9 +492,10 @@ int mcTrueVertexIndex( const std::vector<edm::Ptr<reco::GenParticle> > &genParti
 
       cout << "atLeastOneDiphoPass: " << atLeastOneDiphoPass << endl;
 
-      // if (diphotons->size() > 0){ // without systematics (?)
-      if (atLeastOneDiphoPass){
+      //if (photons->size()>3){ // without systematics (?)
+      if (atLeastOneDiphoPass && photons->size() > 3){
         edm::Ptr<flashgg::DiPhotonCandidate> dipho;
+
         vector<edm::Ptr<flashgg::DiPhotonCandidate>> diphoVec;
         int n_pho = 0;
 
@@ -499,7 +504,7 @@ int mcTrueVertexIndex( const std::vector<edm::Ptr<reco::GenParticle> > &genParti
 
         cout << "# of diphotons " << diphotons->size() << endl;
 
-        for( unsigned int diphoIndex = 0; diphoIndex < diphotons->size(); diphoIndex++ ) { // only look at highest pt dipho
+        for( unsigned int diphoIndex = 0; diphoIndex < diphotons->size(); diphoIndex++ ) {
 
           dipho = diphotons->ptrAt( diphoIndex ); // without systematic look (?)
           diphoVec.push_back(dipho);
@@ -537,17 +542,14 @@ int mcTrueVertexIndex( const std::vector<edm::Ptr<reco::GenParticle> > &genParti
             }
           }
         }
-        cout << "# of photons " << phoVector.size() << endl;
         // sort the photons in Pt
         std::sort(phoVector.begin(), phoVector.end(), [](const flashgg::Photon a, const flashgg::Photon b) {return a.pt() > b.pt(); });
-        for( int phoIndex = 0; phoIndex < (int)phoVector.size(); phoIndex++ )
-        {
-          cout << "photon pt " << phoVector[phoIndex].pt() << endl;
-        }
 
+        //-- prepare a vector of ptr to photons, to be used for vertex selection
         for( int phoIndex = 0; phoIndex < (int) photons->size(); phoIndex++ )
         {
           edm::Ptr<flashgg::Photon> pho = photons->ptrAt(phoIndex);
+          // cout << "photon pt " << pho->pt() << endl;
           phoPtrVector.push_back(pho);
         }
 
@@ -555,10 +557,10 @@ int mcTrueVertexIndex( const std::vector<edm::Ptr<reco::GenParticle> > &genParti
         {
           edm::Ptr<reco::Vertex> vtx = vertex->ptrAt( v );
           Vertices.push_back(vtx);
-          if (vertex_diphoton->x() - vtx->x() == 0  && vertex_diphoton->y() - vtx->y() == 0 && vertex_diphoton->z() - vtx->z() == 0 )
-          {
-            hgg_index =  v;
-          }
+          // if (vertex_diphoton->x() - vtx->x() == 0  && vertex_diphoton->y() - vtx->y() == 0 && vertex_diphoton->z() - vtx->z() == 0 )
+          // {
+          //   hgg_index =  v;
+          // }
           if (fabs(genVertex.z() - vertex_diphoton->z()) > 1 )
           {
             if (fabs(genVertex.z() - vtx->z()) < 1)
@@ -576,9 +578,10 @@ int mcTrueVertexIndex( const std::vector<edm::Ptr<reco::GenParticle> > &genParti
         int trueVtxIndex = trueVtxIndexI;
         int randVtxIndex = randVtxIndexI;
 
-        cout << hgg_index << "  " << trueVtxIndex << "  " << randVtxIndex << endl;
+        // cout << hgg_index << "  " << trueVtxIndex << "  " << randVtxIndex << endl;
 
         std::vector<std::vector<float>> vtxVar;
+        // cout << "USE SINGLE LEG " << useSingleLeg_ << endl;
         if (phoPtrVector.size() == 2)
         {
           vtxVar = vertexSelector_->select_h2g(phoPtrVector[0],phoPtrVector[1], Vertices, *vertexCandidateMap,conversionHandle->ptrs(), conversionHandleSingleLeg->ptrs(), BSPoint, useSingleLeg_   );
@@ -646,7 +649,7 @@ int mcTrueVertexIndex( const std::vector<edm::Ptr<reco::GenParticle> > &genParti
         float vtx_Y = Vertices[selected_vertex_index_]->y();
         float vtx_Z = Vertices[selected_vertex_index_]->z();
         math::XYZVector vtx_Pos( vtx_X, vtx_Y, vtx_Z );
-        cout << "vtx X " << vtx_X << "vtx Y" << vtx_Y << "vtx Z " << vtx_Z << endl;
+        // cout << "vtx X " << vtx_X << "vtx Y" << vtx_Y << "vtx Z " << vtx_Z << "selected_vertex_index_: " << selected_vertex_index_ << endl;
 
         vector<flashgg::Photon> phoP4Corrected_dp;
         if (phoVector.size() > 0)
@@ -664,6 +667,7 @@ int mcTrueVertexIndex( const std::vector<edm::Ptr<reco::GenParticle> > &genParti
             phoP4Corrected_dp.push_back(phoVector[dp]);
           }
         }
+
         std::sort(phoP4Corrected_dp.begin(), phoP4Corrected_dp.end(), [](const flashgg::Photon a, const flashgg::Photon  b) {return a.pt() > b.pt(); });
 
         sorter_.clear();
@@ -762,9 +766,13 @@ int mcTrueVertexIndex( const std::vector<edm::Ptr<reco::GenParticle> > &genParti
                   dipair_eta = (dipho1+dipho2).eta();
                   dipair_phi = (dipho1+dipho2).phi();
                   dipair_dR = deltaR(dipho1.eta(),dipho1.phi(),dipho2.eta(),dipho2.phi());
-
+                  // cout << "saveDiphoPairingTree_ " << saveDiphoPairingTree_ << endl;
+                  // cout << "event.isRealData() " << !event.isRealData() << endl;
                   if(saveDiphoPairingTree_ && !event.isRealData()){
+                    // cout <<"HERE 1 " << endl;
+                    // cout << "isSigPairing " << isSigPairing << endl;
                     if(isSigPairing(i1,i2,i3,i4,&genToReco_photon_map_)){
+                      // cout << "FILLING THE TREE " << endl;
                       tree_pairBDT_sig->Fill();
                     }else tree_pairBDT_bkg->Fill();
                   }
@@ -806,6 +814,7 @@ int mcTrueVertexIndex( const std::vector<edm::Ptr<reco::GenParticle> > &genParti
 
                   if(saveDiphoPairingTree_ && !event.isRealData()){
                     if(isSigPairing(i1,i3,i2,i4,&genToReco_photon_map_)){
+                      cout << "FILLING THE TREE " << endl;
                       tree_pairBDT_sig->Fill();
                     }else tree_pairBDT_bkg->Fill();
                   }
@@ -851,6 +860,7 @@ int mcTrueVertexIndex( const std::vector<edm::Ptr<reco::GenParticle> > &genParti
 
                   if(saveDiphoPairingTree_ && !event.isRealData()){
                     if(isSigPairing(i1,i4,i2,i3,&genToReco_photon_map_)){
+                      cout << "FILLING THE TREE " << endl;
                       tree_pairBDT_sig->Fill();
                     }else tree_pairBDT_bkg->Fill();
                   }
@@ -885,12 +895,18 @@ int mcTrueVertexIndex( const std::vector<edm::Ptr<reco::GenParticle> > &genParti
 
         int catnum = 0;
 
-        H4GTag tag_obj(dipho, Vertices, vertex_bdt, genVertex, selected_vertex_index_, VertexProbMva_, phoP4Corrected_dp, diphoton_pairing_indices_, diphoPair_MVA );
-
+        // H4GTag tag_obj(dipho, Vertices, vertex_bdt, genVertex, selected_vertex_index_, VertexProbMva_, phoP4Corrected_dp, diphoton_pairing_indices_, diphoPair_MVA );
+        // H4GTag tag_obj(dipho);
+        H4GTag tag_obj (dipho,phoP4Corrected_dp, Vertices, selected_vertex_index_, diphoton_pairing_indices_);
         tag_obj.setSystLabel( systLabel_);
         // tag_obj.setDiPhotonIndex( diphoIndex );
         // tag_obj.setMVA( -0.9 );
         tag_obj.setCategoryNumber( catnum );
+        for (int i1=0; i1 < (int) diphoVec.size() ; i1++)
+        {
+          auto diphotemp = diphoVec[i1];
+          tag_obj.includeWeights(* diphotemp);
+        }
         // tag_obj.includeWeights( *dipho );
         // tag_obj.setEventNumber(event.id().event() );
         // cout << "Pushing back tag object w/ electron" << endl;
@@ -905,7 +921,18 @@ int mcTrueVertexIndex( const std::vector<edm::Ptr<reco::GenParticle> > &genParti
       event.put( std::move( H4Gtags ) );
       event.put( std::move( truths ) );
 
+      // outFile->cd();
+
+      // tree_pairBDT_bkg->Write();
+      // tree_pairBDT_sig->Write();
+      // outFile->Write();
+      // outFile->Close();
+
     } // H4GTagProducer::produce
+          // tree_pairBDT_sig->Write();
+          // tree_pairBDT_bkg->Write();
+          // tree_pairBDT_bkg->Write();
+          // tree_pairBDT_sig->Write();
 
   } // namespace flashgg
 

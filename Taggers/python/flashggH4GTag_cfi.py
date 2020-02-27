@@ -17,11 +17,11 @@ from flashgg.MicroAOD.flashggJets_cfi import  maxJetCollections, flashggDeepCSV
 flashggH4GTag = cms.EDProducer("FlashggH4GTagProducer",
                                     globalVariables=globalVariables,
                                     PhotonTag = cms.InputTag('flashggRandomizedPhotons'),
-                                    # DiPhotonTag = cms.InputTag('flashggDiPhotonSystematics'),
-                                    DiPhotonTag = cms.InputTag('flashggDiPhotons'),
+                                    DiPhotonTag = cms.InputTag('flashggDiPhotonSystematics'),
+                                    #DiPhotonTag = cms.InputTag('flashggDiPhotons'),
                                     idSelection     = cms.PSet(),
                                     SystLabel = cms.string(""),
-                                    DiPhotonName = cms.string('flashggDiPhotons'), #
+                                    DiPhotonName = cms.string('flashggDiPhotonSystematics'), #
                                     VertexTag = cms.InputTag('offlineSlimmedPrimaryVertices'),
                                     GenParticleTag         = cms.InputTag('flashggPrunedGenParticles'),
                                     DiPhotonSuffixes = cms.vstring(''), #nominal and systematic variations
