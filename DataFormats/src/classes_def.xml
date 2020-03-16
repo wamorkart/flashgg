@@ -382,7 +382,8 @@
 <class name="std::vector<flashgg::DoubleHTag>"/>
 <class name="edm::Wrapper<std::vector<flashgg::DoubleHTag> >"/>
 
-<class name="flashgg::H4GCandidate" ClassVersion="51">
+<class name="flashgg::H4GCandidate" ClassVersion="52">
+ <version ClassVersion="52" checksum="3400712885"/>
  <version ClassVersion="51" checksum="234628937"/>
  <version ClassVersion="50" checksum="3400712885"/>
  <version ClassVersion="49" checksum="3011246713"/>
@@ -400,7 +401,18 @@
 <class name="std::vector<flashgg::H4GCandidate>"/>
 <class name="edm::Wrapper<std::vector<flashgg::H4GCandidate> >"/>
 
-<class name="flashgg::H4GTag" ClassVersion="23">
+<class name="flashgg::H4GTag" ClassVersion="34">
+ <version ClassVersion="34" checksum="1029372491"/>
+ <version ClassVersion="33" checksum="3246701946"/>
+ <version ClassVersion="32" checksum="4221275369"/>
+ <version ClassVersion="31" checksum="980708166"/>
+ <version ClassVersion="30" checksum="2040485391"/>
+ <version ClassVersion="29" checksum="3582117182"/>
+ <version ClassVersion="28" checksum="894617555"/>
+ <version ClassVersion="27" checksum="2067843869"/>
+ <version ClassVersion="26" checksum="1035421762"/>
+ <version ClassVersion="25" checksum="994974181"/>
+ <version ClassVersion="24" checksum="1035421762"/>
  <version ClassVersion="23" checksum="2067843869"/>
  <version ClassVersion="22" checksum="3413345734"/>
  <version ClassVersion="21" checksum="149403235"/>
