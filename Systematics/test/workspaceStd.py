@@ -242,13 +242,13 @@ if customize.doFiducial:
 
 # needed for 0th vertex from microAOD
 # HHWWgg: Want zeroeth vertex
-# if customize.tthTagsOnly or customize.H4GTagsOnly:
-#     process.load("flashgg/MicroAOD/flashggDiPhotons_cfi")
-#     process.flashggDiPhotons.whichVertex = cms.uint32(0)
-#     process.flashggDiPhotons.useZerothVertexFromMicro = cms.bool(True)
-#     if customize.H4GTagsOnly: # not sure if this is needed for tthTagsOnly, but it is needed for HHWWgg
-#         process.flashggDiPhotons.vertexProbMVAweightfile = "flashgg/MicroAOD/data/TMVAClassification_BDTVtxProb_SL_2016.xml" # Prob or Id ?
-#         process.flashggDiPhotons.vertexIdMVAweightfile = "flashgg/MicroAOD/data/TMVAClassification_BDTVtxId_SL_2016.xml"
+if customize.tthTagsOnly or customize.H4GTagsOnly:
+    process.load("flashgg/MicroAOD/flashggDiPhotons_cfi")
+    process.flashggDiPhotons.whichVertex = cms.uint32(0)
+    process.flashggDiPhotons.useZerothVertexFromMicro = cms.bool(True)
+    if customize.H4GTagsOnly: # not sure if this is needed for tthTagsOnly, but it is needed for HHWWgg
+        process.flashggDiPhotons.vertexProbMVAweightfile = "flashgg/MicroAOD/data/TMVAClassification_BDTVtxProb_SL_2016.xml" # Prob or Id ?
+        process.flashggDiPhotons.vertexIdMVAweightfile = "flashgg/MicroAOD/data/TMVAClassification_BDTVtxId_SL_2016.xml"
 
 if customize.tthTagsOnly or customize.HHWWggTagsOnly:
     process.load("flashgg/MicroAOD/flashggDiPhotons_cfi")
@@ -333,6 +333,7 @@ if customize.doDoubleHTag:
     minimalVariables += hhc.variablesToDump()
     systematicVariables = hhc.systematicVariables()
 
+
 if customize.doH4GTag:
     import flashgg.Systematics.H4GCustomize
     h4gc = flashgg.Systematics.H4GCustomize.H4GCustomize(process, customize, customize.metaConditions)
@@ -348,6 +349,23 @@ if customize.doH4GTag:
                 variables = flashggPreselectedDiPhotonsLowMass.variables,
                 categories = flashggPreselectedDiPhotonsLowMass.categories)
     process.flashggH4GTag.mass = cms.untracked.double(customize.mass)
+
+if customize.doHHWWggTag:
+    import flashgg.Systematics.HHWWggCustomize
+    wwggc = flashgg.Systematics.HHWWggCustomize.HHWWggCustomize(process, customize, customize.metaConditions)
+
+    # print 'process.flashggTagSequence = ',process.flashggTagSequence
+    # exit(0)
+    minimalVariables += wwggc.variablesToDump()
+    systematicVariables = wwggc.systematicVariables()
+    # 
+    # process.load("flashgg/Taggers/flashggPreselectedDiPhotons_LowMass_cfi")
+    # process.flashggH4GTag.idSelection = cms.PSet(
+    #             rho = flashggPreselectedDiPhotonsLowMass.rho,
+    #             cut = flashggPreselectedDiPhotonsLowMass.cut,
+    #             variables = flashggPreselectedDiPhotonsLowMass.variables,
+    #             categories = flashggPreselectedDiPhotonsLowMass.categories)
+    # process.flashggH4GTag.mass = cms.untracked.double(customize.mass)
 
 process.flashggTHQLeptonicTag.processId = cms.string(str(customize.processId))
 
@@ -556,7 +574,7 @@ if customize.HHWWggTagsOnly:
     variablesToUse = minimalVariables
     if customize.processId == "Data":
         variablesToUse = minimalNonSignalVariables
-        
+
 
 print "--- Systematics  with independent collections ---"
 print systlabels
