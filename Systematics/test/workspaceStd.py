@@ -84,6 +84,23 @@ customize.options.register('doH4GTag',
                            VarParsing.VarParsing.varType.bool,
                            'doH4GTag'
                            )
+customize.options.register('HHWWggTagsOnly',
+                           False,
+                           VarParsing.VarParsing.multiplicity.singleton,
+                           VarParsing.VarParsing.varType.bool,
+                           'HHWWggTagsOnly'
+                           )
+customize.options.register('doHHWWggTag',
+                           False,
+                           VarParsing.VarParsing.multiplicity.singleton,
+                           VarParsing.VarParsing.varType.bool,
+                           'doHHWWggTag'
+                           )
+customize.options.register('mass',
+                 '',
+                 VarParsing.VarParsing.multiplicity.singleton,
+                 VarParsing.VarParsing.varType.float,
+                 "mass")
 customize.options.register('doHHWWggTagCutFlow', # This saves all events for cutflow analysis
                            False,
                            VarParsing.VarParsing.multiplicity.singleton,
@@ -225,13 +242,23 @@ if customize.doFiducial:
 
 # needed for 0th vertex from microAOD
 # HHWWgg: Want zeroeth vertex
-if customize.tthTagsOnly or customize.H4GTagsOnly:
+# if customize.tthTagsOnly or customize.H4GTagsOnly:
+#     process.load("flashgg/MicroAOD/flashggDiPhotons_cfi")
+#     process.flashggDiPhotons.whichVertex = cms.uint32(0)
+#     process.flashggDiPhotons.useZerothVertexFromMicro = cms.bool(True)
+#     if customize.H4GTagsOnly: # not sure if this is needed for tthTagsOnly, but it is needed for HHWWgg
+#         process.flashggDiPhotons.vertexProbMVAweightfile = "flashgg/MicroAOD/data/TMVAClassification_BDTVtxProb_SL_2016.xml" # Prob or Id ?
+#         process.flashggDiPhotons.vertexIdMVAweightfile = "flashgg/MicroAOD/data/TMVAClassification_BDTVtxId_SL_2016.xml"
+
+if customize.tthTagsOnly or customize.HHWWggTagsOnly:
     process.load("flashgg/MicroAOD/flashggDiPhotons_cfi")
     process.flashggDiPhotons.whichVertex = cms.uint32(0)
     process.flashggDiPhotons.useZerothVertexFromMicro = cms.bool(True)
-    if customize.H4GTagsOnly: # not sure if this is needed for tthTagsOnly, but it is needed for HHWWgg
+    if customize.HHWWggTagsOnly: # not sure if this is needed for tthTagsOnly, but it is needed for HHWWgg
         process.flashggDiPhotons.vertexProbMVAweightfile = "flashgg/MicroAOD/data/TMVAClassification_BDTVtxProb_SL_2016.xml" # Prob or Id ?
         process.flashggDiPhotons.vertexIdMVAweightfile = "flashgg/MicroAOD/data/TMVAClassification_BDTVtxId_SL_2016.xml"
+
+
 
 # if customize.HHWWggTagsOnly:
 #     print'customizing for HHWWgg'
@@ -320,6 +347,7 @@ if customize.doH4GTag:
                 cut = flashggPreselectedDiPhotonsLowMass.cut,
                 variables = flashggPreselectedDiPhotonsLowMass.variables,
                 categories = flashggPreselectedDiPhotonsLowMass.categories)
+    process.flashggH4GTag.mass = cms.untracked.double(customize.mass)
 
 process.flashggTHQLeptonicTag.processId = cms.string(str(customize.processId))
 
@@ -459,31 +487,31 @@ if is_signal:
     if customize.doSystematics:
         for direction in ["Up","Down"]:
             phosystlabels.append("MvaShift%s01sigma" % direction)
-#            phosystlabels.append("MvaLinearSyst%s01sigma" % direction)
-            phosystlabels.append("SigmaEOverEShift%s01sigma" % direction)
-            phosystlabels.append("MaterialCentralBarrel%s01sigma" % direction)
-            phosystlabels.append("MaterialOuterBarrel%s01sigma" % direction)
-            phosystlabels.append("MaterialForward%s01sigma" % direction)
-            phosystlabels.append("FNUFEB%s01sigma" % direction)
-            phosystlabels.append("FNUFEE%s01sigma" % direction)
-            phosystlabels.append("MCScaleGain6EB%s01sigma" % direction)
-            phosystlabels.append("MCScaleGain1EB%s01sigma" % direction)
-            jetsystlabels.append("JEC%s01sigma" % direction)
-            jetsystlabels.append("JER%s01sigma" % direction)
-            jetsystlabels.append("PUJIDShift%s01sigma" % direction)
-            metsystlabels.append("metJecUncertainty%s01sigma" % direction)
-            metsystlabels.append("metJerUncertainty%s01sigma" % direction)
-            metsystlabels.append("metPhoUncertainty%s01sigma" % direction)
-            metsystlabels.append("metUncUncertainty%s01sigma" % direction)
-            variablesToUse.append("UnmatchedPUWeight%s01sigma[1,-999999.,999999.] := weight(\"UnmatchedPUWeight%s01sigma\")" % (direction,direction))
-            variablesToUse.append("MvaLinearSyst%s01sigma[1,-999999.,999999.] := weight(\"MvaLinearSyst%s01sigma\")" % (direction,direction))
-            variablesToUse.append("LooseMvaSF%s01sigma[1,-999999.,999999.] := weight(\"LooseMvaSF%s01sigma\")" % (direction,direction))
-            variablesToUse.append("PreselSF%s01sigma[1,-999999.,999999.] := weight(\"PreselSF%s01sigma\")" % (direction,direction))
-            variablesToUse.append("electronVetoSF%s01sigma[1,-999999.,999999.] := weight(\"electronVetoSF%s01sigma\")" % (direction,direction))
-            variablesToUse.append("TriggerWeight%s01sigma[1,-999999.,999999.] := weight(\"TriggerWeight%s01sigma\")" % (direction,direction))
-            variablesToUse.append("FracRVWeight%s01sigma[1,-999999.,999999.] := weight(\"FracRVWeight%s01sigma\")" % (direction,direction))
-            # variablesToUse.append("FracRVNvtxWeight%s01sigma[1,-999999.,999999.] := weight(\"FracRVNvtxWeight%s01sigma\")" % (direction,direction)) # removed because not working for HHWWgg for some reason
-            variablesToUse.append("ElectronWeight%s01sigma[1,-999999.,999999.] := weight(\"ElectronWeight%s01sigma\")" % (direction,direction))
+###            phosystlabels.append("MvaLinearSyst%s01sigma" % direction)
+#            phosystlabels.append("SigmaEOverEShift%s01sigma" % direction)
+#            phosystlabels.append("MaterialCentralBarrel%s01sigma" % direction)
+#            phosystlabels.append("MaterialOuterBarrel%s01sigma" % direction)
+#            phosystlabels.append("MaterialForward%s01sigma" % direction)
+#            phosystlabels.append("FNUFEB%s01sigma" % direction)
+#            phosystlabels.append("FNUFEE%s01sigma" % direction)
+#            phosystlabels.append("MCScaleGain6EB%s01sigma" % direction)
+#            phosystlabels.append("MCScaleGain1EB%s01sigma" % direction)
+#            jetsystlabels.append("JEC%s01sigma" % direction)
+#            jetsystlabels.append("JER%s01sigma" % direction)
+#            jetsystlabels.append("PUJIDShift%s01sigma" % direction)
+#            metsystlabels.append("metJecUncertainty%s01sigma" % direction)
+#            metsystlabels.append("metJerUncertainty%s01sigma" % direction)
+#            metsystlabels.append("metPhoUncertainty%s01sigma" % direction)
+#            metsystlabels.append("metUncUncertainty%s01sigma" % direction)
+#            variablesToUse.append("UnmatchedPUWeight%s01sigma[1,-999999.,999999.] := weight(\"UnmatchedPUWeight%s01sigma\")" % (direction,direction))
+#            variablesToUse.append("MvaLinearSyst%s01sigma[1,-999999.,999999.] := weight(\"MvaLinearSyst%s01sigma\")" % (direction,direction))
+#            variablesToUse.append("LooseMvaSF%s01sigma[1,-999999.,999999.] := weight(\"LooseMvaSF%s01sigma\")" % (direction,direction))
+#            variablesToUse.append("PreselSF%s01sigma[1,-999999.,999999.] := weight(\"PreselSF%s01sigma\")" % (direction,direction))
+#            variablesToUse.append("electronVetoSF%s01sigma[1,-999999.,999999.] := weight(\"electronVetoSF%s01sigma\")" % (direction,direction))
+#            variablesToUse.append("TriggerWeight%s01sigma[1,-999999.,999999.] := weight(\"TriggerWeight%s01sigma\")" % (direction,direction))
+#            variablesToUse.append("FracRVWeight%s01sigma[1,-999999.,999999.] := weight(\"FracRVWeight%s01sigma\")" % (direction,direction))
+ ####           # variablesToUse.append("FracRVNvtxWeight%s01sigma[1,-999999.,999999.] := weight(\"FracRVNvtxWeight%s01sigma\")" % (direction,direction)) # removed because not working for HHWWgg for some reason
+ #           variablesToUse.append("ElectronWeight%s01sigma[1,-999999.,999999.] := weight(\"ElectronWeight%s01sigma\")" % (direction,direction))
             if os.environ["CMSSW_VERSION"].count("CMSSW_8_0"):
                 variablesToUse.append("MuonWeight%s01sigma[1,-999999.,999999.] := weight(\"MuonWeight%s01sigma\")" % (direction,direction))
                 variablesToUse.append("MuonMiniIsoWeight%s01sigma[1,-999999.,999999.] := weight(\"MuonMiniIsoWeight%s01sigma\")" % (direction,direction))
@@ -523,6 +551,12 @@ if customize.H4GTagsOnly:
     variablesToUse = minimalVariables
     if customize.processId == "Data":
         variablesToUse = minimalNonSignalVariables
+
+if customize.HHWWggTagsOnly:
+    variablesToUse = minimalVariables
+    if customize.processId == "Data":
+        variablesToUse = minimalNonSignalVariables
+        
 
 print "--- Systematics  with independent collections ---"
 print systlabels
@@ -877,7 +911,7 @@ process.flashggTagSorter.StoreOtherTagInfo = True
 process.flashggTagSorter.BlindedSelectionPrintout = True
 
 ### Rerun microAOD sequence on top of microAODs using the parent dataset
-if customize.useParentDataset:
+if customize.useParentDataset and not customize.H4GTagsOnly:
     runRivetSequence(process, customize.metaConditions)
     if customize.recalculatePDFWeights and is_signal and not customize.processId.count("bbh"):
         recalculatePDFWeights(process, customize.metaConditions)
