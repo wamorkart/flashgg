@@ -313,14 +313,14 @@ if customize.tthTagsOnly:
     process.flashggTagSequence.remove(process.flashggTTHDiLeptonTag)
     process.flashggTagSequence.remove(process.flashggTHQLeptonicTag)
 
-if customize.H4GTagsOnly:
-    # process.load("flashgg/Taggers/vtxH4GSequence")
-    # from flashgg.MicroAOD.flashggTkVtxMap_cfi import flashggVertexMapUnique
-
-    process.flashggTagSequence.remove(process.flashggPreselectedDiPhotons)
-    process.flashggTagSequence.remove(process.flashggDiPhotonMVA)
-    # print "printing tagsequence " , process.flashggTagSequence
-    # process.flashggTagSequence.insert(0,process.vtxH4GSequence)
+# if customize.H4GTagsOnly:
+#     process.load("flashgg/Taggers/vtxH4GSequence")
+#     from flashgg.MicroAOD.flashggTkVtxMap_cfi import flashggVertexMapUnique
+#
+#     process.flashggTagSequence.remove(process.flashggPreselectedDiPhotons)
+#     process.flashggTagSequence.remove(process.flashggDiPhotonMVA)
+#     # print "printing tagsequence " , process.flashggTagSequence
+#     process.flashggTagSequence.insert(0,process.vtxH4GSequence)
 
 
 else:
@@ -348,17 +348,18 @@ if customize.doH4GTag:
                 cut = flashggPreselectedDiPhotonsLowMass.cut,
                 variables = flashggPreselectedDiPhotonsLowMass.variables,
                 categories = flashggPreselectedDiPhotonsLowMass.categories)
-    process.flashggH4GTag.mass = cms.untracked.double(customize.mass)
+    #process.flashggH4GTag.mass = cms.untracked.double(customize.mass)
 
 if customize.doHHWWggTag:
+    print"************************Importing HHWWggCustomize ************"
     import flashgg.Systematics.HHWWggCustomize
-    wwggc = flashgg.Systematics.HHWWggCustomize.HHWWggCustomize(process, customize, customize.metaConditions)
+    hhwwggc = flashgg.Systematics.HHWWggCustomize.HHWWggCustomize(process, customize, customize.metaConditions)
 
     # print 'process.flashggTagSequence = ',process.flashggTagSequence
     # exit(0)
-    minimalVariables += wwggc.variablesToDump()
-    systematicVariables = wwggc.systematicVariables()
-    # 
+    minimalVariables += hhwwggc.variablesToDump()
+    systematicVariables = hhwwggc.systematicVariables()
+    #
     # process.load("flashgg/Taggers/flashggPreselectedDiPhotons_LowMass_cfi")
     # process.flashggH4GTag.idSelection = cms.PSet(
     #             rho = flashggPreselectedDiPhotonsLowMass.rho,
@@ -477,7 +478,9 @@ useEGMTools(process)
 
 # Only run systematics for signal events
 # convention: ggh vbf wzh (wh zh) tth
-signal_processes = ["ggh_","vbf_","wzh_","wh_","zh_","bbh_","thq_","thw_","tth_","HHTo2B2G","GluGluHToGG","VBFHToGG","VHToGG","ttHToGG","Acceptance","WWgg","SUSYGluGluToHToAA"]
+# signal_processes = ["ggh_","vbf_","wzh_","wh_","zh_","bbh_","thq_","thw_","tth_","HHTo2B2G","GluGluHToGG","VBFHToGG","VHToGG","ttHToGG","Acceptance","WWgg","SUSYGluGluHToToAA"]
+signal_processes = ["ggh_","vbf_","wzh_","wh_","zh_","bbh_","thq_","thw_","tth_","HHTo2B2G","GluGluHToGG","VBFHToGG","VHToGG","ttHToGG","Acceptance","WWgg","HToAA"]
+
 # add HHWWgg points
 
 # print'customize'
@@ -506,17 +509,17 @@ if is_signal:
         for direction in ["Up","Down"]:
             phosystlabels.append("MvaShift%s01sigma" % direction)
 ###            phosystlabels.append("MvaLinearSyst%s01sigma" % direction)
-#            phosystlabels.append("SigmaEOverEShift%s01sigma" % direction)
-#            phosystlabels.append("MaterialCentralBarrel%s01sigma" % direction)
-#            phosystlabels.append("MaterialOuterBarrel%s01sigma" % direction)
-#            phosystlabels.append("MaterialForward%s01sigma" % direction)
-#            phosystlabels.append("FNUFEB%s01sigma" % direction)
-#            phosystlabels.append("FNUFEE%s01sigma" % direction)
-#            phosystlabels.append("MCScaleGain6EB%s01sigma" % direction)
-#            phosystlabels.append("MCScaleGain1EB%s01sigma" % direction)
-#            jetsystlabels.append("JEC%s01sigma" % direction)
-#            jetsystlabels.append("JER%s01sigma" % direction)
-#            jetsystlabels.append("PUJIDShift%s01sigma" % direction)
+            phosystlabels.append("SigmaEOverEShift%s01sigma" % direction)
+            phosystlabels.append("MaterialCentralBarrel%s01sigma" % direction)
+            phosystlabels.append("MaterialOuterBarrel%s01sigma" % direction)
+            phosystlabels.append("MaterialForward%s01sigma" % direction)
+            phosystlabels.append("FNUFEB%s01sigma" % direction)
+            phosystlabels.append("FNUFEE%s01sigma" % direction)
+            phosystlabels.append("MCScaleGain6EB%s01sigma" % direction)
+            phosystlabels.append("MCScaleGain1EB%s01sigma" % direction)
+            jetsystlabels.append("JEC%s01sigma" % direction)
+            jetsystlabels.append("JER%s01sigma" % direction)
+            jetsystlabels.append("PUJIDShift%s01sigma" % direction)
 #            metsystlabels.append("metJecUncertainty%s01sigma" % direction)
 #            metsystlabels.append("metJerUncertainty%s01sigma" % direction)
 #            metsystlabels.append("metPhoUncertainty%s01sigma" % direction)
@@ -810,12 +813,13 @@ else:
 process.flashggMetFilters.requiredFilterNames = cms.untracked.vstring([filter.encode("ascii") for filter in customize.metaConditions["flashggMetFilters"][metFilterSelector]])
 
 # HHWWggTagsOnly requires zeroeth vertex, but not modifySystematicsWorkflowForttH
-if customize.tthTagsOnly or customize.H4GTagsOnly:
+if customize.tthTagsOnly or customize.H4GTagsOnly or customize.HHWWggTagsOnly:
     #debug
-    process.load("flashgg/MicroAOD/flashggTkVtxMap_cfi")
+    # process.load("flashgg/MicroAOD/flashggTkVtxMap_cfi")
 
     process.content = cms.EDAnalyzer("EventContentAnalyzer")
-    process.p = cms.Path(process.flashggVertexMapUnique*
+    process.p = cms.Path(
+                         # process.flashggVertexMapUnique*
                          process.dataRequirements*
                          process.flashggMetFilters*
                          process.genFilter*

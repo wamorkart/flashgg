@@ -382,7 +382,10 @@
 <class name="std::vector<flashgg::DoubleHTag>"/>
 <class name="edm::Wrapper<std::vector<flashgg::DoubleHTag> >"/>
 
-<class name="flashgg::H4GCandidate" ClassVersion="52">
+<class name="flashgg::H4GCandidate" ClassVersion="55">
+ <version ClassVersion="55" checksum="2847103166"/>
+ <version ClassVersion="54" checksum="2856586008"/>
+ <version ClassVersion="53" checksum="234628937"/>
  <version ClassVersion="52" checksum="3400712885"/>
  <version ClassVersion="51" checksum="234628937"/>
  <version ClassVersion="50" checksum="3400712885"/>
@@ -401,7 +404,8 @@
 <class name="std::vector<flashgg::H4GCandidate>"/>
 <class name="edm::Wrapper<std::vector<flashgg::H4GCandidate> >"/>
 
-<class name="flashgg::H4GTag" ClassVersion="34">
+<class name="flashgg::H4GTag" ClassVersion="35">
+ <version ClassVersion="35" checksum="1533624168"/>
  <version ClassVersion="34" checksum="1029372491"/>
  <version ClassVersion="33" checksum="3246701946"/>
  <version ClassVersion="32" checksum="4221275369"/>
@@ -448,6 +452,21 @@
 </class>
 <class name="std::vector<flashgg::HHWWggTag>"/>
 <class name="edm::Wrapper<std::vector<flashgg::HHWWggTag> >"/>
+
+
+<class name="flashgg::THQLeptonicTag" ClassVersion="16">
+ <version ClassVersion="16" checksum="1030914150"/>
+ <version ClassVersion="15" checksum="3560398502"/>
+</class>
+<class name="std::vector<flashgg::THQLeptonicTag>"/>
+<class name="edm::Wrapper<std::vector<flashgg::THQLeptonicTag> >"/>
+
+<class name="flashgg::THQLeptonicTagTruth" ClassVersion="16">
+ <version ClassVersion="16" checksum="4051811987"/>
+ <version ClassVersion="15" checksum="3560398502"/>
+</class>
+<class name="std::vector<flashgg::THQLeptonicTagTruth>"/>
+<class name="edm::Wrapper<std::vector<flashgg::THQLeptonicTagTruth> >"/>
 
 
 </lcgdict>

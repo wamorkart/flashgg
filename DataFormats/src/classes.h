@@ -47,6 +47,8 @@
 #include "flashgg/DataFormats/interface/H4GCandidate.h"
 #include "flashgg/DataFormats/interface/H4GTag.h"
 #include "flashgg/DataFormats/interface/HHWWggTag.h"
+#include "flashgg/DataFormats/interface/THQLeptonicTag.h"
+#include "flashgg/DataFormats/interface/THQLeptonicTagTruth.h"
 
 
 #include <vector>
@@ -342,6 +344,14 @@ namespace  {
         flashgg::HHWWggTag HHWWgg;
         std::vector<flashgg::HHWWggTag> vec_HHWWgg;
         edm::Wrapper<std::vector<flashgg::HHWWggTag> > wrp_vec_HHWWgg;
+
+        flashgg::THQLeptonicTag thql;
+        std::vector<flashgg::THQLeptonicTag> vec_thql;
+        edm::Wrapper<std::vector<flashgg::THQLeptonicTag> > wrp_vec_thql;
+
+        flashgg::THQLeptonicTagTruth thqlt;
+        std::vector<flashgg::THQLeptonicTagTruth> vec_thqlt;
+        edm::Wrapper<std::vector<flashgg::THQLeptonicTagTruth> > wrp_vec_thqlt;
 
     };
 }
