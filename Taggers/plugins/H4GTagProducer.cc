@@ -19,7 +19,7 @@
 #include "flashgg/DataFormats/interface/Jet.h"
 #include "DataFormats/PatCandidates/interface/Jet.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
-// #include "flashgg/MicroAOD/interface/VertexSelectorBase.h"
+#include "flashgg/MicroAOD/interface/VertexSelectorBase.h"
 #include "flashgg/DataFormats/interface/VertexCandidateMap.h"
 #include "flashgg/DataFormats/interface/DiPhotonMVAResult.h"
 #include "flashgg/DataFormats/interface/H4GTag.h"
@@ -47,9 +47,47 @@
 using namespace std;
 using namespace edm;
 
+int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &genParticles ,
+  const std::vector<edm::Ptr<reco::Vertex> > &vertices, const double &dzMatch )
+  {
 
+    reco::Vertex::Point hardVertex( 0, 0, 0 );
+
+    for( unsigned int genLoop = 0 ; genLoop < genParticles.size(); genLoop++ ) {
+
+      if( fabs( genParticles[genLoop]->pdgId() ) < 10 || fabs( genParticles[genLoop]->pdgId() ) == 25 ) {
+        hardVertex.SetCoordinates( genParticles[genLoop]->vx(), genParticles[genLoop]->vy(), genParticles[genLoop]->vz() );
+        break;
+      }
+    }
+    int  ivMatch = 0;
+    double dzMin = 999;
+    for( unsigned int iv = 0; iv < vertices.size(); iv++ ) {
+      double dz = fabs( vertices[iv]->z() - hardVertex.z() );
+      if( dz < dzMin ) {
+        ivMatch = iv;
+        dzMin   = dz;
+      }
+    }
+    if( dzMin < dzMatch ) { return ivMatch;}
+
+    return -1;
+  }
 
   namespace flashgg {
+
+    struct Sorter {
+      bool operator()( const std::pair<unsigned int, float> pair1, const std::pair<unsigned int, float> pair2 )
+      {
+        return ( pair1.second > pair2.second );
+      };
+    };
+    struct Sorter_pairs {
+      bool operator()( const std::pair<std::vector<int>,float> pair1, std::pair<std::vector<int>,float> pair2 )
+      {
+        return ( pair1.second > pair2.second );
+      };
+    };
 
     class H4GTagProducer : public EDProducer
     {
@@ -84,13 +122,43 @@ using namespace edm;
       ConsumesCollector cc_;
       CutBasedDiPhotonObjectSelector idSelector_;
 
+
       string systLabel_;
       std::vector< std::string > systematicsLabels;
       std::vector<std::string> inputDiPhotonSuffixes_;
 
+      EDGetTokenT<reco::BeamSpot>  beamSpotToken_;
+      Handle<reco::BeamSpot>  recoBeamSpotHandle;
+
+      EDGetTokenT<View<reco::Conversion> >  conversionToken_;
+      Handle<View<reco::Conversion> > conversionHandle;
+
+      EDGetTokenT<View<reco::Conversion> >  conversionTokenSingleLeg_;
+      Handle<View<reco::Conversion> > conversionHandleSingleLeg;
+
+      EDGetTokenT< VertexCandidateMap > vertexCandidateMapToken_;
+      unique_ptr<VertexSelectorBase> vertexSelector_;
 
       edm::InputTag genInfo_;
       edm::EDGetTokenT<GenEventInfoProduct> genInfoToken_;
+
+      edm::FileInPath vertexIdMVAweightfileH4G_;
+      TMVA::Reader *VertexIdMva_;
+
+      bool useSingleLeg_;
+      float logSumpt2;
+      float ptAsym;
+      float ptBal;
+      float pullConv;
+      float nConv;
+
+      std::vector<std::pair<unsigned int, float> > sorter_;
+      unsigned int selected_vertex_index_ = 0;
+      unsigned int second_selected_vertex_index_ = 0;
+      unsigned int third_selected_vertex_index_ = 0;
+      float max_mva_value_ = -999.;
+      float second_max_mva_value_ = -999.;
+      float third_max_mva_value_ = -999.;
 
     };
 
@@ -103,7 +171,11 @@ using namespace edm;
     vertexToken_( consumes<View<reco::Vertex> >( pSet.getParameter<InputTag> ( "VertexTag" ) ) ),
     cc_( consumesCollector() ),
     idSelector_( pSet.getParameter<ParameterSet> ( "idSelection" ), cc_ ),
-    systLabel_( pSet.getParameter<string> ( "SystLabel" ) )
+    systLabel_( pSet.getParameter<string> ( "SystLabel" ) ),
+    beamSpotToken_( consumes<reco::BeamSpot> ( pSet.getParameter<InputTag> ( "beamSpotTag" ) ) ),
+    conversionToken_( consumes <View<reco::Conversion>> ( pSet.getParameter<InputTag> ( "conversionTag" ) ) ),
+    conversionTokenSingleLeg_( consumes <View<reco::Conversion>> ( pSet.getParameter<InputTag> ( "conversionTagSingleLeg" ) ) ),
+    vertexCandidateMapToken_( consumes<VertexCandidateMap>( pSet.getParameter<InputTag>( "VertexCandidateMapTag" ) ) )
 
 
     {
@@ -124,11 +196,27 @@ using namespace edm;
       genInfo_ = pSet.getUntrackedParameter<edm::InputTag>( "genInfo", edm::InputTag("generator") );
       genInfoToken_ = consumes<GenEventInfoProduct>( genInfo_ );
 
+      // cout << "**************************** in H4GTagProducer.cc **********************************************" << endl;
+
+
+
+      const std::string &VertexSelectorName = pSet.getParameter<std::string>( "VertexSelectorName" );
+      vertexSelector_.reset( FlashggVertexSelectorFactory::get()->create( VertexSelectorName, pSet ) );
+      useSingleLeg_ = pSet.getParameter<bool>( "useSingleLeg" );
+      vertexIdMVAweightfileH4G_ = pSet.getParameter<edm::FileInPath>( "vertexIdMVAweightfileH4G" );
+
+      VertexIdMva_ = new TMVA::Reader( "!Color:Silent" );
+      VertexIdMva_->AddVariable( "ptAsym", &ptAsym );
+      VertexIdMva_->AddVariable( "ptBal", &ptBal );
+      VertexIdMva_->AddVariable( "logSumpt2", &logSumpt2 );
+      VertexIdMva_->AddVariable( "pullConv", &pullConv );
+      VertexIdMva_->AddVariable( "nConv", &nConv );
+      VertexIdMva_->BookMVA( "BDT", vertexIdMVAweightfileH4G_.fullPath() );
+
 
       produces<vector<H4GTag>>();
 
       produces<vector<TagTruthBase>>();
-      // cout << "**************************** in H4GTagProducer.cc **********************************************" << endl;
     }
 
 
@@ -145,7 +233,15 @@ using namespace edm;
       event.getByToken( diphotonToken_, diphotons );
       event.getByToken( vertexToken_, vertex );
       event.getByToken( genParticleToken_, genParticle );
+      event.getByToken( beamSpotToken_, recoBeamSpotHandle );
+      event.getByToken( conversionToken_, conversionHandle );
+      event.getByToken( conversionTokenSingleLeg_, conversionHandleSingleLeg );
 
+      Handle<VertexCandidateMap> vertexCandidateMap;
+      event.getByToken( vertexCandidateMapToken_, vertexCandidateMap );
+
+      Handle<View<reco::Vertex> > primaryVertices;
+      event.getByToken( vertexToken_, primaryVertices );
 
       std::unique_ptr<vector<TagTruthBase> > truths( new vector<TagTruthBase> );
       edm::RefProd<vector<TagTruthBase> > rTagTruth = event.getRefBeforePut<vector<TagTruthBase> >();
@@ -156,44 +252,40 @@ using namespace edm;
 
       //---------vertex output end-----//
       //-----------------------------------------------------------------------------------------------------------
-
+      math::XYZPoint BSPoint;
+      if( recoBeamSpotHandle.isValid() ) {
+        BSPoint = recoBeamSpotHandle->position();
+      }
 
       // MC truth
       TagTruthBase truth_obj;
       // double genMhh=0.;
+      int trueVtxIndexI = -999;
+      vector<int>	pvVecNoTrue;
+      int irand = -999;
+      int randVtxIndexI = -999;
       if( ! event.isRealData() ) {
+
         Handle<View<reco::GenParticle> > genParticles;
         event.getByToken( genParticleToken_, genParticles );
         std::vector<edm::Ptr<reco::GenParticle> > selHiggses;
+        trueVtxIndexI = mcTruthVertexIndex_h4g( genParticles->ptrs(), primaryVertices->ptrs(), 0.1);
+        for( unsigned int i = 0 ; i < primaryVertices->size() ; i++ ) {
+          if( i != (unsigned int)trueVtxIndexI ) { pvVecNoTrue.push_back( i ); }
+        }
+        if( pvVecNoTrue.size() > 1 ) { irand = rand() % pvVecNoTrue.size(); }
+        if( irand != -999 ) { randVtxIndexI = pvVecNoTrue[irand]; }
 
 
         reco::GenParticle::Point higgsVtx(0.,0.,0.);
         for( unsigned int genLoop = 0 ; genLoop < genParticles->size(); genLoop++ ) {
           int pdgid = genParticles->ptrAt( genLoop )->pdgId();
-          // if( pdgid == 25 || pdgid == 22 ) { // not so sure if this is correct for HHWWgg because of potential photons from hadronization
           if( pdgid == 25 ) {
             higgsVtx = genParticles->ptrAt( genLoop )->vertex();
             // gen_vertex_z = higgsVtx.z();
             break;
           }
         }
-        // for( unsigned int genLoop = 0 ; genLoop < genParticles->size(); genLoop++ ) {
-        //   edm::Ptr<reco::GenParticle> genPar = genParticles->ptrAt(genLoop);
-        //   // if (selHiggses.size()>1) break;
-        //   // if (genPar->pdgId()==25 && genPar->isHardProcess()){
-        //   //   selHiggses.push_back(genPar);
-        //   // }
-        //   edm::Ptr<reco::GenParticle> part = genParticles->ptrAt(genLoop);
-        //   if (genPar->pdgId() ==  25 || genPar->pdgId() == 54)
-        //   {
-        //     if (genPar->daughter(0)->pdgId() == 22 && genPar->daughter(1)->pdgId() == 22)
-        //     {
-        //       genPhos.push_back(part);
-        //       genPhoton_p4.push_back(genPar->daughter(0)->p4());
-        //       genPhoton_p4.push_back(genPar->daughter(1)->p4());
-        //     }
-        //   }
-        // }
 
         truth_obj.setGenPV( higgsVtx );
         truths->push_back( truth_obj );
@@ -208,7 +300,7 @@ using namespace edm;
       std::unique_ptr<vector<H4GTag> > H4Gtags( new vector<H4GTag> );
       //
       // edm::Ptr<reco::Vertex> vertex_diphoton;
-      // edm::Ptr<reco::Vertex> vertex_bdt;
+      edm::Ptr<reco::Vertex> vertex_bdt;
       bool atLeastOneDiphoPass = false;
       for( unsigned int dpIndex = 0; dpIndex < diphotons->size(); dpIndex++ )
       {
@@ -221,6 +313,7 @@ using namespace edm;
       // cout << "atLeastOneDiphoPass: " << atLeastOneDiphoPass << endl;
 
       //if (photons->size()>3){ // without systematics (?)
+      std::vector<edm::Ptr<flashgg::Photon>> phoPtrVector;
       if (atLeastOneDiphoPass && photons->size() > 3){
         edm::Ptr<flashgg::DiPhotonCandidate> dipho;
 
@@ -274,12 +367,12 @@ using namespace edm;
         std::sort(phoVector.begin(), phoVector.end(), [](const flashgg::Photon a, const flashgg::Photon b) {return a.pt() > b.pt(); });
 
         //-- prepare a vector of ptr to photons, to be used for vertex selection
-        // for( int phoIndex = 0; phoIndex < (int) photons->size(); phoIndex++ )
-        // {
-        //   edm::Ptr<flashgg::Photon> pho = photons->ptrAt(phoIndex);
-        //   // cout << "photon pt " << pho->pt() << endl;
-        //   phoPtrVector.push_back(pho);
-        // }
+        for( int phoIndex = 0; phoIndex < (int) photons->size(); phoIndex++ )
+        {
+          edm::Ptr<flashgg::Photon> pho = photons->ptrAt(phoIndex);
+          phoPtrVector.push_back(pho);
+        }
+        std::sort(phoPtrVector.begin(), phoPtrVector.end(), [](const edm::Ptr<flashgg::Photon> a, const edm::Ptr<flashgg::Photon> b) {return a->pt() > b->pt(); });
 
         for( int v = 0; v < (int) vertex->size(); v++ )
         {
@@ -303,66 +396,69 @@ using namespace edm;
           //   slim_Vertices.push_back(vertex_diphoton);
           // }
         }
-        // int trueVtxIndex = trueVtxIndexI;
-        // int randVtxIndex = randVtxIndexI;
+        int trueVtxIndex = trueVtxIndexI;
+        int randVtxIndex = randVtxIndexI;
 
         // cout << hgg_index << "  " << trueVtxIndex << "  " << randVtxIndex << endl;
 
-        // std::vector<std::vector<float>> vtxVar;
+        std::vector<std::vector<float>> vtxVar;
+
         // cout << "USE SINGLE LEG " << useSingleLeg_ << endl;
         // if (phoPtrVector.size() == 2)
         // {
-        //   vtxVar = vertexSelector_->select_h2g(phoPtrVector[0],phoPtrVector[1], Vertices, *vertexCandidateMap,conversionHandle->ptrs(), conversionHandleSingleLeg->ptrs(), BSPoint, useSingleLeg_   );
+        // vtxVar = vertexSelector_->select_h2g(phoPtrVector[0],phoPtrVector[1], Vertices, *vertexCandidateMap,conversionHandle->ptrs(), conversionHandleSingleLeg->ptrs(), BSPoint, useSingleLeg_   );
         // }
         // if (phoPtrVector.size() == 3)
         // {
-        //   vtxVar = vertexSelector_->select_h3g(phoPtrVector[0],phoPtrVector[1],phoPtrVector[2], Vertices, *vertexCandidateMap,conversionHandle->ptrs(), conversionHandleSingleLeg->ptrs(), BSPoint, useSingleLeg_   );
+        // vtxVar = vertexSelector_->select_h3g(phoPtrVector[0],phoPtrVector[1],phoPtrVector[2], Vertices, *vertexCandidateMap,conversionHandle->ptrs(), conversionHandleSingleLeg->ptrs(), BSPoint, useSingleLeg_   );
         // }
-        // if (phoPtrVector.size() > 3)
-        // {
-        //   vtxVar = vertexSelector_->select_h4g(phoPtrVector[0],phoPtrVector[1],phoPtrVector[2],phoPtrVector[3], Vertices, *vertexCandidateMap,conversionHandle->ptrs(), conversionHandleSingleLeg->ptrs(), BSPoint, useSingleLeg_   );
-        // }
+        if (phoPtrVector.size() > 3)
+        {
+          vtxVar = vertexSelector_->select_h4g(phoPtrVector[0],phoPtrVector[1],phoPtrVector[2],phoPtrVector[3], Vertices, *vertexCandidateMap,conversionHandle->ptrs(), conversionHandleSingleLeg->ptrs(), BSPoint, useSingleLeg_   );
+        }
 
-        // sorter_.clear();
-        // selected_vertex_index_ = 0;
-        // second_selected_vertex_index_ = 0;
-        // third_selected_vertex_index_ = 0;
-        // max_mva_value_ = -999.;
-        // second_max_mva_value_ = -999.;
-        // third_max_mva_value_ = -999.;
+        sorter_.clear();
+        selected_vertex_index_ = 0;
+        second_selected_vertex_index_ = 0;
+        third_selected_vertex_index_ = 0;
+        max_mva_value_ = -999.;
+        second_max_mva_value_ = -999.;
+        third_max_mva_value_ = -999.;
 
-        // for( int vtx = 0; vtx < (int) vertex->size(); vtx++ )
-        // {
-        //   logSumpt2 = vtxVar[0][vtx];
-        //   ptAsym = vtxVar[1][vtx];
-        //   ptBal = vtxVar[2][vtx];
-        //   pullConv = vtxVar[3][vtx];
-        //   nConv = vtxVar[4][vtx];
-        //
-        //   float mva_value_bdt_ = VertexIdMva_->EvaluateMVA( "BDT" );
-        //
-        //   std::pair<unsigned int, float>pairToSort = std::make_pair( (unsigned int)vtx, mva_value_bdt_ );
-        //   sorter_.push_back( pairToSort );
-        //
-        //   if( mva_value_bdt_ > max_mva_value_ ) {
-        //     max_mva_value_ = mva_value_bdt_;
-        //     selected_vertex_index_ = vtx;
-        //   }
-        // }
+        for( int vtx = 0; vtx < (int) vertex->size(); vtx++ )
+        {
+          logSumpt2 = vtxVar[0][vtx];
+          ptAsym = vtxVar[1][vtx];
+          ptBal = vtxVar[2][vtx];
+          pullConv = vtxVar[3][vtx];
+          nConv = vtxVar[4][vtx];
 
-        // std::sort( sorter_.begin(), sorter_.end(), Sorter() );
-        //
-        // if( sorter_.size() > 1 ) {
-        //   second_max_mva_value_ = sorter_[1].second;
-        //   second_selected_vertex_index_ = sorter_[1].first;
-        // }
-        //
-        // if( sorter_.size() > 2 ) {
-        //   third_max_mva_value_ = sorter_[2].second;
-        //   third_selected_vertex_index_ = sorter_[2].first;
-        // }
-        //
-        // vertex_bdt = vertex->ptrAt( selected_vertex_index_ );
+          float mva_value_bdt_ = VertexIdMva_->EvaluateMVA( "BDT" );
+
+          std::pair<unsigned int, float>pairToSort = std::make_pair( (unsigned int)vtx, mva_value_bdt_ );
+          sorter_.push_back( pairToSort );
+
+          if( mva_value_bdt_ > max_mva_value_ ) {
+            max_mva_value_ = mva_value_bdt_;
+            selected_vertex_index_ = vtx;
+          }
+        }
+
+        std::sort( sorter_.begin(), sorter_.end(), Sorter() );
+
+        if( sorter_.size() > 1 ) {
+          second_max_mva_value_ = sorter_[1].second;
+          second_selected_vertex_index_ = sorter_[1].first;
+        }
+
+        if( sorter_.size() > 2 ) {
+          third_max_mva_value_ = sorter_[2].second;
+          third_selected_vertex_index_ = sorter_[2].first;
+        }
+
+        vertex_bdt = vertex->ptrAt( selected_vertex_index_ );
+
+        cout << "selected vertex index " << selected_vertex_index_ << endl;
 
         // MVA0      = max_mva_value_;
         // MVA1      = second_max_mva_value_;
@@ -654,10 +750,10 @@ using namespace edm;
       // outFile->Close();
 
     } // H4GTagProducer::produce
-          // tree_pairBDT_sig->Write();
-          // tree_pairBDT_bkg->Write();
-          // tree_pairBDT_bkg->Write();
-          // tree_pairBDT_sig->Write();
+    // tree_pairBDT_sig->Write();
+    // tree_pairBDT_bkg->Write();
+    // tree_pairBDT_bkg->Write();
+    // tree_pairBDT_sig->Write();
 
   } // namespace flashgg
 

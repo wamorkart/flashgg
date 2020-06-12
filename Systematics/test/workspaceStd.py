@@ -313,9 +313,9 @@ if customize.tthTagsOnly:
     process.flashggTagSequence.remove(process.flashggTTHDiLeptonTag)
     process.flashggTagSequence.remove(process.flashggTHQLeptonicTag)
 
-# if customize.H4GTagsOnly:
+if customize.H4GTagsOnly:
 #     process.load("flashgg/Taggers/vtxH4GSequence")
-#     from flashgg.MicroAOD.flashggTkVtxMap_cfi import flashggVertexMapUnique
+    from flashgg.MicroAOD.flashggTkVtxMap_cfi import flashggVertexMapUnique
 #
 #     process.flashggTagSequence.remove(process.flashggPreselectedDiPhotons)
 #     process.flashggTagSequence.remove(process.flashggDiPhotonMVA)
@@ -815,11 +815,11 @@ process.flashggMetFilters.requiredFilterNames = cms.untracked.vstring([filter.en
 # HHWWggTagsOnly requires zeroeth vertex, but not modifySystematicsWorkflowForttH
 if customize.tthTagsOnly or customize.H4GTagsOnly or customize.HHWWggTagsOnly:
     #debug
-    # process.load("flashgg/MicroAOD/flashggTkVtxMap_cfi")
+    process.load("flashgg/MicroAOD/flashggTkVtxMap_cfi")
 
     process.content = cms.EDAnalyzer("EventContentAnalyzer")
     process.p = cms.Path(
-                         # process.flashggVertexMapUnique*
+                         process.flashggVertexMapUnique*
                          process.dataRequirements*
                          process.flashggMetFilters*
                          process.genFilter*
