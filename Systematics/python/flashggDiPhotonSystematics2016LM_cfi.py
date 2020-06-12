@@ -11,7 +11,7 @@ mvaShiftBins = cms.PSet(
                      )
     )
 
-# from Arnab 
+# Lowmass 2016 Preselection SF and uncertainties from Arnab
 preselBins = cms.PSet(
     variables = cms.vstring("abs(superCluster.eta)","full5x5_r9"),
     bins = cms.VPSet(
@@ -22,8 +22,7 @@ preselBins = cms.PSet(
         )
     )
 
-
-# slide  ...
+# JTao: 2016 Low mass case
 electronVetoBins = cms.PSet(
     variables = cms.vstring("abs(superCluster.eta)","full5x5_r9"),
     bins = cms.VPSet(
@@ -33,7 +32,6 @@ electronVetoBins = cms.PSet(
         cms.PSet( lowBounds = cms.vdouble( 1.5, 0.90 ) , upBounds = cms.vdouble( 6.0, 999. ) , values = cms.vdouble( 1.0266 ) , uncertainties = cms.vdouble( 0.0162 )  )
         )
     )
-
 
 FNUFBins = cms.PSet(
     variables = cms.vstring("abs(superCluster.eta)","full5x5_r9"),
@@ -65,7 +63,7 @@ showerShapeBins = cms.PSet(
     )
 
 
-#with full 2016  dataset from Linda
+#for full 2016 Legacy dataset, still with 2016 propmtRereco/paper values, from Linda
 leadTriggerScaleBins = cms.PSet(
     variables = cms.vstring("full5x5_r9","abs(superCluster.eta)","pt"),
     bins = cms.VPSet(
@@ -173,7 +171,6 @@ leadTriggerScaleBinsEBhiR9OR= cms.PSet(
 
         )
     )
-
 
 subleadTriggerScaleBins = cms.PSet(
     variables = cms.vstring("full5x5_r9","abs(superCluster.eta)","pt"),
@@ -299,7 +296,7 @@ subleadTriggerScaleBinsEBhiR9OR = cms.PSet(
     )
 
 
-# from Arnab via                                                                                                                                
+# from Arnab for 2016 LM paper/propmptRereco
 looseMvaBins = cms.PSet(
     variables = cms.vstring("abs(superCluster.eta)","full5x5_r9"),
     bins = cms.VPSet(
@@ -435,12 +432,9 @@ emptySigma = cms.PSet(
     secondVar = cms.vint32()
 )
 
-#scalesAndSmearingsPrefix = cms.string("EgammaAnalysis/ElectronTools/data/80X_ichepV2_2016_pho")
-#scalesAndSmearingsPrefixForSigmaEOverE = cms.string("EgammaAnalysis/ElectronTools/data/Golden22June")
-##scalesAndSmearingsPrefix = cms.string("EgammaAnalysis/ElectronTools/data/Winter_2016_reReco_v1_ele")
-##scalesAndSmearingsPrefixForSigmaEOverE = cms.string("EgammaAnalysis/ElectronTools/data/Winter_2016_reReco_v1_ele")
-scalesAndSmearingsPrefix = cms.string("EgammaAnalysis/ElectronTools/data/Moriond17_74x_pho")
-scalesAndSmearingsPrefixForSigmaEOverE = cms.string("EgammaAnalysis/ElectronTools/data/Winter_2016_reReco_v1_ele")
+scalesAndSmearingsPrefix = cms.string("EgammaAnalysis/ElectronTools/data/ScalesSmearings/Legacy2016_07Aug2017_FineEtaR9_v3_ele_unc")
+#scalesAndSmearingsPrefixForSigmaEOverE = scalesAndSmearingsPrefix
+#cms.string("EgammaAnalysis/ElectronTools/data/ScalesSmearings/Legacy2016_07Aug2017_pho_unc")
 
 MCScaleHighR9EB = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale"),
           MethodName = cms.string("FlashggDiPhotonFromPhoton"),
@@ -638,7 +632,7 @@ MvaShift = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonMvaTransform"),
           Label = cms.string("MvaShift"),
           NSigmas = cms.vint32(-1,1),
           OverallRange = cms.string("1"),
-          CorrectionFile = cms.FileInPath("flashgg/MicroAOD/data/transformationIDMVA_v2.root"),
+          CorrectionFile = cms.FileInPath("flashgg/Systematics/data/SystematicsIDMVA_LegRunII_v1_2016.root"),
           BinList = mvaShiftBins,
           Debug = cms.untracked.bool(False),
           ApplyCentralValue = cms.bool(False)
@@ -671,7 +665,7 @@ TriggerWeight = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonWeight"),
           OverallRange = cms.string("pt<99999"),
           BinList = leadTriggerScaleBins,
           BinList2 = subleadTriggerScaleBins,
-          #new for low mass
+          #new for 2016 low mass
           BinList3 = leadTriggerScaleBinsEBhiR9OR,
           BinList4 = subleadTriggerScaleBinsEBhiR9OR,
           Debug = cms.untracked.bool(False),
@@ -711,7 +705,7 @@ SigmaEOverESmearing = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonSigE
 SigmaEOverESmearing_EGM = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonSigEoverESmearingEGMTool"),
           MethodName = cms.string("FlashggDiPhotonFromPhoton"),
           Label = cms.string("SigmaEOverESmearing"),
-          CorrectionFile = scalesAndSmearingsPrefixForSigmaEOverE,
+          CorrectionFile = scalesAndSmearingsPrefix,
           NSigmas = cms.vint32(),
           OverallRange = cms.string("1"),
           BinList = emptyBins,
@@ -892,40 +886,3 @@ MCScaleGain1EB_EGM = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale
          Debug = cms.untracked.bool(False)
          )
 
-flashggDiPhotonSystematics = cms.EDProducer('FlashggDiPhotonSystematicProducer',
-		src = cms.InputTag("flashggUpdatedIdMVADiPhotons"),
-                SystMethods2D = cms.VPSet(),
-                # the number of syst methods matches the number of nuisance parameters
-                # assumed for a given systematic uncertainty and is NOT required
-                # to match 1-to-1 the number of bins above.
-                SystMethods = cms.VPSet(
-                    MCScaleHighR9EB,
-                    MCScaleLowR9EB,
-                    MCScaleHighR9EE,
-                    MCScaleLowR9EE,
-                    MCScaleGain6EB_EGM,
-                    MCScaleGain1EB_EGM,
-                    MaterialCentralBarrel,
-                    MaterialOuterBarrel,
-                    MaterialForward,
-                    ShowerShapeHighR9EB,
-                    ShowerShapeHighR9EE,
-                    ShowerShapeLowR9EB,
-                    ShowerShapeLowR9EE,
-                    FNUFEB,
-                    FNUFEE,
-                    MCSmearHighR9EE,
-                    MCSmearLowR9EE,
-                    MCSmearHighR9EB,
-                    MCSmearLowR9EB,
-                    MvaShift,
-                    PreselSF,
-                    electronVetoSF,
-                    TriggerWeight,
-                    LooseMvaSF,
-                    SigmaEOverEShift,
-                    SigmaEOverESmearing,
-                    FracRVWeight,
-                    FracRVNvtxWeight
-                )
-)

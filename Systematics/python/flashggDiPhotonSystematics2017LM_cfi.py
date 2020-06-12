@@ -22,6 +22,7 @@ preselBins = cms.PSet(
         )
     )
 
+
 # JTao: Low mass case
 electronVetoBins = cms.PSet(
     variables = cms.vstring("abs(superCluster.eta)","full5x5_r9"),
@@ -97,6 +98,7 @@ showerShapeBins = cms.PSet(
         cms.PSet( lowBounds = cms.vdouble( 2.0, 0.94 ) , upBounds = cms.vdouble( 6.0, 999. ) , values = cms.vdouble( 0. ) , uncertainties = cms.vdouble( 0.0003 )  ) 
         )
     )
+
 
 
 #with full 2017 dataset from Linda on April 30 for preapproval.  Trigger scale factors for use without HLT applied in MC
@@ -251,16 +253,6 @@ looseMvaBins = cms.PSet(
         cms.PSet( lowBounds = cms.vdouble( 1.5, 0.0  ) , upBounds = cms.vdouble( 6.0, 0.9   ) , values = cms.vdouble( 1.0007 ) , uncertainties = cms.vdouble( 0.0022 )  ) ,
         cms.PSet( lowBounds = cms.vdouble( 1.5, 0.9  ) , upBounds = cms.vdouble( 6.0, 999.0 ) , values = cms.vdouble( 1.0001 ) , uncertainties = cms.vdouble( 0.0012 ) ) ) )
 
-# from Arnab via Julie 2017 dataset updated 06/11/2018
-tightMvaBins = cms.PSet(
-    variables = cms.vstring("abs(superCluster.eta)","full5x5_r9"),
-    bins = cms.VPSet(
-        cms.PSet( lowBounds = cms.vdouble( 0.0, 0.0  ) , upBounds = cms.vdouble( 1.5, 0.85  ) , values = cms.vdouble( 0.990 ) , uncertainties = cms.vdouble( 0.006 )  ) ,
-        cms.PSet( lowBounds = cms.vdouble( 0.0, 0.85 ) , upBounds = cms.vdouble( 1.5, 999.0 ) , values = cms.vdouble( 0.999 ) , uncertainties = cms.vdouble( 0.009 )  ) ,
-        cms.PSet( lowBounds = cms.vdouble( 1.5, 0.0  ) , upBounds = cms.vdouble( 6.0, 0.9   ) , values = cms.vdouble( 1.004 ) , uncertainties = cms.vdouble( 0.013 )  ) ,
-        cms.PSet( lowBounds = cms.vdouble( 1.5, 0.9  ) , upBounds = cms.vdouble( 6.0, 999.0 ) , values = cms.vdouble( 1.004 ) , uncertainties = cms.vdouble( 0.008 ) ) ) ) 
-
-
 # RELATIVE shift of sigmaE/E --> 0.05 corresponds to a shift of 5%
 sigmaEOverEShiftBins = cms.PSet(
     variables = cms.vstring("abs(superCluster.eta)"),
@@ -385,18 +377,8 @@ emptySigma = cms.PSet(
 )
 
 
-#scalesAndSmearingsPrefix = cms.string("EgammaAnalysis/ElectronTools/data/80X_ichepV2_2016_pho")
-#scalesAndSmearingsPrefixForSigmaEOverE = cms.string("EgammaAnalysis/ElectronTools/data/Golden22June")
-##scalesAndSmearingsPrefix = cms.string("EgammaAnalysis/ElectronTools/data/Winter_2016_reReco_v1_ele")
-##scalesAndSmearingsPrefixForSigmaEOverE = cms.string("EgammaAnalysis/ElectronTools/data/Winter_2016_reReco_v1_ele")
-scalesAndSmearingsPrefix = cms.string("RecoEgamma/ScalesSmearings/data/Run2017_17Nov2017_v1_ele_unc")
-scalesAndSmearingsPrefixForSigmaEOverE = cms.string("RecoEgamma/ScalesSmearings/data/Run2017_17Nov2017_v1_ele_unc")
-#scalesAndSmearingsPrefix = cms.string("flashgg/Systematics/data/Moriond17_74x_pho")
-#scalesAndSmearingsPrefixForSigmaEOverE = cms.string("flashgg/Systematics/data/Winter_2016_reReco_v1_ele")
-
-
-
-
+scalesAndSmearingsPrefix = cms.string("EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2017_17Nov2017_v1_ele_unc")
+#scalesAndSmearingsPrefixForSigmaEOverE = scalesAndSmearingsPrefix
 
 MCScaleHighR9EB = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale"),
           MethodName = cms.string("FlashggDiPhotonFromPhoton"),
@@ -594,8 +576,7 @@ MvaShift = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonMvaTransform"),
           Label = cms.string("MvaShift"),
           NSigmas = cms.vint32(-1,1),
           OverallRange = cms.string("1"),
-          #CorrectionFile = cms.FileInPath("flashgg/MicroAOD/data/transformationIDMVA_v2.root"),
-          CorrectionFile = cms.FileInPath("flashgg/MicroAOD/data/transformation_idmva_Arnab_withlinearCorrinEB_and_0p06shiftinEE_11_12.root"),
+          CorrectionFile = cms.FileInPath("flashgg/Systematics/data/SystematicsIDMVA_LegRunII_v1_2017.root"),
           BinList = mvaShiftBins,
           Debug = cms.untracked.bool(False),
           ApplyCentralValue = cms.bool(False)
@@ -653,16 +634,6 @@ LooseMvaSF = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonWeight"),
           ApplyCentralValue = cms.bool(True)
           )
 
-TightMvaSF = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonWeight"),
-          MethodName = cms.string("FlashggDiPhotonFromPhoton"),
-          Label = cms.string("TightMvaSF"),
-          NSigmas = cms.vint32(-1,1),
-          OverallRange = cms.string("1"),
-          BinList = tightMvaBins,
-          Debug = cms.untracked.bool(False),
-          ApplyCentralValue = cms.bool(True)
-          )
-
 SigmaEOverEShift = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonSigEOverEShift"),
           MethodName = cms.string("FlashggDiPhotonFromPhoton"),
           Label = cms.string("SigmaEOverEShift"),
@@ -686,7 +657,7 @@ SigmaEOverESmearing = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonSigE
 SigmaEOverESmearing_EGM = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonSigEoverESmearingEGMTool"),
           MethodName = cms.string("FlashggDiPhotonFromPhoton"),
           Label = cms.string("SigmaEOverESmearing"),
-          CorrectionFile = scalesAndSmearingsPrefixForSigmaEOverE,
+          CorrectionFile = scalesAndSmearingsPrefix,
           NSigmas = cms.vint32(),
           OverallRange = cms.string("1"),
           BinList = emptyBins,
@@ -867,40 +838,3 @@ MCScaleGain1EB_EGM = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale
          Debug = cms.untracked.bool(False)
          )
 
-flashggDiPhotonSystematics = cms.EDProducer('FlashggDiPhotonSystematicProducer',
-		src = cms.InputTag("flashggUpdatedIdMVADiPhotons"),
-                SystMethods2D = cms.VPSet(),
-                # the number of syst methods matches the number of nuisance parameters
-                # assumed for a given systematic uncertainty and is NOT required
-                # to match 1-to-1 the number of bins above.
-                SystMethods = cms.VPSet(
-                    MCScaleHighR9EB,
-                    MCScaleLowR9EB,
-                    MCScaleHighR9EE,
-                    MCScaleLowR9EE,
-                    MCScaleGain6EB_EGM,
-                    MCScaleGain1EB_EGM,
-                    MaterialCentralBarrel,
-                    MaterialOuterBarrel,
-                    MaterialForward,
-                    ShowerShapeHighR9EB,
-                    ShowerShapeHighR9EE,
-                    ShowerShapeLowR9EB,
-                    ShowerShapeLowR9EE,
-                    FNUFEB,
-                    FNUFEE,
-                    MCSmearHighR9EE,
-                    MCSmearLowR9EE,
-                    MCSmearHighR9EB,
-                    MCSmearLowR9EB,
-                    MvaShift,
-                    PreselSF,
-                    electronVetoSF,
-                    TriggerWeight,
-                    LooseMvaSF,
-                    SigmaEOverEShift,
-                    SigmaEOverESmearing,
-                    FracRVWeight,
-                    FracRVNvtxWeight
-                )
-)
