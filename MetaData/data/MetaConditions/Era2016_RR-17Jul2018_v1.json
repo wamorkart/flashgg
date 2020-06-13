@@ -82,9 +82,7 @@
 
     "Ele_reco_SF_FileName" : "flashgg/Systematics/data/2016_reco-eff.json",
 
-    "flashggDiPhotonSystematics" : "flashggDiPhotonSystematics2016_cfi",
-    
-
+    "flashggDiPhotonSystematics" : "flashggDiPhotonSystematics2016LM_cfi",
     "bTagSystematics" :
     {
 

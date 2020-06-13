@@ -63,6 +63,12 @@ customize.options.register('mass',
                  VarParsing.VarParsing.varType.float,
                  "mass")
 
+customize.options.register('doH4GVertex',
+                 '',
+                 VarParsing.VarParsing.multiplicity.singleton,
+                 VarParsing.VarParsing.varType.bool,
+                 "doH4GVertex")
+
 from flashgg.MetaData.JobConfig import customize
 customize.parse()
 
@@ -163,13 +169,14 @@ cfgTools.addCategories(process.h4gCandidateDumper,
 
 
 if (customize.year == "2016"):
-    process.source = cms.Source ("PoolSource",
-                             # fileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/user/spigazzi/flashgg/Era2016_RR-17Jul2018_v2/legacyRun2FullV1/GluGluToHHTo2B2G_node_SM_13TeV-madgraph/Era2016_RR-17Jul2018_v2-legacyRun2FullV1-v0-RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/190605_224652/0000/myMicroAODOutputFile_2.root"),
-                             # secondaryFileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch///store/mc/RunIISummer16MiniAODv3/GluGluToHHTo2B2G_node_SM_13TeV-madgraph/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v2/110000/CA97CD76-CD37-E911-ADBD-0090FAA57E64.root")
-            fileNames = cms.untracked.vstring("root://eoscms.cern.ch//eos/cms/store/group/phys_higgs/HiggsExo/H4Gamma/MicroAOD/H4G_Jun7/v0/SUSYGluGluToHToAA_AToGG_M-60_TuneCUETP8M1_13TeV_pythia8/Test_jun7-R2S16MAODv2-PUM17_GT/170607_180035/0000/myMicroAODOutputFile_9.root"),
-            secondaryFileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/mc/RunIISummer16MiniAODv2/SUSYGluGluToHToAA_AToGG_M-60_TuneCUETP8M1_13TeV_pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/C85D3FF6-84C8-E611-B11D-D4AE526A0B29.root"),
-            #fileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/user/spigazzi/flashgg/Era2016_RR-17Jul2018_v2/legacyRun2FullV1/DiPhotonJetsBox_M40_80-Sherpa/Era2016_RR-17Jul2018_v2-legacyRun2FullV1-v0-RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/190715_222009/0000/myMicroAODOutputFile_62.root"),
-            #secondaryFileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/mc/RunIISummer16MiniAODv3/DiPhotonJetsBox_M40_80-Sherpa/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v1/60000/36573481-50CD-E811-95FB-0242AC130004.root")
+    if (customize.doH4GVertex == 0):
+        process.source = cms.Source ("PoolSource",
+            fileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/group/phys_higgs/HiggsExo/H4Gamma/H4G_2016samples_producedwithBkgCustomization/H4GandHH4G_2016_27Sep2019/RunIIFall18-4_0_0-119-g2d54185d/SUSYGluGluToHToAA_AToGG_M-60_TuneCUETP8M1_13TeV_pythia8/H4GandHH4G_2016_27Sep2019-RunIIFall18-4_0_0-119-g2d54185d-v0-RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/190927_180219/0000/myMicroAODOutputFile_211.root"))
+            # fileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/user/spigazzi/flashgg/Era2016_RR-17Jul2018_v2/legacyRun2FullV1/DoubleEG/Era2016_RR-17Jul2018_v2-legacyRun2FullV1-v0-Run2016B-17Jul2018_ver2-v1/190605_220256/0000/myMicroAODOutputFile_932.root"))
+    else:
+        process.source = cms.Source ("PoolSource",
+            fileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/group/phys_higgs/HiggsExo/H4Gamma/H4G_2016samples_producedwithBkgCustomization/H4GandHH4G_2016_27Sep2019/RunIIFall18-4_0_0-119-g2d54185d/SUSYGluGluToHToAA_AToGG_M-60_TuneCUETP8M1_13TeV_pythia8/H4GandHH4G_2016_27Sep2019-RunIIFall18-4_0_0-119-g2d54185d-v0-RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/190927_180219/0000/myMicroAODOutputFile_211.root"),
+            secondaryFileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/mc/RunIISummer16MiniAODv3/SUSYGluGluToHToAA_AToGG_M-60_TuneCUETP8M1_13TeV_pythia8/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v2/270000/D489FF02-343F-E911-8857-AC1F6BAC7C2A.root")
             # fileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/user/spigazzi/flashgg/Era2016_RR-17Jul2018_v2/legacyRun2FullV1/DoubleEG/Era2016_RR-17Jul2018_v2-legacyRun2FullV1-v0-Run2016B-17Jul2018_ver2-v1/190605_220256/0000/myMicroAODOutputFile_932.root"),
             # secondaryFileNames = cms.untracked.vstring("root://cms-xrd-global.cern.ch//store/data/Run2016B/DoubleEG/MINIAOD/17Jul2018_ver2-v1/20000/D03AED69-308D-E811-AFFC-008CFA197CD0.root","root://cms-xrd-global.cern.ch//store/data/Run2016B/DoubleEG/MINIAOD/17Jul2018_ver2-v1/20000/FCFDB07D-378D-E811-89A0-008CFAE45144.root")
 
@@ -189,9 +196,14 @@ if (customize.year == "2016"):
     print "2016 diphoton Pairing"
     print "mass = ", customize.mass
     process.FlashggH4GCandidate.mass = cms.untracked.double(customize.mass)
+    process.FlashggH4GCandidate.doH4GVertex = cms.untracked.bool(customize.doH4GVertex)
+    if (customize.doH4GVertex == 0):
+        print "Zeroth Vertex"
+    else:
+        print "H4G Vertex"
     if (customize.mass == 60):
         process.FlashggH4GCandidate.diphoPairMVAweightfileH4G= cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_diphoPairTMVA_H4G_M60.weights.xml")
-        process.FlashggH4GCandidate.CatMVAweightfileH4G = cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_CatMVA_H4G_60.weights.xml")
+        # process.FlashggH4GCandidate.CatMVAweightfileH4G = cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_CatMVA_H4G_60.weights.xml")
         print "BDT mass training ", process.FlashggH4GCandidate.diphoPairMVAweightfileH4G
     elif (customize.mass == 55):
         process.FlashggH4GCandidate.diphoPairMVAweightfileH4G= cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_diphoPairTMVA_H4G_M55.weights.xml")
@@ -199,7 +211,7 @@ if (customize.year == "2016"):
     elif (customize.mass == 50):
         process.FlashggH4GCandidate.diphoPairMVAweightfileH4G= cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_diphoPairTMVA_H4G_M50.weights.xml")
         print "BDT mass training ", process.FlashggH4GCandidate.diphoPairMVAweightfileH4G
-        process.FlashggH4GCandidate.CatMVAweightfileH4G = cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_CatMVA_H4G_60.weights.xml")
+        # process.FlashggH4GCandidate.CatMVAweightfileH4G = cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_CatMVA_H4G_60.weights.xml")
     elif (customize.mass == 45):
         process.FlashggH4GCandidate.diphoPairMVAweightfileH4G= cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_diphoPairTMVA_H4G_M45.weights.xml")
         print "BDT mass training ", process.FlashggH4GCandidate.diphoPairMVAweightfileH4G
@@ -323,8 +335,11 @@ process.flashggDiPhotonSystematics.SystMethods2D = systModules2D
 
 if customize.stdDumper:
    #standard dumper sequence
-   process.path = cms.Path(process.vtxH4GSequence*process.dataRequirements*process.flashggDiPhotonSystematics*process.FlashggH4GCandidate*process.h4gCandidateDumper)
-   # process.path = cms.Path(process.vtxH4GSequence*process.dataRequirements*process.FlashggH4GCandidate*process.h4gCandidateDumper)
+   if (customize.doH4GVertex):
+       process.path = cms.Path(process.vtxH4GSequence*process.dataRequirements*process.flashggDiPhotonSystematics*process.FlashggH4GCandidate*process.h4gCandidateDumper)
+   else:
+       process.path = cms.Path(process.dataRequirements*process.flashggDiPhotonSystematics*process.FlashggH4GCandidate*process.h4gCandidateDumper)
+   #process.path = cms.Path(process.vtxH4GSequence*process.dataRequirements*process.FlashggH4GCandidate*process.h4gCandidateDumper)
 
 if customize.vtxBDTDumper:
    #vtxBDT dumper sequence

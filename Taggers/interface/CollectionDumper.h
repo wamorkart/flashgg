@@ -180,7 +180,7 @@ namespace flashgg {
   globalVarsDumper_(0)
   {
     if( dumpGlobalVariables_ ) {
-      cout << "[in Taggers/interface/CollectionDumper.h 1st collectiondumper] - dumpGlobalVariables_ = True" << endl;
+      // cout << "[in Taggers/interface/CollectionDumper.h 1st collectiondumper] - dumpGlobalVariables_ = True" << endl;
       globalVarsDumper_ = new GlobalVariablesDumper( cfg.getParameter<edm::ParameterSet>( "globalVariables" ) );
     }
     _init(cfg, fs);
@@ -210,7 +210,7 @@ namespace flashgg {
   globalVarsDumper_(0)
   {
     if( dumpGlobalVariables_ ) {
-      cout << "[in Taggers/interface/CollectionDumper.h 2nd collectiondumper] - dumpGlobalVariables_ = True" << endl;
+      // cout << "[in Taggers/interface/CollectionDumper.h 2nd collectiondumper] - dumpGlobalVariables_ = True" << endl;
       globalVarsDumper_ = new GlobalVariablesDumper( cfg.getParameter<edm::ParameterSet>( "globalVariables" ), std::forward<edm::ConsumesCollector>(cc) );
     }
     _init(cfg, fs);
@@ -235,7 +235,7 @@ namespace flashgg {
     workspaceName_       = cfg.getUntrackedParameter<std::string>( "workspaceName", src_.label() );
     dumpHistos_          = cfg.getUntrackedParameter<bool>( "dumpHistos", false );
     classifier_          = cfg.getParameter<edm::ParameterSet>( "classifierCfg" );
-    cout << "I am here 1" << endl;
+    // cout << "I am here 1" << endl;
     throwOnUnclassified_ = cfg.exists("throwOnUnclassified") ? cfg.getParameter<bool>("throwOnUnclassified") : false;
     splitPdfByStage0Cat_ = cfg.getUntrackedParameter<bool>( "splitPdfByStage0Cat", false);
 
@@ -356,19 +356,19 @@ namespace flashgg {
       ws_ = 0;
     }
     for( auto &dumpers : dumpers_ ) {
-      cout << "[in Taggers/interface/CollectionDumper.h] - &dumpers = " << &dumpers << endl;
-      cout << "[in Taggers/interface/CollectionDumper.h] - on &dumpers " << endl;
+      // cout << "[in Taggers/interface/CollectionDumper.h] - &dumpers = " << &dumpers << endl;
+      // cout << "[in Taggers/interface/CollectionDumper.h] - on &dumpers " << endl;
       for( auto &dumper : dumpers.second ) {
-        cout << "[in Taggers/interface/CollectionDumper.h] - &dumper = " << &dumper << endl;
-        cout << "[in Taggers/interface/CollectionDumper.h] - on &dumper " << endl;
+        // cout << "[in Taggers/interface/CollectionDumper.h] - &dumper = " << &dumper << endl;
+        // cout << "[in Taggers/interface/CollectionDumper.h] - on &dumper " << endl;
         if( dumpWorkspace_ ) {
           dumper.bookRooDataset( *ws_, "weight", replacements);
         }
         if( dumpTrees_ ) {
           // debugging HHWWgg
-          cout << "[in Taggers/interface/CollectionDumper.h] - dumpTrees_ = True " << endl;
+          // cout << "[in Taggers/interface/CollectionDumper.h] - dumpTrees_ = True " << endl;
           TFileDirectory dir = fs.mkdir( "trees" );
-          cout << "[in Taggers/interface/CollectionDumper.h] - dir = " << endl;
+          // cout << "[in Taggers/interface/CollectionDumper.h] - dir = " << endl;
           dumper.bookTree( dir, "weight", replacements );
         }
         if( dumpHistos_ ) {
@@ -593,30 +593,30 @@ namespace flashgg {
   template<class C, class T, class U>
   void CollectionDumper<C, T, U>::analyze( const edm::EventBase &event )
   {
-    cout << "[in collectiondumper.h]: step 1 " << endl;
+    // cout << "[in collectiondumper.h]: step 1 " << endl;
     edm::Handle<collection_type> collectionH;
 
     const edm::Event * fullEvent = dynamic_cast<const edm::Event *>(&event);
     if (fullEvent != 0) {
-      cout << "[in collectiondumper.h]: step 2 " << endl;
+      // cout << "[in collectiondumper.h]: step 2 " << endl;
       fullEvent->getByToken(srcToken_, collectionH);
     } else {
-      cout << "[in collectiondumper.h]: step 3 " << endl;
+      // cout << "[in collectiondumper.h]: step 3 " << endl;
       event.getByLabel(src_,collectionH);
     }
     const auto & collection = *collectionH;
 
     if( globalVarsDumper_ ) {
-      cout << "[in collectiondumper.h]: step 4 " << endl;
+      // cout << "[in collectiondumper.h]: step 4 " << endl;
       globalVarsDumper_->fill( event ); }
 
       weight_ = eventWeight( event );
-      cout << "[in collectiondumper.h]: dumpPdfWeights_ value " <<  dumpPdfWeights_ << endl;
+      // cout << "[in collectiondumper.h]: dumpPdfWeights_ value " <<  dumpPdfWeights_ << endl;
 
       //            std::cout << " IN CollectionDumper::analyze initial weight is " << weight_ << " dump=" << dumpPdfWeights_ << " split=" << splitPdfByStage0Cat_ << std::endl;
       if( dumpPdfWeights_){
 
-        cout << "[in collectiondumper.h]: step 5 " << endl;
+        // cout << "[in collectiondumper.h]: step 5 " << endl;
 
         // want pdfWeights_ to be scale factors rather than akternative weights.
         // To do this, each PDF weight needs to be divided by the nominal MC weight
@@ -624,7 +624,7 @@ namespace flashgg {
         // The Scale Factor is then pdfWeight/nominalMC weight
         pdfWeights_ = pdfWeights( event );
         for (unsigned int i = 0; i < pdfWeights_.size() ; i++){
-          cout << "[in collectiondumper.h]: step 6 " << endl;
+          // cout << "[in collectiondumper.h]: step 6 " << endl;
           pdfWeights_[i]= (pdfWeights_[i] )*(lumiWeight_/weight_); // ie pdfWeight/nominal MC weight
         }
         if ( splitPdfByStage0Cat_ ) {
@@ -646,22 +646,22 @@ namespace flashgg {
       }
 
       int nfilled = maxCandPerEvent_;
-      cout << "[in Taggers/interface/CollectionDumper.h] - maxCandPerEvent_ = " << maxCandPerEvent_ << endl;
-      cout << "[in Taggers/interface/CollectionDumper.h] - Right before for( auto &cand : collection) " << endl;
+      // cout << "[in Taggers/interface/CollectionDumper.h] - maxCandPerEvent_ = " << maxCandPerEvent_ << endl;
+      // cout << "[in Taggers/interface/CollectionDumper.h] - Right before for( auto &cand : collection) " << endl;
 
       for( auto &cand : collection ) {
-        cout << "[in collectiondumper.h]: step 7 " << endl;
+        // cout << "[in collectiondumper.h]: step 7 " << endl;
 
-        cout << "[in Taggers/interface/CollectionDumper.h] - in for( auto &cand : collection) " << endl;
+        // cout << "[in Taggers/interface/CollectionDumper.h] - in for( auto &cand : collection) " << endl;
 
 
         for (auto &dumper: dumpers_){
           // for (unsigned int j =0; i < dumper.first ; i++){
-          cout << "dumper.first = " << dumper.first << endl;
+          // cout << "dumper.first = " << dumper.first << endl;
           // }
 
           for (unsigned int i =0; i < dumper.second.size() ; i++){
-            cout << "dumper.second[" << i << "].GetName() = " << dumper.second[i].GetName() << endl;
+            // cout << "dumper.second[" << i << "].GetName() = " << dumper.second[i].GetName() << endl;
           }
         }
         // cout <<  "[in collectiondumper.h]: classifier" << classifier_ << endl;
@@ -669,32 +669,32 @@ namespace flashgg {
         auto cat = classifier_( cand );
         auto which = dumpers_.find( cat.first );
         //auto which = dumpers_.find("H4GTag");
-        cout << "[in collectiondumper.h]: cat.first" << cat.first << endl;
-        cout << "[in Taggers/interface/CollectionDumper.h] - dumpers_.size() = " << dumpers_.size() << endl;
+        // cout << "[in collectiondumper.h]: cat.first" << cat.first << endl;
+        // cout << "[in Taggers/interface/CollectionDumper.h] - dumpers_.size() = " << dumpers_.size() << endl;
 
-        cout << "[in Taggers/interface/CollectionDumper.h] - Right before if( which != dumpers_.end() ) " << endl;
+        // cout << "[in Taggers/interface/CollectionDumper.h] - Right before if( which != dumpers_.end() ) " << endl;
         if( which != dumpers_.end() ) {
-          cout << "[in collectiondumper.h]: step 8 " << endl;
+          // cout << "[in collectiondumper.h]: step 8 " << endl;
           int isub = ( hasSubcat_[cat.first] ? cat.second : 0 );
           double fillWeight =weight_;
           const  WeightedObject* tag = dynamic_cast<const WeightedObject* >( &cand );
           if ( tag != NULL ){
-            cout << "[in collectiondumper.h]: step 9 " << endl;
+            // cout << "[in collectiondumper.h]: step 9 " << endl;
 
             fillWeight =fillWeight*(tag->centralWeight());
           }
-          cout << "[in collectiondumper.h]: size of pdfweights_ " << pdfWeights_.size()  << endl;
+          // cout << "[in collectiondumper.h]: size of pdfweights_ " << pdfWeights_.size()  << endl;
           which->second[isub].fill( cand, fillWeight, pdfWeights_, maxCandPerEvent_ - nfilled, stage0cat_ );
           --nfilled;
         } else if( throwOnUnclassified_ ) {
-          cout << "[in collectiondumper.h]: step 10 " << endl;
+          // cout << "[in collectiondumper.h]: step 10 " << endl;
           throw cms::Exception( "Runtime error" ) << "could not find dumper for category [" << cat.first << "," << cat.second << "]"
           << "If you want to allow this (eg because you don't want to dump some of the candidates in the collection)\n"
           << "please set throwOnUnclassified in the dumper configuration\n";
         }
-        cout << "[in collectiondumper.h]: step 11 " << endl;
+        // cout << "[in collectiondumper.h]: step 11 " << endl;
         if( ( maxCandPerEvent_ > 0 )  && nfilled == 0 ) {
-          cout << "[in collectiondumper.h]: step 12 " << endl;
+          // cout << "[in collectiondumper.h]: step 12 " << endl;
           break; }
         }
       }

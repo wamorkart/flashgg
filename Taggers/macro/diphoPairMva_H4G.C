@@ -25,38 +25,67 @@
 
 void diphoPairMva_H4G()
 {
-   
+
     TString outfileName( "outputTMVA_diphoPair.root" );
     TFile* outputFile = TFile::Open( outfileName, "RECREATE" );
 
-    TFile* inputFile = TFile::Open("/eos/cms/store/user/bmarzocc/H4G_Analysis/Dumpers_pairBDT/SUSYGluGluToHToAA_AToGG_M-60_TuneCUETP8M1_13TeV_pythia8_diPairMVA_final.root");
+    TChain* bkg_ch = new TChain("diphotonPair_BDT_bkg");
+    bkg_ch->Add("/eos/user/t/twamorka/EOY_2019/24Dec2019/hadd/signal_m_60.root");
+    bkg_ch->Add("/eos/user/t/twamorka/EOY_2019/24Dec2019/hadd/signal_m_55.root");
+    bkg_ch->Add("/eos/user/t/twamorka/EOY_2019/24Dec2019/hadd/signal_m_50.root");
+    bkg_ch->Add("/eos/user/t/twamorka/EOY_2019/24Dec2019/hadd/signal_m_45.root");
+    bkg_ch->Add("/eos/user/t/twamorka/EOY_2019/24Dec2019/hadd/signal_m_40.root");
+    bkg_ch->Add("/eos/user/t/twamorka/EOY_2019/24Dec2019/hadd/signal_m_35.root");
+    bkg_ch->Add("/eos/user/t/twamorka/EOY_2019/24Dec2019/hadd/signal_m_30.root");
+    bkg_ch->Add("/eos/user/t/twamorka/EOY_2019/24Dec2019/hadd/signal_m_25.root");
+    bkg_ch->Add("/eos/user/t/twamorka/EOY_2019/24Dec2019/hadd/signal_m_20.root");
+    bkg_ch->Add("/eos/user/t/twamorka/EOY_2019/24Dec2019/hadd/signal_m_15.root");
 
-    TTree* signal_ggf  = (TTree*)inputFile->Get("diphotonPair_BDT_sig");
-    TTree* bkg_ggf     = (TTree*)inputFile->Get("diphotonPair_BDT_bkg");
-    
+
+    TChain* sig_ch = new TChain("diphotonPair_BDT_sig");
+    sig_ch->Add("/eos/user/t/twamorka/EOY_2019/24Dec2019/hadd/signal_m_60.root");
+    sig_ch->Add("/eos/user/t/twamorka/EOY_2019/24Dec2019/hadd/signal_m_55.root");
+    sig_ch->Add("/eos/user/t/twamorka/EOY_2019/24Dec2019/hadd/signal_m_50.root");
+    sig_ch->Add("/eos/user/t/twamorka/EOY_2019/24Dec2019/hadd/signal_m_45.root");
+    sig_ch->Add("/eos/user/t/twamorka/EOY_2019/24Dec2019/hadd/signal_m_40.root");
+    sig_ch->Add("/eos/user/t/twamorka/EOY_2019/24Dec2019/hadd/signal_m_35.root");
+    sig_ch->Add("/eos/user/t/twamorka/EOY_2019/24Dec2019/hadd/signal_m_30.root");
+    sig_ch->Add("/eos/user/t/twamorka/EOY_2019/24Dec2019/hadd/signal_m_25.root");
+    sig_ch->Add("/eos/user/t/twamorka/EOY_2019/24Dec2019/hadd/signal_m_20.root");
+    sig_ch->Add("/eos/user/t/twamorka/EOY_2019/24Dec2019/hadd/signal_m_15.root");
+
+
+
+    // TFile* inputFile = TFile::Open("/eos/cms/store/user/bmarzocc/H4G_Analysis/Dumpers_pairBDT/SUSYGluGluToHToAA_AToGG_M-60_TuneCUETP8M1_13TeV_pythia8_diPairMVA_final.root");
+
+    // TTree* signal_ggf  = (TTree*)inputFile->Get("diphotonPair_BDT_sig");
+    // TTree* bkg_ggf     = (TTree*)inputFile->Get("diphotonPair_BDT_bkg");
+
     TMVA::Tools::Instance();
 
     TMVA::Factory *factory = new TMVA::Factory( "TMVAClassification", outputFile,
                                                "!V:!Silent:Color:DrawProgressBar:Transformations=I;D;P;G,D:AnalysisType=Classification" );
-    factory->AddVariable("dipho1_energy", "dipho1_energy", "", 'F'); 
+    factory->AddVariable("dipho1_energy", "dipho1_energy", "", 'F');
     factory->AddVariable("dipho1_pt", "dipho1_pt", "", 'F');
-    factory->AddVariable("dipho1_eta", "dipho1_eta", "", 'F'); 
+    factory->AddVariable("dipho1_eta", "dipho1_eta", "", 'F');
     //factory->AddVariable("dipho1_phi", "dipho1_phi", "", 'F');
     factory->AddVariable("dipho1_dR", "dipho1_dR", "", 'F');
     factory->AddVariable("deltaM1_gen1", "deltaM1_gen1", "", 'F');
-    factory->AddVariable("dipho2_energy", "dipho2_energy", "", 'F'); 
+    factory->AddVariable("dipho2_energy", "dipho2_energy", "", 'F');
     factory->AddVariable("dipho2_pt", "dipho2_pt", "", 'F');
-    factory->AddVariable("dipho2_eta", "dipho2_eta", "", 'F'); 
+    factory->AddVariable("dipho2_eta", "dipho2_eta", "", 'F');
     //factory->AddVariable("dipho2_phi", "dipho2_phi", "", 'F');
     factory->AddVariable("dipho2_dR", "dipho2_dR", "", 'F');
     factory->AddVariable("deltaM2_gen1", "deltaM2_gen1", "", 'F');
     factory->AddVariable("dipair_dR", "dipair_dR", "", 'F');
-   
+
     Double_t signalWeight = 1.0;
     Double_t backgroundWeight = 1.0;
-  
-    factory->AddSignalTree( signal_ggf, signalWeight );
-    factory->AddBackgroundTree( bkg_ggf, backgroundWeight );
+
+    // factory->AddSignalTree( signal_ggf, signalWeight );
+    // factory->AddBackgroundTree( bkg_ggf, backgroundWeight );
+    factory->AddSignalTree( sig_ch, signalWeight );
+    factory->AddBackgroundTree( bkg_ch, backgroundWeight );
 
     //factory->SetWeightExpression( "genweight" );
 
@@ -72,7 +101,7 @@ void diphoPairMva_H4G()
 
     TString theCat1Vars = "dipho1_energy:dipho1_pt:dipho1_eta:dipho1_dR:deltaM1_gen1:dipho2_energy:dipho2_pt:dipho2_eta:dipho2_dR:deltaM2_gen1:dipair_dR";
     TString theCat2Vars = "dipho1_energy:dipho1_pt:dipho1_eta:dipho1_dR:deltaM1_gen1:dipho2_energy:dipho2_pt:dipho2_eta:dipho2_dR:deltaM2_gen1:dipair_dR";
- 
+
     TMVA::MethodBase* BDT_Cat = factory->BookMethod( TMVA::Types::kCategory, "diphoPairTMVA","" );
     mcat = dynamic_cast<TMVA::MethodCategory*>(BDT_Cat);
 
@@ -94,4 +123,3 @@ void diphoPairMva_H4G()
 
     delete factory;
 }
-
