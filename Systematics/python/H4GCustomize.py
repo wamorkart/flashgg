@@ -10,7 +10,7 @@ class H4GCustomize():
         self.customize = customize
         self.metaConditions = metaConditions
         # self.tagList = [ ["HHWWggTag",12] ]
-        self.tagList = [ ["H4GTag",1] ]
+        self.tagList = [ ["H4GTag",3] ]
         self.customizeTagSequence()
 
     def variablesToDump(self):
@@ -22,19 +22,23 @@ class H4GCustomize():
             # "HHbbggMVA := MVA()"
         ]
         variables = [
-            # "pho1_MVA  := pho1_MVA "
-            # "pho2_MVA  := pho2_MVA ",
-            # "pho3_MVA  := pho3_MVA ",
-            # "pho4_MVA  := pho4_MVA ",
-            "pho1_pt   := phoP4Corrected_dp[0].pt()"
+            "pho1_MVA  := pho1_MVA ",
+            "pho2_MVA  := pho2_MVA ",
+            "pho3_MVA  := pho3_MVA ",
+            "pho4_MVA  := pho4_MVA ",
+            "pho1_pt   := pho1.pt()",
+            "pho2_pt   := pho2.pt()",
+            "pho3_pt   := pho3.pt()",
+            "pho4_pt   := pho4.pt()",
             # "pho2_pt   := phoP4Corrected_dp[1].pt()",
             # "pho3_pt   := phoP4Corrected_dp[2].pt()",
             # "pho4_pt   := phoP4Corrected_dp[3].pt()",
-            # "pho1_energy := phoP4Corrected_dp[0].energy()",
+            "pho1_energy := pho1.energy()",
             # "pho2_energy := phoP4Corrected_dp[1].energy()",
             # "pho3_energy := phoP4Corrected_dp[2].energy()",
             # "pho4_energy := phoP4Corrected_dp[3].energy()",
-            # "pho1_energy_init := phoP4Corrected_dp[0].energyAtStep('initial')",
+            "pho1_energy_init := pho1.energyAtStep('initial')",
+            "dZ_bdtVtx        := dZ_bdtVtx"
             # "pho2_energy_init := phoP4Corrected_dp[1].energyAtStep('initial')",
             # "pho3_energy_init := phoP4Corrected_dp[2].energyAtStep('initial')",
             # "pho4_energy_init := phoP4Corrected_dp[3].energyAtStep('initial')",
@@ -197,6 +201,11 @@ class H4GCustomize():
     def systematicVariables(self):
     #   systematicVariables=["CMS_hgg_mass[160,100,180]:=diPhoton().mass","Mjj[120,70,190]:=dijet().M()","HHbbggMVA[100,0,1.]:=MVA()","MX[300,250,5000]:=MX()"]
       systematicVariables=[
+          "pho1_MVA  := pho1_MVA ",
+          "pho2_MVA  := pho2_MVA ",
+          "pho3_MVA  := pho3_MVA ",
+          "pho4_MVA  := pho4_MVA ",
+          "pho1_pt   := pho1.pt()"
           # "CMS_hgg_mass[160,100,180]:=diPhoton().mass",
           # "lp_E[100,0,100] := Leading_Photon.p4().E()",
           # "slp_E[100,0,100] := Subleading_Photon.p4().E()",

@@ -18,10 +18,10 @@ flashggH4GTag = cms.EDProducer("FlashggH4GTagProducer",
                                     globalVariables=globalVariables,
                                     PhotonTag = cms.InputTag('flashggRandomizedPhotons'),
                                     DiPhotonTag = cms.InputTag('flashggDiPhotonSystematics'),
+                                    DiPhotonName = cms.string('flashggDiPhotonSystematics'),
                                     #DiPhotonTag = cms.InputTag('flashggDiPhotons'),
                                     idSelection     = cms.PSet(),
                                     SystLabel = cms.string(""),
-                                    DiPhotonName = cms.string('flashggDiPhotonSystematics'), #
                                     VertexTag = cms.InputTag('offlineSlimmedPrimaryVertices'),
                                     GenParticleTag         = cms.InputTag('flashggPrunedGenParticles'),
                                     DiPhotonSuffixes = cms.vstring(''), #nominal and systematic variations
@@ -43,6 +43,7 @@ flashggH4GTag = cms.EDProducer("FlashggH4GTagProducer",
                                      # vertexIdMVAweightfileH4G_2016   = cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_BDTVtxId_H4G_Total_2016.xml"),
                                      # vertexProbMVAweightfileH4G_2016 = cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_BDTVtxProb_H4G_Total_2016.xml"),
                                      useSingleLeg               = cms.bool(True),
+                                     doH4GVertex                = cms.bool(True),
                                      # saveDiphoPairingTree       = cms.bool(''),
                                      saveDiphoPairingTree       = cms.bool(True),
                                      useZerothVertexFromMicro   = cms.bool(False),
@@ -76,6 +77,7 @@ flashggH4GTag = cms.EDProducer("FlashggH4GTagProducer",
                                      singlelegsigma2PixFwd   = cms.double(0.577081),
                                      singlelegsigma2Tid      = cms.double(0.892751),
                                      singlelegsigma2Tec      = cms.double(1.56638)
+
 
                                     )
 # flashggHHWWggTagSequence = cms.Sequence( flashggHHWWggTag ) # not used
