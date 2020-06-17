@@ -212,12 +212,16 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
 
 
 
-      const std::string &VertexSelectorName = pSet.getParameter<std::string>( "VertexSelectorName" );
-      vertexSelector_.reset( FlashggVertexSelectorFactory::get()->create( VertexSelectorName, pSet ) );
+      
       useSingleLeg_ = pSet.getParameter<bool>( "useSingleLeg" );
       doH4GVertex_ = pSet.getParameter<bool>("doH4GVertex");
       vertexIdMVAweightfileH4G_ = pSet.getParameter<edm::FileInPath>( "vertexIdMVAweightfileH4G" );
       // vertexProbMVAweightfileH4G_ = pSet.getParameter<edm::FileInPath>( "vertexProbMVAweightfileH4G" );
+
+      if (doH4GVertex_)
+      {
+      const std::string &VertexSelectorName = pSet.getParameter<std::string>( "VertexSelectorName" );
+      vertexSelector_.reset( FlashggVertexSelectorFactory::get()->create( VertexSelectorName, pSet ) );
 
       VertexIdMva_ = new TMVA::Reader( "!Color:Silent" );
       VertexIdMva_->AddVariable( "ptAsym", &ptAsym );
@@ -226,7 +230,7 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
       VertexIdMva_->AddVariable( "pullConv", &pullConv );
       VertexIdMva_->AddVariable( "nConv", &nConv );
       VertexIdMva_->BookMVA( "BDT", vertexIdMVAweightfileH4G_.fullPath() );
-
+      }
       // VertexProbMva_ = new TMVA::Reader( "!Color:Silent" );
       // VertexProbMva_->AddVariable( "tp_pt", &tp_pt);
       // VertexProbMva_->AddVariable( "n_vertices", &nVertices );
@@ -259,8 +263,11 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
       event.getByToken( vertexToken_, vertex );
       event.getByToken( genParticleToken_, genParticle );
       event.getByToken( beamSpotToken_, recoBeamSpotHandle );
+      if (doH4GVertex_)
+      {
       event.getByToken( conversionToken_, conversionHandle );
       event.getByToken( conversionTokenSingleLeg_, conversionHandleSingleLeg );
+      }
 
       Handle<VertexCandidateMap> vertexCandidateMap;
       event.getByToken( vertexCandidateMapToken_, vertexCandidateMap );
@@ -316,7 +323,7 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
         if( part.pdgId() != 2212 || part.vertex().z() != 0. )
         {
           genVertex = part.vertex();
-          cout << part.pdgId()  <<  "   "  << genVertex.z() << endl;
+          //cout << part.pdgId()  <<  "   "  << genVertex.z() << endl;
         }
       }
 
@@ -328,7 +335,7 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
             if (pdgid == 25) {  higgsVtx = genParticles->ptrAt( genLoop )->vertex(); }
 
             // hardVertex.SetCoordinates( genParticles[genLoop]->vx(), genParticles[genLoop]->vy(), genParticles[genLoop]->vz() );
-            cout << "Higgs Vtx " << higgsVtx.z() << endl;
+            //cout << "Higgs Vtx " << higgsVtx.z() << endl;
             // gen_vertex_z = higgsVtx.z();
             break;
           }
@@ -502,10 +509,14 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
 
         vertex_chosen = vertex->ptrAt( selected_vertex_index_ );
         vertex_zero = vertex->ptrAt( 0 );
-        cout << "# of photons: " << phoVector.size() << endl;
-        cout << "selected vertex index " << selected_vertex_index_ << endl;
+        //cout << "# of photons: " << phoVector.size() << endl;
+        //cout << "selected vertex index " << selected_vertex_index_ << endl;
 
-        float dZ_bdtVtx =   hardVertex.z() - vertex_chosen->z();
+        float dZ_bdtVtx = -999;
+
+        if( ! event.isRealData() ){ dZ_bdtVtx =   hardVertex.z() - vertex_chosen->z(); }
+
+        //cout << dZ_bdtVtx << endl;
 
         // MVA0      = max_mva_value_;
         // MVA1      = second_max_mva_value_;
@@ -548,14 +559,14 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
 
         if (phoP4Corrected_dp.size() > 3)
         {
-                   cout  << phoP4Corrected_dp[0].phoIdMvaDWrtVtx(Vertices[selected_vertex_index_]) << "  " << phoP4Corrected_dp[1].phoIdMvaDWrtVtx(Vertices[selected_vertex_index_]) << "  " << phoP4Corrected_dp[2].phoIdMvaDWrtVtx(Vertices[selected_vertex_index_]) << "  " << phoP4Corrected_dp[3].phoIdMvaDWrtVtx(Vertices[selected_vertex_index_]) << endl;
-                   cout <<"HERE Vtx Zero " << phoP4Corrected_dp[0].phoIdMvaDWrtVtx(vertex_zero) << "  " << phoP4Corrected_dp[1].phoIdMvaDWrtVtx(vertex_zero) << "  " << phoP4Corrected_dp[2].phoIdMvaDWrtVtx(vertex_zero) << "  " << phoP4Corrected_dp[3].phoIdMvaDWrtVtx(vertex_zero) << endl;
+                   //cout  << phoP4Corrected_dp[0].phoIdMvaDWrtVtx(Vertices[selected_vertex_index_]) << "  " << phoP4Corrected_dp[1].phoIdMvaDWrtVtx(Vertices[selected_vertex_index_]) << "  " << phoP4Corrected_dp[2].phoIdMvaDWrtVtx(Vertices[selected_vertex_index_]) << "  " << phoP4Corrected_dp[3].phoIdMvaDWrtVtx(Vertices[selected_vertex_index_]) << endl;
+                   //cout <<"HERE Vtx Zero " << phoP4Corrected_dp[0].phoIdMvaDWrtVtx(vertex_zero) << "  " << phoP4Corrected_dp[1].phoIdMvaDWrtVtx(vertex_zero) << "  " << phoP4Corrected_dp[2].phoIdMvaDWrtVtx(vertex_zero) << "  " << phoP4Corrected_dp[3].phoIdMvaDWrtVtx(vertex_zero) << endl;
 
-                   cout  << phoP4Corrected_dp[0].pt() << "  " << phoP4Corrected_dp[1].pt() << "  " << phoP4Corrected_dp[2].pt() << "  " << phoP4Corrected_dp[3].pt() << endl;
-                   cout  << phoP4Corrected_dp[0].eta() << "  " << phoP4Corrected_dp[1].eta() << "  " << phoP4Corrected_dp[2].eta() << "  " << phoP4Corrected_dp[3].eta() << endl;
+                   //cout  << phoP4Corrected_dp[0].pt() << "  " << phoP4Corrected_dp[1].pt() << "  " << phoP4Corrected_dp[2].pt() << "  " << phoP4Corrected_dp[3].pt() << endl;
+                   //cout  << phoP4Corrected_dp[0].eta() << "  " << phoP4Corrected_dp[1].eta() << "  " << phoP4Corrected_dp[2].eta() << "  " << phoP4Corrected_dp[3].eta() << endl;
 
           // int catnum = 0;
-          cout << "4 photon vtx "<< selected_vertex_index_ << endl;
+          //cout << "4 photon vtx "<< selected_vertex_index_ << endl;
           H4GTag tag_obj (dipho, phoP4Corrected_dp[0], phoP4Corrected_dp[1], phoP4Corrected_dp[2], phoP4Corrected_dp[3], vertex_chosen, dZ_bdtVtx);
           // cout << "systlabel: " << systLabel_ << endl;
           tag_obj.setSystLabel( systLabel_);
@@ -578,7 +589,7 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
         if (phoP4Corrected_dp.size() == 3)
         {
           // int catnum = 1;
-          cout << "3 photon vtx "<< selected_vertex_index_ << endl;
+          //cout << "3 photon vtx "<< selected_vertex_index_ << endl;
           H4GTag tag_obj (dipho, phoP4Corrected_dp[0], phoP4Corrected_dp[1], phoP4Corrected_dp[2],vertex_chosen, dZ_bdtVtx);
           // cout << "systlabel: " << systLabel_ << endl;
           tag_obj.setSystLabel( systLabel_);
@@ -601,8 +612,10 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
         if (phoP4Corrected_dp.size() == 2)
         {
           // int catnum = 2;
-          cout << "2 photon vtx "<< selected_vertex_index_ << endl;
+
+          //cout << "2 photon vtx "<< selected_vertex_index_ << endl;
           H4GTag tag_obj (dipho, phoP4Corrected_dp[0], phoP4Corrected_dp[1], vertex_chosen, dZ_bdtVtx);
+          //cout << "breaks here" << endl;
           // cout << "systlabel: " << systLabel_ << endl;
           tag_obj.setSystLabel( systLabel_);
           // tag_obj.setDiPhotonIndex( diphoIndex );
@@ -616,6 +629,7 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
 
           H4Gtags->push_back( tag_obj );
           if( ! event.isRealData() ) {
+             //cout << "should not enter here " << endl;
             H4Gtags->back().setTagTruth( edm::refToPtr( edm::Ref<vector<TagTruthBase> >( rTagTruth, 0 ) ) );
           }
 
