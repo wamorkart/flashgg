@@ -45,7 +45,19 @@ namespace flashgg{
     float pho3_MVA() const {return pho3_MVA_;};
     float pho4_MVA() const {return pho4_MVA_;};
 
+    const reco::Candidate::LorentzVector& tp() const { return tp_; };
+
     float dZ_bdtVtx() const {return dZ_bdtVtx_;};
+    const reco::Candidate::LorentzVector& h4gDiPho1_prime() const { return dp1_prime_; };
+    const reco::Candidate::LorentzVector& h4gDiPho2_prime() const { return dp2_prime_; };
+    const reco::Candidate::LorentzVector& h4gDiPho1_Pho1_prime() const { return dp1_pho1_prime_; };
+    const reco::Candidate::LorentzVector& h4gDiPho1_Pho2_prime() const { return dp1_pho2_prime_; };
+    const reco::Candidate::LorentzVector& h4gDiPho2_Pho1_prime() const { return dp2_pho1_prime_; };
+    const reco::Candidate::LorentzVector& h4gDiPho2_Pho2_prime() const { return dp2_pho2_prime_; };
+    const int& h4gDiPho1_iPho1_prime() const { return dp1_ipho1_prime_; };
+    const int& h4gDiPho1_iPho2_prime() const { return dp1_ipho2_prime_; };
+    const int& h4gDiPho2_iPho1_prime() const { return dp2_ipho1_prime_; };
+    const int& h4gDiPho2_iPho2_prime() const { return dp2_ipho2_prime_; };
 
     // const vector<flashgg::Photon> phoP4Corrected_dp() const { return phoP4Corrected_dp_;};
 
@@ -60,7 +72,19 @@ namespace flashgg{
     float pho2_MVA_;
     float pho3_MVA_;
     float pho4_MVA_;
+    reco::Candidate::LorentzVector tp_;
     float dZ_bdtVtx_;
+    reco::Candidate::LorentzVector dp1_prime_;
+    reco::Candidate::LorentzVector dp2_prime_;
+    reco::Candidate::LorentzVector dp1_pho1_prime_;
+    reco::Candidate::LorentzVector dp1_pho2_prime_;
+    reco::Candidate::LorentzVector dp2_pho1_prime_;
+    reco::Candidate::LorentzVector dp2_pho2_prime_;
+    int dp1_ipho1_prime_;
+    int dp1_ipho2_prime_;
+    int dp2_ipho1_prime_;
+    int dp2_ipho2_prime_;
+
 
   //   float BS_factor_BDTVtx_;
     // vector <flashgg::Photon> phoP4Corrected_dp_;
