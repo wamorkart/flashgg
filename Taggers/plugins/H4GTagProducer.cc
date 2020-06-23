@@ -74,6 +74,20 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
     return -1;
   }
 
+  // bool isSignalPairing(int i1, int i2, int i3, int i4, std::map<int,int>* genToReco_photon_map_)
+  // {
+  //   bool isSignal=false;
+  //   if(genToReco_photon_map_->at(i1)==0 && genToReco_photon_map_->at(i2)==1 && genToReco_photon_map_->at(i3)==2 && genToReco_photon_map_->at(i4)==3) isSignal=true;
+  //   if(genToReco_photon_map_->at(i1)==1 && genToReco_photon_map_->at(i2)==0 && genToReco_photon_map_->at(i3)==2 && genToReco_photon_map_->at(i4)==3) isSignal=true;
+  //   if(genToReco_photon_map_->at(i1)==0 && genToReco_photon_map_->at(i2)==1 && genToReco_photon_map_->at(i3)==3 && genToReco_photon_map_->at(i4)==2) isSignal=true;
+  //   if(genToReco_photon_map_->at(i1)==1 && genToReco_photon_map_->at(i2)==0 && genToReco_photon_map_->at(i3)==3 && genToReco_photon_map_->at(i4)==2) isSignal=true;
+  //   if(genToReco_photon_map_->at(i1)==3 && genToReco_photon_map_->at(i2)==2 && genToReco_photon_map_->at(i3)==1 && genToReco_photon_map_->at(i4)==0) isSignal=true;
+  //   if(genToReco_photon_map_->at(i1)==3 && genToReco_photon_map_->at(i2)==2 && genToReco_photon_map_->at(i3)==0 && genToReco_photon_map_->at(i4)==1) isSignal=true;
+  //   if(genToReco_photon_map_->at(i1)==2 && genToReco_photon_map_->at(i2)==3 && genToReco_photon_map_->at(i3)==1 && genToReco_photon_map_->at(i4)==0) isSignal=true;
+  //   if(genToReco_photon_map_->at(i1)==2 && genToReco_photon_map_->at(i2)==3 && genToReco_photon_map_->at(i3)==0 && genToReco_photon_map_->at(i4)==1) isSignal=true;
+  //   return isSignal;
+  // }
+
   namespace flashgg {
 
     struct Sorter {
@@ -143,8 +157,10 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
       edm::EDGetTokenT<GenEventInfoProduct> genInfoToken_;
 
       edm::FileInPath vertexIdMVAweightfileH4G_;
+      edm::FileInPath diphoPairMVAweightfileH4G_;
       // edm::FileInPath vertexProbMVAweightfileH4G_;
       TMVA::Reader *VertexIdMva_;
+      TMVA::Reader *DiphotonPairMva_;
       // TMVA::Reader *VertexProbMva_;
 
       bool useSingleLeg_;
@@ -171,6 +187,31 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
       float max_mva_value_ = -999.;
       float second_max_mva_value_ = -999.;
       float third_max_mva_value_ = -999.;
+
+      float dipho1_energy = -999.;
+      float dipho1_pt = -999.;
+      float dipho1_eta = -999.;
+      float dipho1_phi = -999.;
+      float dipho1_dR = -999.;
+      float dipho1_mass = -999.;
+      float dipho2_energy = -999.;
+      float dipho2_pt = -999.;
+      float dipho2_eta = -999.;
+      float dipho2_phi = -999.;
+      float dipho2_dR = -999.;
+      float dipho2_mass = -999.;
+      float dipair_energy = -999.;
+      float dipair_pt = -999.;
+      float dipair_eta = -999.;
+      float dipair_phi = -999.;
+      float dipair_dR = -999.;
+
+      std::vector<std::vector<float> > genPhoton_dR_;
+      std::map<int,std::vector<int> > genToReco_photon_map_tmp_;
+      std::map<int,int> genToReco_photon_map_;
+      std::vector<std::pair<std::vector<int>,float> > dipair_index_map_;
+      std::vector<int> diphoton_pairing_indices_tmp_;
+      std::vector<int> diphoton_pairing_indices_;
 
     };
 
@@ -212,25 +253,40 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
 
 
 
-      
+
       useSingleLeg_ = pSet.getParameter<bool>( "useSingleLeg" );
       doH4GVertex_ = pSet.getParameter<bool>("doH4GVertex");
       vertexIdMVAweightfileH4G_ = pSet.getParameter<edm::FileInPath>( "vertexIdMVAweightfileH4G" );
+      diphoPairMVAweightfileH4G_ = pSet.getParameter<edm::FileInPath>( "diphoPairMVAweightfileH4G" );
+
       // vertexProbMVAweightfileH4G_ = pSet.getParameter<edm::FileInPath>( "vertexProbMVAweightfileH4G" );
 
       if (doH4GVertex_)
       {
-      const std::string &VertexSelectorName = pSet.getParameter<std::string>( "VertexSelectorName" );
-      vertexSelector_.reset( FlashggVertexSelectorFactory::get()->create( VertexSelectorName, pSet ) );
+        const std::string &VertexSelectorName = pSet.getParameter<std::string>( "VertexSelectorName" );
+        vertexSelector_.reset( FlashggVertexSelectorFactory::get()->create( VertexSelectorName, pSet ) );
 
-      VertexIdMva_ = new TMVA::Reader( "!Color:Silent" );
-      VertexIdMva_->AddVariable( "ptAsym", &ptAsym );
-      VertexIdMva_->AddVariable( "ptBal", &ptBal );
-      VertexIdMva_->AddVariable( "logSumpt2", &logSumpt2 );
-      VertexIdMva_->AddVariable( "pullConv", &pullConv );
-      VertexIdMva_->AddVariable( "nConv", &nConv );
-      VertexIdMva_->BookMVA( "BDT", vertexIdMVAweightfileH4G_.fullPath() );
+        VertexIdMva_ = new TMVA::Reader( "!Color:Silent" );
+        VertexIdMva_->AddVariable( "ptAsym", &ptAsym );
+        VertexIdMva_->AddVariable( "ptBal", &ptBal );
+        VertexIdMva_->AddVariable( "logSumpt2", &logSumpt2 );
+        VertexIdMva_->AddVariable( "pullConv", &pullConv );
+        VertexIdMva_->AddVariable( "nConv", &nConv );
+        VertexIdMva_->BookMVA( "BDT", vertexIdMVAweightfileH4G_.fullPath() );
       }
+
+      // DiphotonPairMva_ = new TMVA::Reader( "!Color:Silent" );
+      // DiphotonPairMva_->AddVariable( "dipho1_energy", &dipho1_energy);
+      // DiphotonPairMva_->AddVariable( "dipho1_pt", &dipho1_pt );
+      // DiphotonPairMva_->AddVariable( "dipho1_eta", &dipho1_eta );
+      // DiphotonPairMva_->AddVariable( "dipho1_dR", &dipho1_dR );
+      // DiphotonPairMva_->AddVariable( "dipho2_energy", &dipho2_energy);
+      // DiphotonPairMva_->AddVariable( "dipho2_pt", &dipho2_pt );
+      // DiphotonPairMva_->AddVariable( "dipho2_eta", &dipho2_eta );
+      // DiphotonPairMva_->AddVariable( "dipho2_dR", &dipho2_dR );
+      // DiphotonPairMva_->AddVariable( "dipair_dR", &dipair_dR );
+      // DiphotonPairMva_->BookMVA( "BDT", diphoPairMVAweightfileH4G_.fullPath() );
+
       // VertexProbMva_ = new TMVA::Reader( "!Color:Silent" );
       // VertexProbMva_->AddVariable( "tp_pt", &tp_pt);
       // VertexProbMva_->AddVariable( "n_vertices", &nVertices );
@@ -243,7 +299,8 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
       // VertexProbMva_->BookMVA( "BDT", vertexProbMVAweightfileH4G_.fullPath() );
 
 
-      produces<vector<H4GTag>>();
+      // produces<vector<H4GTag>>();
+
 
       produces<vector<TagTruthBase>>();
     }
@@ -265,8 +322,8 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
       event.getByToken( beamSpotToken_, recoBeamSpotHandle );
       if (doH4GVertex_)
       {
-      event.getByToken( conversionToken_, conversionHandle );
-      event.getByToken( conversionTokenSingleLeg_, conversionHandleSingleLeg );
+        event.getByToken( conversionToken_, conversionHandle );
+        event.getByToken( conversionTokenSingleLeg_, conversionHandleSingleLeg );
       }
 
       Handle<VertexCandidateMap> vertexCandidateMap;
@@ -299,6 +356,8 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
       reco::GenParticle::Point genVertex;
       int irand = -999;
       int randVtxIndexI = -999;
+      float diphoPair_MVA =-999;;
+
       if( ! event.isRealData() ) {
 
         Handle<View<reco::GenParticle> > genParticles;
@@ -313,19 +372,19 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
 
         for( unsigned int genLoop = 0 ; genLoop < genParticles->ptrs().size(); genLoop++ ) {
 
-        if( fabs( genParticles->ptrs()[genLoop]->pdgId() ) < 10 || fabs( genParticles->ptrs()[genLoop]->pdgId() ) == 25 ) {
+          if( fabs( genParticles->ptrs()[genLoop]->pdgId() ) < 10 || fabs( genParticles->ptrs()[genLoop]->pdgId() ) == 25 ) {
             hardVertex.SetCoordinates( genParticles->ptrs()[genLoop]->vx(), genParticles->ptrs()[genLoop]->vy(), genParticles->ptrs()[genLoop]->vz() );
             break;
+          }
         }
-    }
 
         for( auto &part : *genParticle ) {
-        if( part.pdgId() != 2212 || part.vertex().z() != 0. )
-        {
-          genVertex = part.vertex();
-          //cout << part.pdgId()  <<  "   "  << genVertex.z() << endl;
+          if( part.pdgId() != 2212 || part.vertex().z() != 0. )
+          {
+            genVertex = part.vertex();
+            //cout << part.pdgId()  <<  "   "  << genVertex.z() << endl;
+          }
         }
-      }
 
 
         // reco::GenParticle::Point higgsVtx(0.,0.,0.);
@@ -463,7 +522,7 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
             vtxVar = vertexSelector_->select_h4g(phoPtrVector[0],phoPtrVector[1],phoPtrVector[2],phoPtrVector[3], Vertices, *vertexCandidateMap,conversionHandle->ptrs(), conversionHandleSingleLeg->ptrs(), BSPoint, useSingleLeg_   );
           }
 
-          // sorter_.clear();
+          sorter_.clear();
           // selected_vertex_index_ = 0;
           // second_selected_vertex_index_ = 0;
           // third_selected_vertex_index_ = 0;
@@ -549,24 +608,153 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
             phoP4Corrected_dp.push_back(phoVector[dp]);
           }
         }
-        sorter_.clear();
-        std::sort(phoP4Corrected_dp.begin(), phoP4Corrected_dp.end(), [](const flashgg::Photon a, const flashgg::Photon  b) {return a.pt() > b.pt(); });
+        // sorter_.clear();
 
-        // for (int p=0; p < (int) phoP4Corrected_dp.size(); p++)
-        // {
-        //   cout << phoP4Corrected_dp[p].pt() <<endl;
-        // }
+        std::sort(phoP4Corrected_dp.begin(), phoP4Corrected_dp.end(), [](const flashgg::Photon a, const flashgg::Photon  b) {return a.pt() > b.pt(); });
+        // dipair_index_map_.clear();
+        // diphoton_pairing_indices_.clear();
+        // diphoton_pairing_indices_.resize(4);
+
 
         if (phoP4Corrected_dp.size() > 3)
         {
-                   //cout  << phoP4Corrected_dp[0].phoIdMvaDWrtVtx(Vertices[selected_vertex_index_]) << "  " << phoP4Corrected_dp[1].phoIdMvaDWrtVtx(Vertices[selected_vertex_index_]) << "  " << phoP4Corrected_dp[2].phoIdMvaDWrtVtx(Vertices[selected_vertex_index_]) << "  " << phoP4Corrected_dp[3].phoIdMvaDWrtVtx(Vertices[selected_vertex_index_]) << endl;
-                   //cout <<"HERE Vtx Zero " << phoP4Corrected_dp[0].phoIdMvaDWrtVtx(vertex_zero) << "  " << phoP4Corrected_dp[1].phoIdMvaDWrtVtx(vertex_zero) << "  " << phoP4Corrected_dp[2].phoIdMvaDWrtVtx(vertex_zero) << "  " << phoP4Corrected_dp[3].phoIdMvaDWrtVtx(vertex_zero) << endl;
+          // dipair_index_map_.clear();
 
-                   //cout  << phoP4Corrected_dp[0].pt() << "  " << phoP4Corrected_dp[1].pt() << "  " << phoP4Corrected_dp[2].pt() << "  " << phoP4Corrected_dp[3].pt() << endl;
-                   //cout  << phoP4Corrected_dp[0].eta() << "  " << phoP4Corrected_dp[1].eta() << "  " << phoP4Corrected_dp[2].eta() << "  " << phoP4Corrected_dp[3].eta() << endl;
+          /*for (int i1=0; i1 < (int) phoP4Corrected_dp.size(); i1++)
+          {
+            flashgg::Photon pho1 = phoP4Corrected_dp[i1];
+            for (int i2=0; i2 < (int) phoP4Corrected_dp.size(); i2++)
+            {
+              if (i2 <= i1 ){continue;}
+              flashgg::Photon pho2 = phoP4Corrected_dp[i2];
 
-          // int catnum = 0;
-          //cout << "4 photon vtx "<< selected_vertex_index_ << endl;
+              for (int i3=0; i3 < (int) phoP4Corrected_dp.size(); i3++)
+              {
+                if (i3 <= i2){continue;}
+                if (i3 == i1){continue;}
+                flashgg::Photon pho3 = phoP4Corrected_dp[i3];
+
+                for (int i4=0; i4 < (int) phoP4Corrected_dp.size(); i4++)
+                {
+                  if (i4 <= i3){continue;}
+                  if (i4 == i1 || i4 == i2){continue;}
+                  flashgg::Photon pho4 = phoP4Corrected_dp[i4];
+
+                  auto dipho1 = pho1.p4() + pho2.p4();
+                  dipho1_energy = dipho1.energy();
+                  dipho1_pt = dipho1.pt();
+                  dipho1_eta = dipho1.eta();
+                  dipho1_phi = dipho1.phi();
+                  dipho1_dR = deltaR(pho1.eta(),pho1.phi(),pho2.eta(),pho2.phi());
+                  dipho1_mass = dipho1.mass();
+
+                  auto dipho2 = pho3.p4() + pho4.p4();
+                  dipho2_energy = dipho2.energy();
+                  dipho2_pt = dipho2.pt();
+                  dipho2_eta = dipho2.eta();
+                  dipho2_phi = dipho2.phi();
+                  dipho2_dR = deltaR(pho3.eta(),pho3.phi(),pho4.eta(),pho4.phi());
+                  dipho2_mass = dipho2.mass();
+
+                  dipair_energy = (dipho1+dipho2).energy();
+                  dipair_pt = (dipho1+dipho2).pt();
+                  dipair_eta = (dipho1+dipho2).eta();
+                  dipair_phi = (dipho1+dipho2).phi();
+                  dipair_dR = deltaR(dipho1.eta(),dipho1.phi(),dipho2.eta(),dipho2.phi());
+
+
+                  float mva_value_ = DiphotonPairMva_->EvaluateMVA( "BDT" );
+                  diphoton_pairing_indices_tmp_.push_back(i1);
+                  diphoton_pairing_indices_tmp_.push_back(i2);
+                  diphoton_pairing_indices_tmp_.push_back(i3);
+                  diphoton_pairing_indices_tmp_.push_back(i4);
+
+                  dipair_index_map_.push_back(std::make_pair(diphoton_pairing_indices_tmp_, mva_value_ ));
+                  diphoton_pairing_indices_tmp_.clear();
+
+                  dipho1 = pho1.p4() + pho3.p4();
+                  dipho1_energy = dipho1.energy();
+                  dipho1_pt = dipho1.pt();
+                  dipho1_eta = dipho1.eta();
+                  dipho1_phi = dipho1.phi();
+                  dipho1_dR = deltaR(pho1.eta(),pho1.phi(),pho3.eta(),pho3.phi());
+                  dipho1_mass = dipho1.mass();
+
+                  dipho2 = pho2.p4() + pho4.p4();
+                  dipho2_energy = dipho2.energy();
+                  dipho2_pt = dipho2.pt();
+                  dipho2_eta = dipho2.eta();
+                  dipho2_phi = dipho2.phi();
+                  dipho2_dR = deltaR(pho2.eta(),pho2.phi(),pho4.eta(),pho4.phi());
+                  dipho2_mass = dipho2.mass();
+
+                  dipair_energy = (dipho1+dipho2).energy();
+                  dipair_pt = (dipho1+dipho2).pt();
+                  dipair_eta = (dipho1+dipho2).eta();
+                  dipair_phi = (dipho1+dipho2).phi();
+                  dipair_dR = deltaR(dipho1.eta(),dipho1.phi(),dipho2.eta(),dipho2.phi());
+
+
+
+                  mva_value_ = DiphotonPairMva_->EvaluateMVA( "BDT" );
+                  diphoton_pairing_indices_tmp_.push_back(i1);
+                  diphoton_pairing_indices_tmp_.push_back(i3);
+                  diphoton_pairing_indices_tmp_.push_back(i2);
+                  diphoton_pairing_indices_tmp_.push_back(i4);
+
+                  dipair_index_map_.push_back(std::make_pair(diphoton_pairing_indices_tmp_, mva_value_ ));
+                  diphoton_pairing_indices_tmp_.clear();
+
+                  dipho1 = pho1.p4() + pho4.p4();
+                  dipho1_energy = dipho1.energy();
+                  dipho1_pt = dipho1.pt();
+                  dipho1_eta = dipho1.eta();
+                  dipho1_phi = dipho1.phi();
+                  dipho1_dR = deltaR(pho1.eta(),pho1.phi(),pho4.eta(),pho4.phi());
+                  dipho1_mass = dipho1.mass();
+
+
+                  dipho2 = pho2.p4() + pho3.p4();
+                  dipho2_energy = dipho2.energy();
+                  dipho2_pt = dipho2.pt();
+                  dipho2_eta = dipho2.eta();
+                  dipho2_phi = dipho2.phi();
+                  dipho2_dR = deltaR(pho2.eta(),pho2.phi(),pho3.eta(),pho3.phi());
+                  dipho2_mass = dipho2.mass();
+
+
+                  dipair_energy = (dipho1+dipho2).energy();
+                  dipair_pt = (dipho1+dipho2).pt();
+                  dipair_eta = (dipho1+dipho2).eta();
+                  dipair_phi = (dipho1+dipho2).phi();
+                  dipair_dR = deltaR(dipho1.eta(),dipho1.phi(),dipho2.eta(),dipho2.phi());
+
+
+
+                  mva_value_ = DiphotonPairMva_->EvaluateMVA( "BDT" );
+                  diphoton_pairing_indices_tmp_.push_back(i1);
+                  diphoton_pairing_indices_tmp_.push_back(i4);
+                  diphoton_pairing_indices_tmp_.push_back(i2);
+                  diphoton_pairing_indices_tmp_.push_back(i3);
+
+                  dipair_index_map_.push_back(std::make_pair(diphoton_pairing_indices_tmp_, mva_value_));
+                  diphoton_pairing_indices_tmp_.clear();
+
+                }
+              }
+            }
+          }*/
+
+          // std::sort( dipair_index_map_.begin(), dipair_index_map_.end(), Sorter_pairs() );
+          // diphoton_pairing_indices_[0] = dipair_index_map_.at(0).first.at(0);
+          // diphoton_pairing_indices_[1] = dipair_index_map_.at(0).first.at(1);
+          // diphoton_pairing_indices_[2] = dipair_index_map_.at(0).first.at(2);
+          // diphoton_pairing_indices_[3] = dipair_index_map_.at(0).first.at(3);
+          //
+          // diphoPair_MVA = dipair_index_map_.at(0).second ;
+          //
+          // cout << diphoPair_MVA << endl;
+
           H4GTag tag_obj (dipho, phoP4Corrected_dp[0], phoP4Corrected_dp[1], phoP4Corrected_dp[2], phoP4Corrected_dp[3], vertex_chosen, dZ_bdtVtx);
           // cout << "systlabel: " << systLabel_ << endl;
           tag_obj.setSystLabel( systLabel_);
@@ -629,7 +817,7 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
 
           H4Gtags->push_back( tag_obj );
           if( ! event.isRealData() ) {
-             //cout << "should not enter here " << endl;
+            //cout << "should not enter here " << endl;
             H4Gtags->back().setTagTruth( edm::refToPtr( edm::Ref<vector<TagTruthBase> >( rTagTruth, 0 ) ) );
           }
 
