@@ -299,7 +299,7 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
       // VertexProbMva_->BookMVA( "BDT", vertexProbMVAweightfileH4G_.fullPath() );
 
 
-      // produces<vector<H4GTag>>();
+      produces<vector<H4GTag>>();
 
 
       produces<vector<TagTruthBase>>();
