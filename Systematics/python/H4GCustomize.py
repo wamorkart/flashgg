@@ -10,7 +10,7 @@ class H4GCustomize():
         self.customize = customize
         self.metaConditions = metaConditions
         # self.tagList = [ ["HHWWggTag",12] ]
-        self.tagList = [ ["H4GTag",3] ]
+        self.tagList = [ ["H4GTag",1] ]
         self.customizeTagSequence()
 
     def variablesToDump(self):
@@ -22,39 +22,49 @@ class H4GCustomize():
             # "HHbbggMVA := MVA()"
         ]
         variables = [
-            "pho1_pt   := pho1.pt()",
-            "pho2_pt   := pho2.pt()",
-            "pho3_pt   := pho3.pt()",
-            "pho4_pt   := pho4.pt()",
-            "pho1_eta   := pho1.eta()",
-            "pho2_eta   := pho2.eta()",
-            "pho3_eta   := pho3.eta()",
-            "pho4_eta   := pho4.eta()",
-            "pho1_MVA  := pho1_MVA ",
-            "pho2_MVA  := pho2_MVA ",
-            "pho3_MVA  := pho3_MVA ",
-            "pho4_MVA  := pho4_MVA ",
-            "pho1_electronveto := pho1.passElectronVeto()",
-            "pho2_electronveto := pho2.passElectronVeto()",
-            "pho3_electronveto := pho3.passElectronVeto()",
-            "pho4_electronveto := pho4.passElectronVeto()",
-            "pho1_pixelseed := pho1.hasPixelSeed()",
-            "pho2_pixelseed := pho2.hasPixelSeed()",
-            "pho3_pixelseed := pho3.hasPixelSeed()",
-            "pho4_pixelseed := pho4.hasPixelSeed()",
-            "pho1_genType := pho1.genMatchType()",
-            "pho2_genType := pho2.genMatchType()",
-            "pho3_genType := pho3.genMatchType()",
-            "pho4_genType := pho4.genMatchType()",
-
-            "pho1_energy := pho1.energy()",
-            "pho1_energy_init := pho1.energyAtStep('initial')",
-            "dZ_bdtVtx        := dZ_bdtVtx",
-            "tp_pt         := tp.pt()",
-            "tp_eta         := tp.eta()",
-            "tp_mass         := tp.mass()",
-            "a1_mass        := h4gDiPho1_prime.mass()",
-            "a2_mass        := h4gDiPho2_prime.mass()"
+        "dp_pt := dp_pt"
+          #   "pho1_pt   := pho1.pt()",
+          #   "pho2_pt   := pho2.pt()",
+          #   "pho3_pt   := pho3.pt()",
+          #   "pho4_pt   := pho4.pt()",
+          #   "pho1_eta   := pho1.eta()",
+          #   "pho2_eta   := pho2.eta()",
+          #   "pho3_eta   := pho3.eta()",
+          #   "pho4_eta   := pho4.eta()",
+          #   "pho1_MVA  := pho1_MVA ",
+          #   "pho2_MVA  := pho2_MVA ",
+          #   "pho3_MVA  := pho3_MVA ",
+          #   "pho4_MVA  := pho4_MVA ",
+          #   "pho1_electronveto := pho1.passElectronVeto()",
+          #   "pho2_electronveto := pho2.passElectronVeto()",
+          #   "pho3_electronveto := pho3.passElectronVeto()",
+          #   "pho4_electronveto := pho4.passElectronVeto()",
+          #   "pho1_pixelseed := pho1.hasPixelSeed()",
+          #   "pho2_pixelseed := pho2.hasPixelSeed()",
+          #   "pho3_pixelseed := pho3.hasPixelSeed()",
+          #   "pho4_pixelseed := pho4.hasPixelSeed()",
+          #   "pho1_genType := pho1.genMatchType()",
+          #   "pho2_genType := pho2.genMatchType()",
+          #   "pho3_genType := pho3.genMatchType()",
+          #   "pho4_genType := pho4.genMatchType()",
+          #
+          #   "pho1_energy := pho1.energy()",
+          #   "pho1_energy_init := pho1.energyAtStep('initial')",
+          #   "dZ_bdtVtx        := dZ_bdtVtx",
+          #   "tp_pt         := tp.pt()",
+          #   "tp_eta         := tp.eta()",
+          #   "tp_mass         := tp.mass()",
+          #   "a1_mass        := h4gDiPho1_prime.mass()",
+          #   "a2_mass        := h4gDiPho2_prime.mass()",
+          #   "a1_pt        := h4gDiPho1_prime.pt()",
+          # "a2_pt        := h4gDiPho2_prime.pt()",
+          # "a1_eta        := h4gDiPho1_prime.eta()",
+          # "a2_eta        := h4gDiPho2_prime.eta()",
+          # "a1_dr         := deltaR(h4gDiPho1_Pho1_prime.eta(), h4gDiPho1_Pho1_prime.phi(), h4gDiPho1_Pho2_prime.eta(), h4gDiPho1_Pho2_prime.phi())",
+          # "a2_dr         := deltaR(h4gDiPho2_Pho1_prime.eta(), h4gDiPho2_Pho1_prime.phi(), h4gDiPho2_Pho2_prime.eta(), h4gDiPho2_Pho2_prime.phi())",
+          # "CosThetaStar_CS      := getCosThetaStar_CS()",
+          # "CosTheta_pho_a1      := CosThetaAngles()[0]",
+          # "CosTheta_pho_a2      := CosThetaAngles()[1]"
         ]
         return variables
 
@@ -83,40 +93,60 @@ class H4GCustomize():
         "pho4_pixelseed := pho4.hasPixelSeed()",
         "tp_pt         := tp.pt()",
         "tp_eta         := tp.eta()",
-        "tp_mass         := tp.mass()"
+        "tp_mass         := tp.mass()",
+        "a1_pt        := h4gDiPho1_prime.pt()",
+          "a2_pt        := h4gDiPho2_prime.pt()",
+          "a1_eta        := h4gDiPho1_prime.eta()",
+          "a2_eta        := h4gDiPho2_prime.eta()",
+          "a1_dr         := deltaR(h4gDiPho1_Pho1_prime.eta(), h4gDiPho1_Pho1_prime.phi(), h4gDiPho1_Pho2_prime.eta(), h4gDiPho1_Pho2_prime.phi())",
+          "a2_dr         := deltaR(h4gDiPho2_Pho1_prime.eta(), h4gDiPho2_Pho1_prime.phi(), h4gDiPho2_Pho2_prime.eta(), h4gDiPho2_Pho2_prime.phi())",
+          "CosThetaStar_CS      := getCosThetaStar_CS()",
+          "CosTheta_pho_a1      := CosThetaAngles()[0]",
+          "CosTheta_pho_a2      := CosThetaAngles()[1]"
         ]
         return dataVariables
     def systematicVariables(self):
     #   systematicVariables=["CMS_hgg_mass[160,100,180]:=diPhoton().mass","Mjj[120,70,190]:=dijet().M()","HHbbggMVA[100,0,1.]:=MVA()","MX[300,250,5000]:=MX()"]
       systematicVariables=[
-          "pho1_pt   := pho1.pt()",
-          "pho2_pt   := pho2.pt()",
-          "pho3_pt   := pho3.pt()",
-          "pho4_pt   := pho4.pt()",
-          "pho1_eta   := pho1.eta()",
-          "pho2_eta   := pho2.eta()",
-          "pho3_eta   := pho3.eta()",
-          "pho4_eta   := pho4.eta()",
-          "pho1_MVA  := pho1_MVA ",
-          "pho2_MVA  := pho2_MVA ",
-          "pho3_MVA  := pho3_MVA ",
-          "pho4_MVA  := pho4_MVA ",
-          "pho1_electronveto := pho1.passElectronVeto()",
-          "pho2_electronveto := pho2.passElectronVeto()",
-          "pho3_electronveto := pho3.passElectronVeto()",
-          "pho4_electronveto := pho4.passElectronVeto()",
-          "pho1_pixelseed := pho1.hasPixelSeed()",
-          "pho2_pixelseed := pho2.hasPixelSeed()",
-          "pho3_pixelseed := pho3.hasPixelSeed()",
-          "pho4_pixelseed := pho4.hasPixelSeed()",
-          "pho1_genType := pho1.genMatchType()",
-          "pho1_energy_init := pho1.energyAtStep('initial')",
-          "dZ_bdtVtx        := dZ_bdtVtx",
-          "tp_pt         := tp.pt()",
-          "tp_eta         := tp.eta()",
-          "tp_mass         := tp.mass()",
-          "a1_mass        := h4gDiPho1_prime.mass()",
-          "a2_mass        := h4gDiPho2_prime.mass()"
+           "dp_pt := dp_pt"
+          # "dp_mass := dipho.mass()"
+          # "pho1_pt   := pho1.pt()",
+          # "pho2_pt   := pho2.pt()",
+          # "pho3_pt   := pho3.pt()",
+          # "pho4_pt   := pho4.pt()",
+          # "pho1_eta   := pho1.eta()",
+          # "pho2_eta   := pho2.eta()",
+          # "pho3_eta   := pho3.eta()",
+          # "pho4_eta   := pho4.eta()",
+          # "pho1_MVA  := pho1_MVA ",
+          # "pho2_MVA  := pho2_MVA ",
+          # "pho3_MVA  := pho3_MVA ",
+          # "pho4_MVA  := pho4_MVA ",
+          # "pho1_electronveto := pho1.passElectronVeto()",
+          # "pho2_electronveto := pho2.passElectronVeto()",
+          # "pho3_electronveto := pho3.passElectronVeto()",
+          # "pho4_electronveto := pho4.passElectronVeto()",
+          # "pho1_pixelseed := pho1.hasPixelSeed()",
+          # "pho2_pixelseed := pho2.hasPixelSeed()",
+          # "pho3_pixelseed := pho3.hasPixelSeed()",
+          # "pho4_pixelseed := pho4.hasPixelSeed()",
+          # "pho1_genType := pho1.genMatchType()",
+          # "pho1_energy_init := pho1.energyAtStep('initial')",
+          # "dZ_bdtVtx        := dZ_bdtVtx",
+          # "tp_pt         := tp.pt()",
+          # "tp_eta         := tp.eta()",
+          # "tp_mass         := tp.mass()",
+          # "a1_mass        := h4gDiPho1_prime.mass()",
+          # "a2_mass        := h4gDiPho2_prime.mass()",
+          # "a1_pt        := h4gDiPho1_prime.pt()",
+          # "a2_pt        := h4gDiPho2_prime.pt()",
+          # "a1_eta        := h4gDiPho1_prime.eta()",
+          # "a2_eta        := h4gDiPho2_prime.eta()",
+          # "a1_dr         := deltaR(h4gDiPho1_Pho1_prime.eta(), h4gDiPho1_Pho1_prime.phi(), h4gDiPho1_Pho2_prime.eta(), h4gDiPho1_Pho2_prime.phi())",
+          # "a2_dr         := deltaR(h4gDiPho2_Pho1_prime.eta(), h4gDiPho2_Pho1_prime.phi(), h4gDiPho2_Pho2_prime.eta(), h4gDiPho2_Pho2_prime.phi())",
+          # "CosThetaStar_CS      := getCosThetaStar_CS()",
+          # "CosTheta_pho_a1      := CosThetaAngles()[0]",
+          # "CosTheta_pho_a2      := CosThetaAngles()[1]"
            ]
 
       return systematicVariables
@@ -166,28 +196,45 @@ class H4GCustomize():
             self.process.flashggTagSequence.remove(self.process.flashggUntagged)
             self.process.flashggTagSequence.remove(self.process.flashggTHQLeptonicTag)
 
-        self.process.flashggTagSequence.replace(self.process.flashggTagSorter,self.process.flashggH4GTagSequence*self.process.flashggTagSorter)
-        self.process.flashggTagSorter.TagPriorityRanges = cms.VPSet( cms.PSet(TagName = cms.InputTag('flashggH4GTag')) )
+        # self.process.flashggTagSequence.replace(self.process.flashggTagSorter,self.process.flashggH4GTagSequence*self.process.flashggTagSorter)
+        # self.process.flashggTagSorter.TagPriorityRanges = cms.VPSet( cms.PSet(TagName = cms.InputTag('flashggH4GTag')) )
 
     def H4GTagMerger(self,systlabels=[]):
         self.process.p.remove(self.process.flashggTagSorter)
         self.process.p.replace(self.process.flashggSystTagMerger,self.process.flashggH4GTagSequence*self.process.flashggTagSorter*self.process.flashggSystTagMerger)
-        # print'process.p = ',self.process.p
-
-        ##-- Do I need this part for HHWWgg?
         for systlabel in systlabels:
            if systlabel!='':
              self.process.p.remove(getattr(self.process,'flashggTagSorter'+systlabel))
              self.process.p.replace(self.process.flashggSystTagMerger,getattr(self.process, 'flashggTagSorter'+systlabel)*self.process.flashggSystTagMerger)
-           setattr(getattr(self.process, 'flashggTagSorter'+systlabel), 'TagPriorityRanges', cms.VPSet( cms.PSet(TagName = cms.InputTag('flashggH4GTag')) ))
+           setattr(getattr(self.process, 'flashggTagSorter'+systlabel), 'TagPriorityRanges', cms.VPSet( cms.PSet(TagName = cms.InputTag('flashggH4GTag', systlabel)) ))
+        #print 'from loop after:',process.flashggSystTagMerger.src
+
+
+    # def H4GTagMerger(self,systlabels=[]):
+    #     self.process.p.remove(self.process.flashggTagSorter)
+    #     self.process.p.replace(self.process.flashggSystTagMerger,self.process.flashggH4GTagSequence*self.process.flashggTagSorter*self.process.flashggSystTagMerger)
+    #     # print'process.p = ',self.process.p
+    #
+    #     ##-- Do I need this part for HHWWgg?
+    #     for systlabel in systlabels:
+    #        if systlabel!='':
+    #          self.process.p.remove(getattr(self.process,'flashggTagSorter'+systlabel))
+    #          self.process.p.replace(self.process.flashggSystTagMerger,getattr(self.process, 'flashggTagSorter'+systlabel)*self.process.flashggSystTagMerger)
+    #        setattr(getattr(self.process, 'flashggTagSorter'+systlabel), 'TagPriorityRanges', cms.VPSet( cms.PSet(TagName = cms.InputTag('flashggH4GTag')) ))
         #    setattr(getattr(self.process, 'flashggTagSorter'+systlabel), 'TagPriorityRanges', cms.VPSet( cms.PSet(TagName = cms.InputTag('flashggHHWWggTag', systlabel)) ))
 
         # print 'from loop after:',process.flashggSystTagMerger.src
 
 
     def H4GTagRunSequence(self,systlabels,jetsystlabels,phosystlabels):
-        print'not used'
-    #    if self.customize.HHWWggTagsOnly:
+        if self.customize.H4GTagsOnly:
+          self.H4GTagMerger(systlabels)
+
+        if len(systlabels)>1 :
+          getattr(self.process, "flashggH4GTag").JetsSuffixes = cms.vstring([systlabels[0]]+jetsystlabels)
+          getattr(self.process, "flashggH4GTag").DiPhotonSuffixes = cms.vstring([systlabels[0]]+phosystlabels)
+        # print'not used'
+       # if self.customize.HHWWggTagsOnly:
         #   print'systlabels = ',systlabels
         #   self.HHWWggTagMerger(systlabels)
 

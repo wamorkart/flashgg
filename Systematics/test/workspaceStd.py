@@ -891,8 +891,8 @@ if customize.doBJetRegression:
 if customize.doDoubleHTag:
     hhc.doubleHTagRunSequence(systlabels,jetsystlabels,phosystlabels)
 
-# if customize.doH4GTag:
-#     hhc.doubleHTagRunSequence(systlabels,jetsystlabels,phosystlabels)
+if customize.doH4GTag:
+    h4gc.H4GTagRunSequence(systlabels,jetsystlabels,phosystlabels)
 # if customize.doHHWWggTag:
 #     hhwwggc.HHWWggTagRunSequence(systlabels,jetsystlabels,phosystlabels)
 
