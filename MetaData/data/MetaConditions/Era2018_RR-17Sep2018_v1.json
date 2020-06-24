@@ -76,7 +76,7 @@
 	    ]
         }
     },
-    "flashggDiPhotonSystematics" : "flashggDiPhotonSystematics2018_cfi",
+    "flashggDiPhotonSystematics" : "flashggDiPhotonSystematics2018LM_cfi",
 
 
     "sigmaM_M_decorr" : "flashgg/Taggers/data/diphoMVA_sigmaMoMdecorr_split_2018_Mgg100to180.root",
