@@ -58,6 +58,9 @@ namespace flashgg{
     const int& h4gDiPho1_iPho2_prime() const { return dp1_ipho2_prime_; };
     const int& h4gDiPho2_iPho1_prime() const { return dp2_ipho1_prime_; };
     const int& h4gDiPho2_iPho2_prime() const { return dp2_ipho2_prime_; };
+    float getCosThetaStar_CS() const;
+    std::vector<float> CosThetaAngles() const;
+    float HelicityCosTheta( TLorentzVector Booster, TLorentzVector Boosted) const;
 
     // const vector<flashgg::Photon> phoP4Corrected_dp() const { return phoP4Corrected_dp_;};
 

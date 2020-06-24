@@ -15,11 +15,6 @@ class H4GCustomize():
 
     def variablesToDump(self):
         var_workspace = [
-            # "testVariable[10,0,10] := 5 "
-#             "Mjj := dijet().M()"
-            # "eventNumber := eventNumber()",
-            # "MX := MX()",
-            # "HHbbggMVA := MVA()"
         ]
         variables = [
             "pho1_pt   := pho1.pt()",
@@ -54,7 +49,18 @@ class H4GCustomize():
             "tp_eta         := tp.eta()",
             "tp_mass         := tp.mass()",
             "a1_mass        := h4gDiPho1_prime.mass()",
-            "a2_mass        := h4gDiPho2_prime.mass()"
+            "a2_mass        := h4gDiPho2_prime.mass()",
+            "a1_pt        := h4gDiPho1_prime.pt()",
+            "a2_pt        := h4gDiPho2_prime.pt()",
+            "a1_eta        := h4gDiPho1_prime.eta()",
+            "a2_eta        := h4gDiPho2_prime.eta()",
+            "a1_dR        := deltaR(h4gDiPho1_Pho1_prime.eta(), h4gDiPho1_Pho1_prime.phi(), h4gDiPho1_Pho2_prime.eta(), h4gDiPho1_Pho2_prime.phi())",
+            "a2_dR        := deltaR(h4gDiPho2_Pho1_prime.eta(), h4gDiPho2_Pho1_prime.phi(), h4gDiPho2_Pho2_prime.eta(), h4gDiPho2_Pho2_prime.phi())",
+            "a1_a2_dR     := deltaR(h4gDiPho1_prime.eta(),h4gDiPho1_prime.phi(),h4gDiPho2_prime.eta(),h4gDiPho2_prime.phi())",
+            "CosThetaStar_CS      := getCosThetaStar_CS()",
+            "CosTheta_pho_a1      := CosThetaAngles()[0]",
+            "CosTheta_pho_a2      := CosThetaAngles()[1]"
+
         ]
         return variables
 
@@ -81,9 +87,29 @@ class H4GCustomize():
         "pho2_pixelseed := pho2.hasPixelSeed()",
         "pho3_pixelseed := pho3.hasPixelSeed()",
         "pho4_pixelseed := pho4.hasPixelSeed()",
+        "pho1_genType := pho1.genMatchType()",
+        "pho2_genType := pho2.genMatchType()",
+        "pho3_genType := pho3.genMatchType()",
+        "pho4_genType := pho4.genMatchType()",
+
+        "pho1_energy := pho1.energy()",
+        "pho1_energy_init := pho1.energyAtStep('initial')",
+        "dZ_bdtVtx        := dZ_bdtVtx",
         "tp_pt         := tp.pt()",
         "tp_eta         := tp.eta()",
-        "tp_mass         := tp.mass()"
+        "tp_mass         := tp.mass()",
+        "a1_mass        := h4gDiPho1_prime.mass()",
+        "a2_mass        := h4gDiPho2_prime.mass()",
+        "a1_pt        := h4gDiPho1_prime.pt()",
+        "a2_pt        := h4gDiPho2_prime.pt()",
+        "a1_eta        := h4gDiPho1_prime.eta()",
+        "a2_eta        := h4gDiPho2_prime.eta()",
+        "a1_dR        := deltaR(h4gDiPho1_Pho1_prime.eta(), h4gDiPho1_Pho1_prime.phi(), h4gDiPho1_Pho2_prime.eta(), h4gDiPho1_Pho2_prime.phi())",
+        "a2_dR        := deltaR(h4gDiPho2_Pho1_prime.eta(), h4gDiPho2_Pho1_prime.phi(), h4gDiPho2_Pho2_prime.eta(), h4gDiPho2_Pho2_prime.phi())",
+        "a1_a2_dR     := deltaR(h4gDiPho1_prime.eta(),h4gDiPho1_prime.phi(),h4gDiPho2_prime.eta(),h4gDiPho2_prime.phi())",
+        "CosThetaStar_CS      := getCosThetaStar_CS()",
+        "CosTheta_pho_a1      := CosThetaAngles()[0]",
+        "CosTheta_pho_a2      := CosThetaAngles()[1]"
         ]
         return dataVariables
     def systematicVariables(self):
@@ -110,13 +136,28 @@ class H4GCustomize():
           "pho3_pixelseed := pho3.hasPixelSeed()",
           "pho4_pixelseed := pho4.hasPixelSeed()",
           "pho1_genType := pho1.genMatchType()",
+          "pho2_genType := pho2.genMatchType()",
+          "pho3_genType := pho3.genMatchType()",
+          "pho4_genType := pho4.genMatchType()",
+
+          "pho1_energy := pho1.energy()",
           "pho1_energy_init := pho1.energyAtStep('initial')",
           "dZ_bdtVtx        := dZ_bdtVtx",
           "tp_pt         := tp.pt()",
           "tp_eta         := tp.eta()",
           "tp_mass         := tp.mass()",
           "a1_mass        := h4gDiPho1_prime.mass()",
-          "a2_mass        := h4gDiPho2_prime.mass()"
+          "a2_mass        := h4gDiPho2_prime.mass()",
+          "a1_pt        := h4gDiPho1_prime.pt()",
+          "a2_pt        := h4gDiPho2_prime.pt()",
+          "a1_eta        := h4gDiPho1_prime.eta()",
+          "a2_eta        := h4gDiPho2_prime.eta()",
+          "a1_dR        := deltaR(h4gDiPho1_Pho1_prime.eta(), h4gDiPho1_Pho1_prime.phi(), h4gDiPho1_Pho2_prime.eta(), h4gDiPho1_Pho2_prime.phi())",
+          "a2_dR        := deltaR(h4gDiPho2_Pho1_prime.eta(), h4gDiPho2_Pho1_prime.phi(), h4gDiPho2_Pho2_prime.eta(), h4gDiPho2_Pho2_prime.phi())",
+          "a1_a2_dR     := deltaR(h4gDiPho1_prime.eta(),h4gDiPho1_prime.phi(),h4gDiPho2_prime.eta(),h4gDiPho2_prime.phi())",
+          "CosThetaStar_CS      := getCosThetaStar_CS()",
+          "CosTheta_pho_a1      := CosThetaAngles()[0]",
+          "CosTheta_pho_a2      := CosThetaAngles()[1]"
            ]
 
       return systematicVariables
@@ -187,27 +228,6 @@ class H4GCustomize():
 
     def H4GTagRunSequence(self,systlabels,jetsystlabels,phosystlabels):
         print'not used'
-    #    if self.customize.HHWWggTagsOnly:
-        #   print'systlabels = ',systlabels
-        #   self.HHWWggTagMerger(systlabels)
-
-
-        ## Not sure if this is necessary for HHWWgg
-    #    if len(systlabels)>1 :
-    #       print'[HHWWggTagRunSequence] - Add JetesSuffixes and diphotonsuffices'
-    #       getattr(self.process, "flashggHHWWggTag").JetsSuffixes = cms.vstring([systlabels[0]]+jetsystlabels)
-    #       getattr(self.process, "flashggHHWWggTag").DiPhotonSuffixes = cms.vstring([systlabels[0]]+phosystlabels)
-
-
-
-
-
-    #    if self.customize.HHWWggReweight>0:
-        #   self.addNodesReweighting()
-
-    #    if self.customize.doHHWWggGenAnalysis:
-        #   self.addGenAnalysis()
-
 
 
     def addNodesReweighting(self):
