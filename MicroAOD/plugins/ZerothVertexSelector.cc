@@ -33,12 +33,36 @@ namespace flashgg {
                                       const std::vector<edm::Ptr<reco::Conversion> > &,
                                       const math::XYZPoint &,
                                        bool
-                                      //  const Parameters_Selector_Type&,                                                                                                                         
-                                      //  const float&                                                                                                                                             
+                                      //  const Parameters_Selector_Type&,
+                                      //  const float&
                                       ) override;
+        // for H4G studies
+        std::vector<std::vector<float>> select_h2g( const edm::Ptr<flashgg::Photon> &, const edm::Ptr<flashgg::Photon> &, const std::vector<edm::Ptr<reco::Vertex> > &,
+                                      const VertexCandidateMap &vertexCandidateMap,
+                                      const std::vector<edm::Ptr<reco::Conversion> > &,
+                                      const std::vector<edm::Ptr<reco::Conversion> > &,
+                                      const math::XYZPoint &,
+                                      bool
+                                    ) ;
+
+        std::vector<std::vector<float>> select_h3g( const edm::Ptr<flashgg::Photon> &, const edm::Ptr<flashgg::Photon> &, const edm::Ptr<flashgg::Photon> &, const std::vector<edm::Ptr<reco::Vertex> > &,
+                                      const VertexCandidateMap &vertexCandidateMap,
+                                      const std::vector<edm::Ptr<reco::Conversion> > &,
+                                      const std::vector<edm::Ptr<reco::Conversion> > &,
+                                      const math::XYZPoint &,
+                                      bool
+                                    ) ;
+        std::vector<std::vector<float>> select_h4g( const edm::Ptr<flashgg::Photon> &, const edm::Ptr<flashgg::Photon> &,const edm::Ptr<flashgg::Photon> &,const edm::Ptr<flashgg::Photon> &, const std::vector<edm::Ptr<reco::Vertex> > &,
+                                      const VertexCandidateMap &vertexCandidateMap,
+                                      const std::vector<edm::Ptr<reco::Conversion> > &,
+                                      const std::vector<edm::Ptr<reco::Conversion> > &,
+                                      const math::XYZPoint &,
+                                      bool
+                                    ) override;
 
         void writeInfoFromLastSelectionTo( flashgg::DiPhotonCandidate & ) override;
         void writeInfoFromLastSelectionTo( flashgg::PhotonJetCandidate & ) override;
+        void writeInfoFromLastSelectionTo( flashgg::H4GCandidate & ) override;
 
     private:
         unsigned int _whichVertex; // set this variable to something non-zero to make this stupid selector both stupider and poorly-named
@@ -74,7 +98,40 @@ namespace flashgg {
     {
         return vtxs[_whichVertex];
     }
+    std::vector<std::vector<float>> ZerothVertexSelector::select_h2g( const edm::Ptr<flashgg::Photon> &g1, const edm::Ptr<flashgg::Photon> &g2,
+                                                         const std::vector<edm::Ptr<reco::Vertex> > &vtxs,
+                                                         const VertexCandidateMap &vertexCandidateMap,
+                                                         const std::vector<edm::Ptr<reco::Conversion> > &conversionsVector,
+                                                         const std::vector<edm::Ptr<reco::Conversion> > &conversionsVectorSingleLeg,
+                                                         const math::XYZPoint &beamSpot,
+                                                         bool useSingleLeg
+                                                         )
+    {
+      return {};
+    }
 
+    std::vector<std::vector<float>> ZerothVertexSelector::select_h3g( const edm::Ptr<flashgg::Photon> &g1, const edm::Ptr<flashgg::Photon> &g2, const edm::Ptr<flashgg::Photon> &g3,
+                                                         const std::vector<edm::Ptr<reco::Vertex> > &vtxs,
+                                                         const VertexCandidateMap &vertexCandidateMap,
+                                                         const std::vector<edm::Ptr<reco::Conversion> > &conversionsVector,
+                                                         const std::vector<edm::Ptr<reco::Conversion> > &conversionsVectorSingleLeg,
+                                                         const math::XYZPoint &beamSpot,
+                                                         bool useSingleLeg
+                                                         )
+    {
+      return {};
+    }
+    std::vector<std::vector<float>> ZerothVertexSelector::select_h4g( const edm::Ptr<flashgg::Photon> &g1, const edm::Ptr<flashgg::Photon> &g2, const edm::Ptr<flashgg::Photon> &g3, const edm::Ptr<flashgg::Photon> &g4,
+                                                         const std::vector<edm::Ptr<reco::Vertex> > &vtxs,
+                                                         const VertexCandidateMap &vertexCandidateMap,
+                                                         const std::vector<edm::Ptr<reco::Conversion> > &conversionsVector,
+                                                         const std::vector<edm::Ptr<reco::Conversion> > &conversionsVectorSingleLeg,
+                                                         const math::XYZPoint &beamSpot,
+                                                         bool useSingleLeg
+                                                         )
+    {
+      return {};
+    }
     void ZerothVertexSelector::writeInfoFromLastSelectionTo( flashgg::DiPhotonCandidate &dipho )
     {
         // No need to store anything if we're just taking the zeroth vertex
@@ -85,6 +142,10 @@ namespace flashgg {
         // No need to store anything if we're just taking the zeroth vertex
     }
 
+    void ZerothVertexSelector::writeInfoFromLastSelectionTo( flashgg::H4GCandidate &phojet )
+    {
+        // No need to store anything if we're just taking the zeroth vertex
+    }
 }
 
 DEFINE_EDM_PLUGIN( FlashggVertexSelectorFactory,
@@ -97,4 +158,3 @@ DEFINE_EDM_PLUGIN( FlashggVertexSelectorFactory,
 // c-basic-offset:4
 // End:
 // vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
-
