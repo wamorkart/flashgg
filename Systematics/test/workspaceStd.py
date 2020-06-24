@@ -7,7 +7,7 @@ from flashgg.Systematics.SystematicDumperDefaultVariables import minimalVariable
 from flashgg.Systematics.SystematicDumperDefaultVariables import minimalVariablesHTXS,systematicVariablesHTXS
 import os
 from flashgg.MetaData.MetaConditionsReader import *
-from flashgg.Taggers.flashggPreselectedDiPhotons_LowMass_cfi import flashggPreselectedDiPhotonsLowMass
+from flashgg.Taggers.flashggPreselectedDiPhotons_LowMass16_cfi import flashggPreselectedDiPhotonsLowMass
 
 # SYSTEMATICS SECTION
 dropVBFInNonGold = False  # for 2015 only!
@@ -348,7 +348,7 @@ if customize.doH4GTag:
     minimalVariables += h4gc.variablesToDump()
     systematicVariables = h4gc.systematicVariables()
     dataVariables = h4gc.dataVariables()
-    process.load("flashgg/Taggers/flashggPreselectedDiPhotons_LowMass_cfi")
+    process.load("flashgg/Taggers/flashggPreselectedDiPhotons_LowMass16_cfi")
     process.flashggH4GTag.idSelection = cms.PSet(
                 rho = flashggPreselectedDiPhotonsLowMass.rho,
                 cut = flashggPreselectedDiPhotonsLowMass.cut,
