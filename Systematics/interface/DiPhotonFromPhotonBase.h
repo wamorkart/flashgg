@@ -36,6 +36,8 @@ namespace flashgg {
     private:
         std::unique_ptr<BaseSystMethod<flashgg::Photon, param_var> > photon_corr_;
         std::unique_ptr<BaseSystMethod<flashgg::Photon, param_var> > photon_corr2_;
+        std::unique_ptr<BaseSystMethod<flashgg::Photon, param_var> > photon_corr3_; //JTao for low mass 2016
+        std::unique_ptr<BaseSystMethod<flashgg::Photon, param_var> > photon_corr4_; //JTao for low mass 2016
     };
 
     template<class param_var>
@@ -62,10 +64,55 @@ namespace flashgg {
                 conf2.insertParameterSet(true,binListName, *(conf.retrieveUnknownParameterSet("BinList2")));
                 photon_corr2_.reset( FlashggSystematicMethodsFactory<flashgg::Photon, param_var>::get()->create( photonMethodName, conf2, std::forward<edm::ConsumesCollector>(iC),  gv ) );
                 
+                //JTao for low mass 2016 
+                if(conf.exists("BinList4"))  //candidates for subleading 
+                    {
+                        edm::ParameterSet conf4;// =  conf.clone();
+                        conf4.copyFrom(conf,"PhotonMethodName");
+                        conf4.copyFrom(conf,"MethodName");
+                        conf4.copyFrom(conf,"Label");
+                        conf4.copyFrom(conf,"NSigmas");
+                        conf4.copyFrom(conf,"OverallRange");
+                        conf4.copyFrom(conf,"Debug");
+                        conf4.copyFrom(conf,"ApplyCentralValue");
+                        const auto &pset = conf.getParameterSet( "BinList4" );
+                        conf4.addParameter<edm::ParameterSet>("BinList", pset);
+                        std::string binListName = "BinList";
+                        conf4.insertParameterSet(true,binListName, *(conf.retrieveUnknownParameterSet("BinList4")));
+                        photon_corr4_.reset( FlashggSystematicMethodsFactory<flashgg::Photon, param_var>::get()->create( photonMethodName, conf4, std::forward<edm::ConsumesCollector>(iC),  gv ) );
+                    }
+                else { //if BinList4 is not defined, use BinList2 for photon_corr4_ candidate for subleading photon 
+                    photon_corr4_.reset( FlashggSystematicMethodsFactory<flashgg::Photon, param_var>::get()->create( photonMethodName, conf2, std::forward<edm::ConsumesCollector>(iC),  gv ) );
+                }
+
             }
-        else { //if BinList2 is not defined, use BinList for both lead and sublead photons
+        else { //if BinList2 is not defined, use BinList for subleading photons
             photon_corr2_.reset( FlashggSystematicMethodsFactory<flashgg::Photon, param_var>::get()->create( photonMethodName, conf, std::forward<edm::ConsumesCollector>(iC),  gv ) );
+            photon_corr4_.reset( FlashggSystematicMethodsFactory<flashgg::Photon, param_var>::get()->create( photonMethodName, conf, std::forward<edm::ConsumesCollector>(iC),  gv ) );   //JTao for low mass 20162016        
         }
+        //JTao for low mass 2016
+        if(conf.exists("BinList3"))  //candidates for lead 
+            {
+                edm::ParameterSet conf3;// =  conf.clone();
+                conf3.copyFrom(conf,"PhotonMethodName");
+                conf3.copyFrom(conf,"MethodName");
+                conf3.copyFrom(conf,"Label");
+                conf3.copyFrom(conf,"NSigmas");
+                conf3.copyFrom(conf,"OverallRange");
+                conf3.copyFrom(conf,"Debug");
+                conf3.copyFrom(conf,"ApplyCentralValue");
+                const auto &pset = conf.getParameterSet( "BinList3" );
+                conf3.addParameter<edm::ParameterSet>("BinList", pset);
+                std::string binListName = "BinList";
+                conf3.insertParameterSet(true,binListName, *(conf.retrieveUnknownParameterSet("BinList3")));
+                photon_corr3_.reset( FlashggSystematicMethodsFactory<flashgg::Photon, param_var>::get()->create( photonMethodName, conf3, std::forward<edm::ConsumesCollector>(iC),  gv ) );
+
+            }
+        else { //if BinList3 is not defined, use BinList for photon_corr3_ candidate for leading photon 
+            photon_corr3_.reset( FlashggSystematicMethodsFactory<flashgg::Photon, param_var>::get()->create( photonMethodName, conf, std::forward<edm::ConsumesCollector>(iC),  gv ) );
+        }
+
+
         this->setMakesWeight( photon_corr_->makesWeight() );
     }
 
@@ -85,11 +132,31 @@ namespace flashgg {
         }
         float weight1 = photon_corr_->makeWeight( *(y.leadingPhoton()), syst_shift );
         float weight2 = photon_corr2_->makeWeight( *(y.subLeadingPhoton()), syst_shift );
+        if( debug_ ) {
+            std::cout << "===========Default makeWeight===================== "
+                      << " weight1=" << weight1 << " weight2=" << weight2  << std::endl;
+        }
+        float Lead_SCEta =  y.leadingPhoton()->superCluster()->position().Eta(); //JTao for low mass 2016
+        float SubLead_SCEta =  y.subLeadingPhoton()->superCluster()->position().Eta(); //JTao for low mass 2016
+        float Lead_R9 = y.leadingPhoton()->full5x5_r9(); //JTao for low mass 2016
+        float SubLead_R9 = y.subLeadingPhoton()->full5x5_r9(); //JTao for low mass 2016
+        //Use highR9 'OR' efficiencies for EB+EB; For all other cases use the 'AND' efficiencies as before
+        if( (fabs(Lead_SCEta)<1.5 && fabs(SubLead_SCEta)<1.5 && Lead_R9>0.85) || (fabs(Lead_SCEta)<1.5 && fabs(SubLead_SCEta)<1.5 && SubLead_R9>0.85) ){ //JTao for low mass 2016
+            //if( fabs(Lead_SCEta)<1.5 && fabs(SubLead_SCEta)<1.5 && Lead_R9>0.85 && SubLead_R9>0.85 ){ //JTao for low mass 2016
+            weight1 = photon_corr3_->makeWeight( *(y.leadingPhoton()), syst_shift ); 
+            weight2 = photon_corr4_->makeWeight( *(y.subLeadingPhoton()), syst_shift );
+            if( debug_ ) {
+                std::cout << "============ JTao makeWeight ================"
+                          << " weight1=" << weight1 << " weight2=" << weight2 << std::endl;
+            }
+        }
         float diphoweight = weight1*weight2;
+        /*
         if( debug_ ) {
             std::cout << "END OF DiPhotonFromPhoton::makeWeight M PT E1 E2 ETA1 ETA2 "
                       << " weight1=" << weight1 << " weight2=" << weight2 << " diphoweight=" << diphoweight << std::endl;
         }
+        */
         return diphoweight;
     }
 
@@ -120,6 +187,8 @@ namespace flashgg {
         }
         photon_corr_->eventInitialize( ev, es );
         photon_corr2_->eventInitialize( ev, es );
+        photon_corr3_->eventInitialize( ev, es ); //JTao for low mass 2016 
+        photon_corr4_->eventInitialize( ev, es ); //JTao for low mass 2016 
     }
 }
 
