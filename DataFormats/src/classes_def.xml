@@ -206,8 +206,8 @@
 <class name="edm::Wrapper<std::vector<flashgg::VHHadronicTag> >"/>
 <class name="edm::Ptr<flashgg::DiPhotonTagBase>"/>
 <class name="edm::Wrapper<edm::Ptr<flashgg::DiPhotonTagBase> >"/>
-<class name="edm::Ptr<reco::Vertex>"/> 
-<class name="std::vector<edm::Ptr<reco::Vertex> >"/> 
+<class name="edm::Ptr<reco::Vertex>"/>
+<class name="std::vector<edm::Ptr<reco::Vertex> >"/>
 <class name="flashgg::Photon" ClassVersion="13">
  <version ClassVersion="13" checksum="1109558243"/>
  <version ClassVersion="12" checksum="1503356172"/>
@@ -480,5 +480,23 @@
 <class name="edm::RefProd<std::vector<flashgg::TagAndProbeCandidate> >"/>
 <class name="edm::RefVector<std::vector<flashgg::TagAndProbeCandidate>,flashgg::TagAndProbeCandidate,edm::refhelper::FindUsingAdvance<std::vector<flashgg::TagAndProbeCandidate>,flashgg::TagAndProbeCandidate> >"/>
 <class name="edm::Wrapper<edm::RefVector<std::vector<flashgg::TagAndProbeCandidate>,flashgg::TagAndProbeCandidate,edm::refhelper::FindUsingAdvance<std::vector<flashgg::TagAndProbeCandidate>,flashgg::TagAndProbeCandidate> > >"/>
+
+
 <class name="edm::Ptr<reco::CompositeCandidate>"/>
+
+<class name="std::vector<flashgg::H4GCandidate>"/>
+<class name="edm::Wrapper<std::vector<flashgg::H4GCandidate> >"/>
+
+<class name="flashgg::H4GTag" ClassVersion="38">
+ <version ClassVersion="38" checksum="1593338339"/>
+  <version ClassVersion="11" checksum="2809364010"/>
+</class>
+<class name="std::vector<flashgg::H4GTag>"/>
+<class name="edm::Wrapper<std::vector<flashgg::H4GTag> >"/>
+
+<class name="flashgg::H4GCandidate" ClassVersion="55">
+ <version ClassVersion="55" checksum="2847103166"/>
+</class>
+<class name="std::vector<flashgg::H4GCandidate>"/>
+<class name="edm::Wrapper<std::vector<flashgg::H4GCandidate> >"/>
 </lcgdict>
