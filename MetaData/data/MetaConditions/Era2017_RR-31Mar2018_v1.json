@@ -72,7 +72,7 @@
         ]
     },
 
-    "flashggDiPhotonSystematics" : "flashggDiPhotonSystematics2017_cfi",
+    "flashggDiPhotonSystematics" : "flashggDiPhotonSystematics2017LM_cfi",
 
     "JetCorrectorParametersCollection_version" :
     {

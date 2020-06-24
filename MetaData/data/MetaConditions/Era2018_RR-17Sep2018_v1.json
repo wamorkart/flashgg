@@ -64,7 +64,7 @@
             "HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8_v*"
         ]
     },
-    "flashggDiPhotonSystematics" : "flashggDiPhotonSystematics2018_cfi",
+    "flashggDiPhotonSystematics" : "flashggDiPhotonSystematics2018LM_cfi",
     
     "MUON_ID" : "Medium",
     "MUON_ISO" : "LooseRel",
