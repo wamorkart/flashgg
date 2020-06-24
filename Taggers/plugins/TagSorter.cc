@@ -111,7 +111,7 @@ namespace flashgg {
                 if( labels[i] == tag.label() ) { break; }
             }
             if( i == TagList_.size() ) {
-                // cout << "tag = " << tag << endl;
+              //cout << "tag = " << tag << endl;
                 labels.push_back( tag.label() );
                 TagList_.push_back( consumes<View<flashgg::DiPhotonTagBase> >( tag ) );
             }
@@ -136,7 +136,7 @@ namespace flashgg {
         unique_ptr<edm::OwnVector<flashgg::TagTruthBase> > SelectedTagTruth( new edm::OwnVector<flashgg::TagTruthBase> );
 
         // Cache other tags for each event; but do not use the old ones next time
-        otherTags_.clear(); 
+        otherTags_.clear();
 
         int priority = -1; // for debug
 
@@ -144,31 +144,39 @@ namespace flashgg {
 
         for( auto tpr = TagPriorityRanges.begin() ; tpr != TagPriorityRanges.end() ; tpr++ ) {
             priority += 1; // for debug
-            // cout << "On priority " << priority << endl; // HHWWgg debugging 
-            // cout << "TagList_ = " << TagList_ << endl;
-            // cout << "tpr->collIndex = " << tpr->collIndex << endl;
-            // cout << "TagList_[tpr->collIndex] = " << TagList_[tpr->collIndex] << endl;
+            //cout << "On priority " << priority << endl; // HHWWgg debugging
+            //cout << "TagList_ = " << TagList_ << endl;
+            //cout << "tpr->collIndex = " << tpr->collIndex << endl;
+            //cout << "TagList_[tpr->collIndex] = " << TagList_[tpr->collIndex] << endl;
 
             Handle<View<flashgg::DiPhotonTagBase> > TagVectorEntry;
             evt.getByToken( TagList_[tpr->collIndex], TagVectorEntry );
 
             edm::RefProd<edm::OwnVector<TagTruthBase> > rTagTruth = evt.getRefBeforePut<edm::OwnVector<TagTruthBase> >();
 
-            int chosen_i = -1 ; //this will become the index of the highest priority candidate 
-            // cout << "TagVectorEntry->size() = " << TagVectorEntry->size() << endl;
+            int chosen_i = -1 ; //this will become the index of the highest priority candidate
+            //cout << "TagVectorEntry->size() = " << TagVectorEntry->size() << endl;
             // Looking from highest priority to lowest, check if the tag has any entries.
             for( unsigned int  tag_i = 0; tag_i < TagVectorEntry->size() ; tag_i++ )        {
-
-                // cout << "tag_i = " << tag_i << endl;
+                //cout << "tag_i = " << tag_i << endl;
+                //cout << "make it here ? 1" << endl;
+                //{
+                   //std::cout << "[TagSorter DEBUG]" << tpr->name << " " << tpr->minCat << " " << tpr->maxCat << "  "  << tag_i << std::endl;
+              // }
+                // cout << TagVectorEntry->ptrAt( tag_i )->diPhoton()->mass()  << endl;
 
                 float mass = TagVectorEntry->ptrAt( tag_i )->diPhoton()->mass();
                 float sumPt = TagVectorEntry->ptrAt( tag_i )->diPhoton()->sumPt();
                 int category = TagVectorEntry->ptrAt( tag_i )->categoryNumber();
 
-                if (debug_) {
-                    std::cout << "[TagSorter DEBUG]" << tpr->name << " " << tpr->minCat << " " << tpr->maxCat << " "
-                              << mass << " " << category << " " << tag_i << std::endl;
-                }
+                //cout << mass  << sumPt << category << endl;
+
+                //cout << "make it here ? " << endl;
+
+                //  {
+                //     std::cout << "[TagSorter DEBUG]" << tpr->name << " " << tpr->minCat << " " << tpr->maxCat << " "
+                //               << mass << " " << category << " " << tag_i << std::endl;
+                // }
 
                 // ignore candidate tags with category number outside the present range we're looking at
                 if( category < tpr->minCat || category > tpr->maxCat ) { continue ; }
@@ -184,17 +192,17 @@ namespace flashgg {
                 } else {
                     // We can still pick a tag in the current priority range
                     // We pick this one if:
-                    // i. this is the first, or 
-                    // ii. if this is a higher category than existing one, or 
+                    // i. this is the first, or
+                    // ii. if this is a higher category than existing one, or
                     // iii. if it is an equal category and has higher sumPt
                     // In the case of (ii) or (iii) we also save the old tag info if storeOtherTagInfo_ is true
                     if ( (chosen_i == -1) ||
                          (TagVectorEntry->ptrAt( chosen_i )->categoryNumber() > category) ||
                          (TagVectorEntry->ptrAt( chosen_i )->categoryNumber() == category && TagVectorEntry->ptrAt( chosen_i )->diPhoton()->sumPt() < sumPt) ) {
                         if ( chosen_i >= 0 && storeOtherTagInfo_ ) {
-                            otherTags_.emplace_back( TagVectorEntry->ptrAt( chosen_i )->tagEnum(), 
+                            otherTags_.emplace_back( TagVectorEntry->ptrAt( chosen_i )->tagEnum(),
                                                      TagVectorEntry->ptrAt( chosen_i )->categoryNumber(),
-                                                     TagVectorEntry->ptrAt( chosen_i )->diPhotonIndex() 
+                                                     TagVectorEntry->ptrAt( chosen_i )->diPhotonIndex()
                                                      );
                         }
                         if ( debug_  ) {
@@ -243,25 +251,25 @@ namespace flashgg {
                     }
                     alreadyChosen = true;
                     SelectedTag->back().addOtherTags( otherTags_ );
-                    
+
                 } else {
                     if ( debug_ ) {
                         std::cout << "[TagSorter DEBUG] Not saving other interpretations so we break out of the tag priority loop" << std::endl;
                     }
-                    break; 
+                    break;
                 }
             } else {
                 if ( debug_ ) {
                     std::cout << "[TagSorter DEBUG] No Priority " << priority << " Tag ..., looking for Priority " << (priority+1) << " Tag.. " << std::endl;
                 }
             }
-        } 
+        }
 
         if ( SelectedTag->size() == 1  && storeOtherTagInfo_ && debug_ ) {
             if ( SelectedTag->back().nOtherTags() > 0 ) {
                 std::cout << "[TagSorter DEBUG] List of other tags: (" << SelectedTag->back().nOtherTags() << " total):" << std::endl;
                 for ( unsigned i = 0 ; i < SelectedTag->back().nOtherTags() ; i++) {
-                    std::cout << "[TagSorter DEBUG]  (tag_t,cat,dipho_i)=(" << SelectedTag->back().otherTagType(i) << "," 
+                    std::cout << "[TagSorter DEBUG]  (tag_t,cat,dipho_i)=(" << SelectedTag->back().otherTagType(i) << ","
                               << SelectedTag->back().otherTagCategory(i) << ","
                               << SelectedTag->back().otherTagDiPhotonIndex(i) << ")" << std::endl;
                 }
@@ -274,44 +282,44 @@ namespace flashgg {
             float mass = SelectedTag->back().diPhoton()->mass();
             if (mass < 115. || mass > 135.) {
                 int cat = SelectedTag->back().categoryNumber();
-                std::cout << "******************************" << std::endl;
-                std::cout << "* BLINDED SELECTION PRINTOUT *" << std::endl;
-                std::cout << "******************************" << std::endl;
-                std::cout << "* Run " << evt.run() << " LumiSection " << evt.id().luminosityBlock() << " Event " << evt.id().event() << std::endl;
-                std::cout << "* Selected tag name: " << TagSorter::tagName(SelectedTag->back().tagEnum()) << std::endl;
+                //std::cout << "******************************" << std::endl;
+                //std::cout << "* BLINDED SELECTION PRINTOUT *" << std::endl;
+                //std::cout << "******************************" << std::endl;
+                //std::cout << "* Run " << evt.run() << " LumiSection " << evt.id().luminosityBlock() << " Event " << evt.id().event() << std::endl;
+                //std::cout << "* Selected tag name: " << TagSorter::tagName(SelectedTag->back().tagEnum()) << std::endl;
                 if (cat >= 0) {
-                    std::cout << "* Selected tag category: " << cat << std::endl;
+                    //std::cout << "* Selected tag category: " << cat << std::endl;
                 }
-                std::cout << "* Selected tag MVA result: " << SelectedTag->back().diPhotonMVA().mvaValue() << std::endl;
-                std::cout << "* Selected tag mass: " << mass << std::endl;
+               // std::cout << "* Selected tag MVA result: " << SelectedTag->back().diPhotonMVA().mvaValue() << std::endl;
+                //std::cout << "* Selected tag mass: " << mass << std::endl;
                 if ( storeOtherTagInfo_ ) {
                     unsigned nother = SelectedTag->back().nOtherTags();
                     int dipho_i = SelectedTag->back().diPhotonIndex();
-                    std::cout << "* Number of other tag interpretations: " << nother << std::endl;
+                    //std::cout << "* Number of other tag interpretations: " << nother << std::endl;
                     for (unsigned i = 0 ; i < nother; i++) {
-                        std::cout << "*     " << TagSorter::tagName(SelectedTag->back().otherTagType(i)) << " ";
+                        //std::cout << "*     " << TagSorter::tagName(SelectedTag->back().otherTagType(i)) << " ";
                         int ocat = SelectedTag->back().otherTagCategory(i);
                         if (ocat >= 0) {
-                            std::cout << ocat << " ";
+                           // std::cout << ocat << " ";
                         }
                         if ( SelectedTag->back().otherTagDiPhotonIndex(i) == dipho_i ) {
-                            std::cout << "(same diphoton)";
+                            //std::cout << "(same diphoton)";
                         } else {
-                            std::cout << "(different diphoton)";
+                            //std::cout << "(different diphoton)";
                         }
-                        std::cout << std::endl;
+                        //std::cout << std::endl;
                     }
                 } else {
                     std::cout << "* Other tag interpretations not stored (config)" << std::endl;
                 }
                 if( SelectedTagTruth->size() != 0 ) {
-                    std::cout << "* HTXS Category 0 (1): " << SelectedTagTruth->back().HTXSstage0cat() << " ("
-                              << SelectedTagTruth->back().HTXSstage1cat() << ")" << std::endl;
-                    std::cout << "* HTXS njets, pTH, pTV: " << SelectedTagTruth->back().HTXSnjets() << ", "
-                              << SelectedTagTruth->back().HTXSpTH() << ", "
-                              << SelectedTagTruth->back().HTXSpTV() << std::endl;
+                    //std::cout << "* HTXS Category 0 (1): " << SelectedTagTruth->back().HTXSstage0cat() << " ("
+                              //<< SelectedTagTruth->back().HTXSstage1cat() << ")" << std::endl;
+                    //std::cout << "* HTXS njets, pTH, pTV: " << SelectedTagTruth->back().HTXSnjets() << ", "
+                              //<< SelectedTagTruth->back().HTXSpTH() << ", "
+                              //<< SelectedTagTruth->back().HTXSpTV() << std::endl;
                 }
-                std::cout << "******************************" << std::endl;
+                //std::cout << "******************************" << std::endl;
             }
         }
 
@@ -357,8 +365,6 @@ namespace flashgg {
                 std::cout << "******************************" << std::endl;
             }
         }
-        // if(SelectedTag) cout << "SELECTED TAG EXISTS" << endl;
-        // else cout << "SELECTED TAG DOES NOT" << endl;
         evt.put( std::move( SelectedTag ) );
         evt.put( std::move( SelectedTagTruth ) );
     }
@@ -367,7 +373,7 @@ namespace flashgg {
         switch(tagEnumVal) {
         case DiPhotonTagBase::tag_t::kUndefined:
             return string("UNDEFINED");
-        case DiPhotonTagBase::tag_t::kUntagged: 
+        case DiPhotonTagBase::tag_t::kUntagged:
             return string("Untagged");
         case DiPhotonTagBase::tag_t::kVBF:
             return string("VBF");
@@ -410,4 +416,3 @@ DEFINE_FWK_MODULE( FlashggTagSorter );
 // c-basic-offset:4
 // End:
 // vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
-

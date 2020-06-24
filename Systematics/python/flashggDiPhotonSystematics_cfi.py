@@ -38,5 +38,5 @@ def setupDiPhotonSystematics( process, options ):
    flashggDiPhotonSystematics.SystMethods.append(sysmodule.LooseMvaSF)
    flashggDiPhotonSystematics.SystMethods.append(sysmodule.SigmaEOverEShift)
    flashggDiPhotonSystematics.SystMethods.append(sysmodule.SigmaEOverESmearing)
-   flashggDiPhotonSystematics.SystMethods.append(sysmodule.FracRVWeight)
+   #flashggDiPhotonSystematics.SystMethods.append(sysmodule.FracRVWeight)
    # flashggDiPhotonSystematics.SystMethods.append(sysmodule.FracRVNvtxWeight)
