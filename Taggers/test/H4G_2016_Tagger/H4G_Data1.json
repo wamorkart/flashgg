@@ -6,3 +6,4 @@
          ]
 },
   "cmdLine" : "campaign=Era2016_RR-17Jul2018_v2 copyInputMicroAOD=1 doH4GTag=1 H4GTagsOnly=1 doSystematics=1 dumpWorkspace=0 dumpTrees=1 useParentDataset=1 targetLumi=36e+3 processId=Data processType=Data useAAA=1  metaConditions=$CMSSW_BASE/src/flashgg/MetaData/data/MetaConditions/Era2016_RR-17Jul2018_v1.json"
+}
