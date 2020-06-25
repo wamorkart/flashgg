@@ -1,17 +1,5 @@
 * H4Gamma
 
-; Presentations:
-; - [[https://indico.cern.ch/event/904968/contributions/3866826/attachments/2041516/3419252/19_May_2020_HH_WWgg_NonResStatus.pdf][19 May 2020 Non-Res Status]]
-; - [[https://indico.cern.ch/event/847923/contributions/3632148/attachments/1942588/3221820/HH_WWgg_Analysis_Update_11_November_2019_2.pdf][11 November 2019 Update]]
-; - [[https://indico.cern.ch/event/847927/contributions/3606888/attachments/1930081/3196452/HH_WWgg_Analysis_Status_21_October_2019.pdf][21 October 2019 Status]]
-;
-; Repositories:
-; - [[https://github.com/atishelmanch/flashggFinalFit/tree/HHWWgg_Dev_runII_102x][HHWWgg Flashgg Final Fit]]
-; - [[https://github.com/atishelmanch/flashgg/tree/HHWWgg_Crab][HHWWgg MicroAOD Production]]
-; - [[https://github.com/NEUAnalyses/HHWWgg_Tools/tree/master][HHWWgg Analysis Tools]]
-;
-; These instructions describe how to run flashgg modules specific to the HH->WWgg analysis. The current plugin designed to work with workspaceStd is the HHWWgg Tagger.
-
 ** Cloning the repository
 
 ; The HHWWgg development branch is obtained in a similar fasion to the dev_legacy_runII branch:
