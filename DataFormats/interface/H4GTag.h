@@ -29,7 +29,7 @@ namespace flashgg{
     H4GTag();
     ~H4GTag();
      // H4GTag(edm::Ptr<DiPhotonCandidate>);
-     H4GTag(edm::Ptr<DiPhotonCandidate>,  flashgg::Photon, flashgg::Photon, flashgg::Photon, flashgg::Photon, edm::Ptr<reco::Vertex>, float);
+     H4GTag(edm::Ptr<DiPhotonCandidate>,  flashgg::Photon, flashgg::Photon, flashgg::Photon, flashgg::Photon, edm::Ptr<reco::Vertex>, float,std::vector<int>, float, reco::Candidate::LorentzVector, reco::Candidate::LorentzVector, reco::Candidate::LorentzVector, reco::Candidate::LorentzVector, reco::Candidate::LorentzVector, reco::Candidate::LorentzVector );
      H4GTag(edm::Ptr<DiPhotonCandidate>, flashgg::Photon, flashgg::Photon, flashgg::Photon, edm::Ptr<reco::Vertex>, float);
      H4GTag(edm::Ptr<DiPhotonCandidate>, flashgg::Photon, flashgg::Photon, edm::Ptr<reco::Vertex>, float);
 
@@ -45,9 +45,25 @@ namespace flashgg{
     float pho3_MVA() const {return pho3_MVA_;};
     float pho4_MVA() const {return pho4_MVA_;};
 
-    const reco::Candidate::LorentzVector& tp() const { return tp_; };
+    float diphoPair_MVA() const {return diphoPair_MVA_;};
 
-    float dZ_bdtVtx() const {return dZ_bdtVtx_;};
+    const reco::Candidate::LorentzVector& pho12() const { return pho12_; };
+    const reco::Candidate::LorentzVector& pho13() const { return pho13_; };
+    const reco::Candidate::LorentzVector& pho14() const { return pho14_; };
+    const reco::Candidate::LorentzVector& pho23() const { return pho23_; };
+    const reco::Candidate::LorentzVector& pho24() const { return pho24_; };
+    const reco::Candidate::LorentzVector& pho34() const { return pho34_; };
+
+    const reco::Candidate::LorentzVector& h4gDiPho1() const { return dp1_; };
+    const reco::Candidate::LorentzVector& h4gDiPho2() const { return dp2_; };
+    const reco::Candidate::LorentzVector& h4gDiPho1_Pho1() const { return dp1_pho1_; };
+    const reco::Candidate::LorentzVector& h4gDiPho1_Pho2() const { return dp1_pho2_; };
+    const reco::Candidate::LorentzVector& h4gDiPho2_Pho1() const { return dp2_pho1_; };
+    const reco::Candidate::LorentzVector& h4gDiPho2_Pho2() const { return dp2_pho2_; };
+    const float& cosThetaStarCS() const {return cosThetaStarCS_;};
+    const float& cosTheta_a1() const {return cosTheta_a1_;};
+    const float& cosTheta_a2() const {return cosTheta_a2_;};
+
     const reco::Candidate::LorentzVector& h4gDiPho1_prime() const { return dp1_prime_; };
     const reco::Candidate::LorentzVector& h4gDiPho2_prime() const { return dp2_prime_; };
     const reco::Candidate::LorentzVector& h4gDiPho1_Pho1_prime() const { return dp1_pho1_prime_; };
@@ -58,11 +74,21 @@ namespace flashgg{
     const int& h4gDiPho1_iPho2_prime() const { return dp1_ipho2_prime_; };
     const int& h4gDiPho2_iPho1_prime() const { return dp2_ipho1_prime_; };
     const int& h4gDiPho2_iPho2_prime() const { return dp2_ipho2_prime_; };
-    float getCosThetaStar_CS() const;
-    std::vector<float> CosThetaAngles() const;
+    const float& cosThetaStarCS_prime() const {return cosThetaStarCS_prime_;};
+    const float& cosTheta_a1_prime() const {return cosTheta_a1_prime_;};
+    const float& cosTheta_a2_prime() const {return cosTheta_a2_prime_;};
+
+
+    const reco::Candidate::LorentzVector& tp() const { return tp_; };
+
+    float dZ_bdtVtx() const {return dZ_bdtVtx_;};
+
+    float getCosThetaStar_CS(reco::Candidate::LorentzVector a1, reco::Candidate::LorentzVector a2) const;
+    std::vector<float> CosThetaAngles(reco::Candidate::LorentzVector a1, reco::Candidate::LorentzVector a2, reco::Candidate::LorentzVector a1_pho1, reco::Candidate::LorentzVector a2_pho1) const;
     float HelicityCosTheta( TLorentzVector Booster, TLorentzVector Boosted) const;
 
-    // const vector<flashgg::Photon> phoP4Corrected_dp() const { return phoP4Corrected_dp_;};
+
+
 
 
 
@@ -75,8 +101,22 @@ namespace flashgg{
     float pho2_MVA_;
     float pho3_MVA_;
     float pho4_MVA_;
-    reco::Candidate::LorentzVector tp_;
-    float dZ_bdtVtx_;
+    float diphoPair_MVA_;
+    reco::Candidate::LorentzVector pho12_;
+    reco::Candidate::LorentzVector pho13_;
+    reco::Candidate::LorentzVector pho14_;
+    reco::Candidate::LorentzVector pho23_;
+    reco::Candidate::LorentzVector pho24_;
+    reco::Candidate::LorentzVector pho34_;
+    reco::Candidate::LorentzVector dp1_;
+    reco::Candidate::LorentzVector dp2_;
+    reco::Candidate::LorentzVector dp1_pho1_;
+    reco::Candidate::LorentzVector dp1_pho2_;
+    reco::Candidate::LorentzVector dp2_pho1_;
+    reco::Candidate::LorentzVector dp2_pho2_;
+    float cosThetaStarCS_;
+    float cosTheta_a1_;
+    float cosTheta_a2_;
     reco::Candidate::LorentzVector dp1_prime_;
     reco::Candidate::LorentzVector dp2_prime_;
     reco::Candidate::LorentzVector dp1_pho1_prime_;
@@ -87,10 +127,14 @@ namespace flashgg{
     int dp1_ipho2_prime_;
     int dp2_ipho1_prime_;
     int dp2_ipho2_prime_;
+    float cosThetaStarCS_prime_;
+    float cosTheta_a1_prime_;
+    float cosTheta_a2_prime_;
+    reco::Candidate::LorentzVector tp_;
+    float dZ_bdtVtx_;
 
 
-  //   float BS_factor_BDTVtx_;
-    // vector <flashgg::Photon> phoP4Corrected_dp_;
+
 
   };
 }

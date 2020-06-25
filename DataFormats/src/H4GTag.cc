@@ -21,7 +21,7 @@ H4GTag::H4GTag() : DiPhotonTagBase::DiPhotonTagBase()
 
 H4GTag::~H4GTag() {}
 
-H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg::Photon pho2, flashgg::Photon pho3, flashgg::Photon pho4, edm::Ptr<reco::Vertex> vertex_chosen, float dZ_bdtVtx)
+H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg::Photon pho2, flashgg::Photon pho3, flashgg::Photon pho4, edm::Ptr<reco::Vertex> vertex_chosen, float dZ_bdtVtx, std::vector<int> diphoton_pairing_indices_, float diphoPair_MVA, reco::Candidate::LorentzVector dp1_pho1, reco::Candidate::LorentzVector dp1_pho2, reco::Candidate::LorentzVector dp2_pho1, reco::Candidate::LorentzVector dp2_pho2, reco::Candidate::LorentzVector dp1, reco::Candidate::LorentzVector dp2 )
 {
   dipho_ = dipho;
   pho1_  = pho1;
@@ -33,7 +33,15 @@ H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg:
   pho2_MVA_ = pho2.phoIdMvaDWrtVtx(vertex_chosen);
   pho3_MVA_ = pho3.phoIdMvaDWrtVtx(vertex_chosen);
   pho4_MVA_ = pho4.phoIdMvaDWrtVtx(vertex_chosen);
-  //  cout << pho1_MVA_ << "  " << pho2_MVA_ << "  " << pho3_MVA_ << "  " << pho4_MVA_ << endl;
+
+  diphoPair_MVA_ = diphoPair_MVA;
+  dp1_ = dp1;
+  dp2_ = dp2;
+  dp1_pho1_ = dp1_pho1;
+  dp1_pho2_ = dp1_pho2;
+  dp2_pho1_ = dp2_pho1;
+  dp2_pho2_ = dp2_pho2;
+
 
   tp_ = pho1.p4()+pho2.p4()+pho3.p4()+pho4.p4();
 
@@ -46,6 +54,11 @@ H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg:
   phoVect.push_back(pho3);
   phoVect.push_back(pho4);
 
+  // -- dM pair method -- //
+
+  reco::Candidate::LorentzVector dp1_prime_, dp2_prime_, dp1_pho1_prime_, dp1_pho2_prime_, dp2_pho1_prime_,dp2_pho2_prime_   ;
+
+  // min dM pairing begin-------
   for (int i1=0; i1 < (int) phoVect.size(); i1++)
   {
     flashgg::Photon pho1_prime = phoVect[i1];
@@ -90,6 +103,28 @@ H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg:
       }
     }
   }
+
+  cosThetaStarCS_prime_ = getCosThetaStar_CS(dp1_prime_, dp2_prime_);
+  cosTheta_a1_prime_ = CosThetaAngles(dp1_prime_, dp2_prime_, dp1_pho1_prime_,dp2_pho1_prime_ )[0];
+  cosTheta_a2_prime_ = CosThetaAngles(dp1_prime_, dp2_prime_, dp1_pho1_prime_,dp2_pho1_prime_ )[1];
+
+
+  // -- BDT pair method -- //
+
+  cosThetaStarCS_ = getCosThetaStar_CS(dp1, dp2);
+  cosTheta_a1_ = CosThetaAngles(dp1, dp2, dp1_pho1, dp2_pho1 )[0];
+  cosTheta_a2_ = CosThetaAngles(dp1, dp2, dp1_pho1, dp2_pho1 )[1];
+
+  pho12_ = pho1.p4() + pho2.p4();
+  pho13_ = pho1.p4() + pho3.p4();
+  pho14_ = pho1.p4() + pho4.p4();
+  pho23_ = pho2.p4() + pho3.p4();
+  pho24_ = pho2.p4() + pho4.p4();
+  pho34_ = pho3.p4() + pho4.p4();
+
+
+
+
 }
 
 H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg::Photon pho2, flashgg::Photon pho3, edm::Ptr<reco::Vertex> vertex_chosen, float dZ_bdtVtx)
@@ -106,6 +141,10 @@ H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg:
   tp_ = pho1.p4()+pho2.p4()+pho3.p4();
 
   dZ_bdtVtx_ = dZ_bdtVtx;
+
+  pho12_ = pho1.p4() + pho2.p4();
+  pho13_ = pho1.p4() + pho3.p4();
+  pho23_ = pho2.p4() + pho3.p4();
 }
 
 H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg::Photon pho2, edm::Ptr<reco::Vertex> vertex_chosen, float dZ_bdtVtx)
@@ -122,13 +161,13 @@ H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg:
   dZ_bdtVtx_ = dZ_bdtVtx;
 }
 
-float H4GTag::getCosThetaStar_CS() const {
+float H4GTag::getCosThetaStar_CS(reco::Candidate::LorentzVector a1, reco::Candidate::LorentzVector a2) const {
 
-  reco::Candidate::LorentzVector h_lor = dp1_prime_ + dp2_prime_;
+  reco::Candidate::LorentzVector h_lor = a1 + a2;
   TLorentzVector h;
   h.SetPxPyPzE(h_lor.Px(),h_lor.Py(),h_lor.Pz(),h_lor.E()) ;
 
-  reco::Candidate::LorentzVector a1_lor = dp1_prime_;
+  reco::Candidate::LorentzVector a1_lor = a1;
   TLorentzVector a_1;
   a_1.SetPxPyPzE(a1_lor.Px(),a1_lor.Py(),a1_lor.Pz(),a1_lor.E()) ;
 
@@ -137,20 +176,20 @@ float H4GTag::getCosThetaStar_CS() const {
   return a_1.CosTheta();
 }
 
-std::vector<float> H4GTag::CosThetaAngles() const {
+std::vector<float> H4GTag::CosThetaAngles(reco::Candidate::LorentzVector a1, reco::Candidate::LorentzVector a2, reco::Candidate::LorentzVector a1_pho1, reco::Candidate::LorentzVector a2_pho1) const {
   std::vector<float> helicityThetas;
 
   TLorentzVector Boosted_a1(0,0,0,0);
-  Boosted_a1.SetPxPyPzE(dp1_prime_.px(),dp1_prime_.py(),dp1_prime_.pz(),dp1_prime_.energy()) ;
+  Boosted_a1.SetPxPyPzE(a1.px(),a1.py(),a1.pz(),a1.energy()) ;
   TLorentzVector BoostedLeadingPhoton_a1(0,0,0,0);
-  BoostedLeadingPhoton_a1.SetPxPyPzE(dp1_pho1_prime_.px(),dp1_pho1_prime_.py(),dp1_pho1_prime_.pz(),dp1_pho1_prime_.energy()) ;
+  BoostedLeadingPhoton_a1.SetPxPyPzE(a1_pho1.px(),a1_pho1.py(),a1_pho1.pz(),a1_pho1.energy()) ;
 
   helicityThetas.push_back( HelicityCosTheta(Boosted_a1, BoostedLeadingPhoton_a1));
 
   TLorentzVector Boosted_a2(0,0,0,0);
-  Boosted_a2.SetPxPyPzE(dp2_prime_.px(),dp2_prime_.py(),dp2_prime_.pz(),dp2_prime_.energy()) ;
+  Boosted_a2.SetPxPyPzE(a2.px(),a2.py(),a2.pz(),a2.energy()) ;
   TLorentzVector BoostedLeadingPhoton_a2(0,0,0,0);
-  BoostedLeadingPhoton_a2.SetPxPyPzE(dp2_pho1_prime_.px(),dp2_pho1_prime_.py(),dp2_pho1_prime_.pz(),dp2_pho1_prime_.energy()) ;
+  BoostedLeadingPhoton_a2.SetPxPyPzE(a2_pho1.px(),a2_pho1.py(),a2_pho1.pz(),a2_pho1.energy()) ;
 
   helicityThetas.push_back( HelicityCosTheta(Boosted_a2, BoostedLeadingPhoton_a2));
 
