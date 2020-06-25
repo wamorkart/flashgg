@@ -60,6 +60,8 @@ and on data:
 
 *** Running on condor
 
+   Change the --stage-to option to the folder where you want the output root files to land
+
     #+BEGIN_EXAMPLE
     fggRunJobs.py --load Taggers/test/H4G_2016_Tagger/H4G_Signal.json -D -P -n 500 -d Tagger_Signal_2016 -x cmsRun Systematics/test/workspaceStd.py -q tomorrow --no-copy-proxy analysisType=lowMassAnalysis maxEvents=-1 --stage-to /eos/user/t/twamorka/Tagger_21Jun2020/
     #+END_EXAMPLE
