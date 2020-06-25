@@ -63,10 +63,17 @@ and on data:
    Change the --stage-to option to the folder where you want the output root files to land
 
     #+BEGIN_EXAMPLE
-    fggRunJobs.py --load Taggers/test/H4G_2016_Tagger/H4G_Signal.json -D -P -n 500 -d Tagger_Signal_2016 -x cmsRun Systematics/test/workspaceStd.py -q tomorrow --no-copy-proxy analysisType=lowMassAnalysis maxEvents=-1 --stage-to /eos/user/t/twamorka/Tagger_21Jun2020/
+    fggRunJobs.py --load Taggers/test/H4G_2016_Tagger/H4G_Signal1.json -D -P -n 500 -d Tagger_Signal1_2016 -x cmsRun Systematics/test/workspaceStd.py -q tomorrow --no-copy-proxy analysisType=lowMassAnalysis maxEvents=-1 --stage-to /eos/user/t/twamorka/Tagger_21Jun2020/
+    fggRunJobs.py --load Taggers/test/H4G_2016_Tagger/H4G_Signal2.json -D -P -n 500 -d Tagger_Signal2_2016 -x cmsRun Systematics/test/workspaceStd.py -q tomorrow --no-copy-proxy analysisType=lowMassAnalysis maxEvents=-1 --stage-to /eos/user/t/twamorka/Tagger_21Jun2020/
+    fggRunJobs.py --load Taggers/test/H4G_2016_Tagger/H4G_Signal3.json -D -P -n 500 -d Tagger_Signal3_2016 -x cmsRun Systematics/test/workspaceStd.py -q tomorrow --no-copy-proxy analysisType=lowMassAnalysis maxEvents=-1 --stage-to /eos/user/t/twamorka/Tagger_21Jun2020/
+
+
     #+END_EXAMPLE
 
 and on data:
     #+BEGIN_EXAMPLE
-    fggRunJobs.py --load Taggers/test/H4G_2016_Tagger/H4G_Data.json -D -P -n 500 -d Tagger_Data_2016 -x cmsRun Systematics/test/workspaceStd.py -q tomorrow --no-copy-proxy analysisType=lowMassAnalysis maxEvents=-1 --stage-to /eos/user/t/twamorka/Tagger_21Jun2020/
+    fggRunJobs.py --load Taggers/test/H4G_2016_Tagger/H4G_Data1.json -D -P -n 500 -d Tagger_Data1_2016 -x cmsRun Systematics/test/workspaceStd.py -q tomorrow --no-copy-proxy analysisType=lowMassAnalysis maxEvents=-1 --stage-to /eos/user/t/twamorka/Tagger_21Jun2020/
+    fggRunJobs.py --load Taggers/test/H4G_2016_Tagger/H4G_Data2.json -D -P -n 500 -d Tagger_Data2_2016 -x cmsRun Systematics/test/workspaceStd.py -q tomorrow --no-copy-proxy analysisType=lowMassAnalysis maxEvents=-1 --stage-to /eos/user/t/twamorka/Tagger_21Jun2020/
+    fggRunJobs.py --load Taggers/test/H4G_2016_Tagger/H4G_Data3.json -D -P -n 500 -d Tagger_Data3_2016 -x cmsRun Systematics/test/workspaceStd.py -q tomorrow --no-copy-proxy analysisType=lowMassAnalysis maxEvents=-1 --stage-to /eos/user/t/twamorka/Tagger_21Jun2020/
+
     #+END_EXAMPLE
