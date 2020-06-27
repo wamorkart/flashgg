@@ -77,3 +77,7 @@ and on data:
     fggRunJobs.py --load Taggers/test/H4G_2016_Tagger/H4G_Data3.json -D -P -n 500 -d Tagger_Data3_2016 -x cmsRun Systematics/test/workspaceStd.py -q workday --no-copy-proxy analysisType=lowMassAnalysis maxEvents=-1 --stage-to /eos/user/t/twamorka/Tagger_21Jun2020/
 
     #+END_EXAMPLE
+
+*** Resubmitting missing jobs
+    #+BEGIN_EXAMPLE
+    python Systematics/scripts/resubmit_jobs.py -d <directory originally created by fggRunJobs> -s <directory where the jobs were staged to>
