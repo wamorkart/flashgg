@@ -1,16 +1,11 @@
 import FWCore.ParameterSet.Config as cms
+import flashgg.Taggers.dumperConfigTools as cfgTools
 
 from flashgg.Taggers.globalVariables_cff import globalVariables
 from flashgg.Taggers.flashggTags_cff import UnpackedJetCollectionVInputTag # should include jet systematics
 from flashgg.MicroAOD.flashggJets_cfi import  maxJetCollections, flashggDeepCSV
 
-# # to not run jets systematics
-# UnpackedJetCollectionVInputTag =  cms.VInputTag(
-#     cms.InputTag("flashggUnpackedJets","0"), cms.InputTag("flashggUnpackedJets","1"), cms.InputTag("flashggUnpackedJets","2"), cms.InputTag("flashggUnpackedJets","3"), cms.InputTag("flashggUnpackedJets","4"),
-#     cms.InputTag("flashggUnpackedJets","5"), cms.InputTag("flashggUnpackedJets","6"), cms.InputTag("flashggUnpackedJets","7"), cms.InputTag("flashggUnpackedJets","8"), cms.InputTag("flashggUnpackedJets","9"),
-#     cms.InputTag("flashggUnpackedJets","10"), cms.InputTag("flashggUnpackedJets","11")
-# )
-
+vertexIdMVAweightfileH4G = ""
 
 # cfi = configuration fragment include
 # Clone these params into _cfg
@@ -36,14 +31,10 @@ flashggH4GTag = cms.EDProducer("FlashggH4GTagProducer",
                                      ##Parameters for Legacy Vertex Selector
                                      vertexIdMVAweightfile      = cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_BDTVtxId_SL_2016.xml"),
                                      vertexProbMVAweightfile    = cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_BDTVtxProb_SL_2016.xml"),
-                                     vertexIdMVAweightfileH4G = cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_BDTVtxId_H4G_Total_2016.xml"),
+                                     vertexIdMVAweightfileH4G = cms.untracked.FileInPath("%s"%vertexIdMVAweightfileH4G),
+                                     # vertexIdMVAweightfileH4G = cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_BDTVtxId_H4G_Total_2016.xml"),
                                      vertexProbMVAweightfileH4G = cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_BDTVtxProb_H4G_Total_2016.xml"),
                                      diphoPairMVAweightfileH4G = cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_diphoPairTMVA_H4G_2016_Combined_GB.weights.xml"),
-                                     #diphoPairMVAweightfileH4G = cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_BDT_diphoPairTMVA_H4G_2016_M60.weights.xml"),
-                                     #diphoPairMVAweightfileH4G = cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_diphoPairTMVA_H4G_M60.weights.xml"),
-                                     # diphoPairMVAweightfileH4G = cms.FileInPath(""),
-                                     # vertexIdMVAweightfileH4G_2016   = cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_BDTVtxId_H4G_Total_2016.xml"),
-                                     # vertexProbMVAweightfileH4G_2016 = cms.FileInPath("flashgg/MicroAOD/data/TMVAClassification_BDTVtxProb_H4G_Total_2016.xml"),
                                      useSingleLeg               = cms.bool(True),
                                      doH4GVertex                = cms.bool(True),
                                      # saveDiphoPairingTree       = cms.bool(''),

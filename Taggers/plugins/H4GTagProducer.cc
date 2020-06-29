@@ -234,8 +234,9 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
 
       useSingleLeg_ = pSet.getParameter<bool>( "useSingleLeg" );
       doH4GVertex_ = pSet.getParameter<bool>("doH4GVertex");
-      vertexIdMVAweightfileH4G_ = pSet.getParameter<edm::FileInPath>( "vertexIdMVAweightfileH4G" );
+      vertexIdMVAweightfileH4G_ = pSet.getUntrackedParameter<edm::FileInPath>( "vertexIdMVAweightfileH4G" );
       diphoPairMVAweightfileH4G_ = pSet.getParameter<edm::FileInPath>( "diphoPairMVAweightfileH4G" );
+
 
 
       if (doH4GVertex_)

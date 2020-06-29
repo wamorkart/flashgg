@@ -153,6 +153,12 @@
         "ttHKiller_liststd" : [ 85.77034272,   1.03762195,   1.83170033]
     },
 
+    "H4GTag":
+    {
+  "vertexIdMVAweightfileH4G" : "flashgg/MicroAOD/data/TMVAClassification_BDTVtxId_H4G_Total_2016.xml"
+
+    },
+
     "PhoIdInputCorrections":
     {
 	"corrections_summary" : "flashgg/Taggers/data/PhoIdInputsCorrections/corrections_summary_2016.json",
