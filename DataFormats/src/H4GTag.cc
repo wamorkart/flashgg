@@ -34,6 +34,27 @@ H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg:
   pho3_MVA_ = pho3.phoIdMvaDWrtVtx(vertex_chosen);
   pho4_MVA_ = pho4.phoIdMvaDWrtVtx(vertex_chosen);
 
+  pho1_full5x5_r9_ = pho1.full5x5_r9();
+  pho2_full5x5_r9_ = pho2.full5x5_r9();
+  pho3_full5x5_r9_ = pho3.full5x5_r9();
+  pho4_full5x5_r9_ = pho4.full5x5_r9();
+
+  pho1_egChargedHadronIso_ = pho1.egChargedHadronIso();
+  pho2_egChargedHadronIso_ = pho2.egChargedHadronIso();
+  pho3_egChargedHadronIso_ = pho3.egChargedHadronIso();
+  pho4_egChargedHadronIso_ = pho4.egChargedHadronIso();
+
+  pho1_hadronicOverEm_ = pho1.hadronicOverEm();
+  pho2_hadronicOverEm_ = pho2.hadronicOverEm();
+  pho3_hadronicOverEm_ = pho3.hadronicOverEm();
+  pho4_hadronicOverEm_ = pho4.hadronicOverEm();
+
+  pho1_SC_eta_ = pho1.superCluster()->eta();
+  pho2_SC_eta_ = pho2.superCluster()->eta();
+  pho3_SC_eta_ = pho3.superCluster()->eta();
+  pho4_SC_eta_ = pho4.superCluster()->eta();
+
+
   diphoPair_MVA_ = diphoPair_MVA;
   dp1_ = dp1;
   dp2_ = dp2;
@@ -138,6 +159,22 @@ H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg:
   pho2_MVA_ = pho2.phoIdMvaDWrtVtx(vertex_chosen);
   pho3_MVA_ = pho3.phoIdMvaDWrtVtx(vertex_chosen);
 
+  pho1_full5x5_r9_ = pho1.full5x5_r9();
+  pho2_full5x5_r9_ = pho2.full5x5_r9();
+  pho3_full5x5_r9_ = pho3.full5x5_r9();
+
+  pho1_egChargedHadronIso_ = pho1.egChargedHadronIso();
+  pho2_egChargedHadronIso_ = pho2.egChargedHadronIso();
+  pho3_egChargedHadronIso_ = pho3.egChargedHadronIso();
+
+  pho1_hadronicOverEm_ = pho1.hadronicOverEm();
+  pho2_hadronicOverEm_ = pho2.hadronicOverEm();
+  pho3_hadronicOverEm_ = pho3.hadronicOverEm();
+
+  pho1_SC_eta_ = pho1.superCluster()->eta();
+  pho2_SC_eta_ = pho2.superCluster()->eta();
+  pho3_SC_eta_ = pho3.superCluster()->eta();
+
   tp_ = pho1.p4()+pho2.p4()+pho3.p4();
 
   dZ_bdtVtx_ = dZ_bdtVtx;
@@ -155,6 +192,18 @@ H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg:
 
   pho1_MVA_ = pho1.phoIdMvaDWrtVtx(vertex_chosen);
   pho2_MVA_ = pho2.phoIdMvaDWrtVtx(vertex_chosen);
+
+  pho1_full5x5_r9_ = pho1.full5x5_r9();
+  pho2_full5x5_r9_ = pho2.full5x5_r9();
+
+  pho1_egChargedHadronIso_ = pho1.egChargedHadronIso();
+  pho2_egChargedHadronIso_ = pho2.egChargedHadronIso();
+
+  pho1_hadronicOverEm_ = pho1.hadronicOverEm();
+  pho2_hadronicOverEm_ = pho2.hadronicOverEm();
+
+  pho1_SC_eta_ = pho1.superCluster()->eta();
+  pho2_SC_eta_ = pho2.superCluster()->eta();
 
   tp_ = pho1.p4()+pho2.p4();
 

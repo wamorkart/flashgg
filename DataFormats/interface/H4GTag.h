@@ -45,6 +45,27 @@ namespace flashgg{
     float pho3_MVA() const {return pho3_MVA_;};
     float pho4_MVA() const {return pho4_MVA_;};
 
+    float pho1_full5x5_r9() const {return pho1_full5x5_r9_;};
+    float pho2_full5x5_r9() const {return pho2_full5x5_r9_;};
+    float pho3_full5x5_r9() const {return pho3_full5x5_r9_;};
+    float pho4_full5x5_r9() const {return pho4_full5x5_r9_;};
+
+    float pho1_egChargedHadronIso() const {return pho1_egChargedHadronIso_;};
+    float pho2_egChargedHadronIso() const {return pho2_egChargedHadronIso_;};
+    float pho3_egChargedHadronIso() const {return pho3_egChargedHadronIso_;};
+    float pho4_egChargedHadronIso() const {return pho4_egChargedHadronIso_;};
+
+    float pho1_hadronicOverEm() const {return pho1_hadronicOverEm_;};
+    float pho2_hadronicOverEm() const {return pho2_hadronicOverEm_;};
+    float pho3_hadronicOverEm() const {return pho3_hadronicOverEm_;};
+    float pho4_hadronicOverEm() const {return pho4_hadronicOverEm_;};
+
+    float pho1_SC_eta() const {return pho1_SC_eta_;};
+    float pho2_SC_eta() const {return pho2_SC_eta_;};
+    float pho3_SC_eta() const {return pho3_SC_eta_;};
+    float pho4_SC_eta() const {return pho4_SC_eta_;};
+
+
     float diphoPair_MVA() const {return diphoPair_MVA_;};
 
     const reco::Candidate::LorentzVector& pho12() const { return pho12_; };
@@ -101,6 +122,22 @@ namespace flashgg{
     float pho2_MVA_;
     float pho3_MVA_;
     float pho4_MVA_;
+    float pho1_full5x5_r9_;
+    float pho2_full5x5_r9_;
+    float pho3_full5x5_r9_;
+    float pho4_full5x5_r9_;
+    float pho1_egChargedHadronIso_;
+    float pho2_egChargedHadronIso_;
+    float pho3_egChargedHadronIso_;
+    float pho4_egChargedHadronIso_;
+    float pho1_hadronicOverEm_;
+    float pho2_hadronicOverEm_;
+    float pho3_hadronicOverEm_;
+    float pho4_hadronicOverEm_;
+    float pho1_SC_eta_;
+    float pho2_SC_eta_;
+    float pho3_SC_eta_;
+    float pho4_SC_eta_;
     float diphoPair_MVA_;
     reco::Candidate::LorentzVector pho12_;
     reco::Candidate::LorentzVector pho13_;
