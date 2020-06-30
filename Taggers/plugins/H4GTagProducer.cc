@@ -730,22 +730,30 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
           flashgg::Photon pho4 = phoP4Corrected_dp[diphoton_pairing_indices_.at(3)];
 
           reco::Candidate::LorentzVector dp1_pho1, dp1_pho2, dp2_pho1, dp2_pho2, dp1, dp2;
-          // int dp1_ipho1_, dp1_ipho2_, dp2_ipho1_, dp2_ipho2_;
+          int dp1_ipho1, dp1_ipho2, dp2_ipho1, dp2_ipho2;
 
 
           if(pho1.pt() > pho2.pt()){
             dp1_pho1 = pho1.p4();
             dp1_pho2 = pho2.p4();
+            dp1_ipho1 = diphoton_pairing_indices_.at(0);
+            dp1_ipho2 = diphoton_pairing_indices_.at(1);
           }else{
             dp1_pho1 = pho2.p4();
             dp1_pho2 = pho1.p4();
+            dp1_ipho1 = diphoton_pairing_indices_.at(1);
+            dp1_ipho2 = diphoton_pairing_indices_.at(0);
           }
           if(pho3.pt() > pho4.pt()){
             dp2_pho1 = pho3.p4();
             dp2_pho2 = pho4.p4();
+            dp2_ipho1 = diphoton_pairing_indices_.at(2);
+            dp2_ipho2 = diphoton_pairing_indices_.at(3);
           }else{
             dp2_pho1 = pho4.p4();
             dp2_pho2 = pho3.p4();
+            dp2_ipho1 = diphoton_pairing_indices_.at(3);
+            dp2_ipho2 = diphoton_pairing_indices_.at(2);
           }
           auto dipho1 = pho1.p4() + pho2.p4();
           auto dipho2 = pho3.p4() + pho4.p4();
@@ -765,7 +773,7 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
 
           // cout << diphoPair_MVA << endl;
 
-          H4GTag tag_obj (dipho, phoP4Corrected_dp[0], phoP4Corrected_dp[1], phoP4Corrected_dp[2], phoP4Corrected_dp[3], vertex_chosen, dZ_bdtVtx, diphoton_pairing_indices_, diphoPair_MVA, dp1_pho1, dp1_pho2, dp2_pho1, dp2_pho2, dp1, dp2 );
+          H4GTag tag_obj (dipho, phoP4Corrected_dp[0], phoP4Corrected_dp[1], phoP4Corrected_dp[2], phoP4Corrected_dp[3], vertex_chosen, dZ_bdtVtx, diphoton_pairing_indices_, diphoPair_MVA, dp1_pho1, dp1_pho2, dp2_pho1, dp2_pho2, dp1, dp2, dp1_ipho1, dp1_ipho2, dp2_ipho1, dp2_ipho2 );
           // cout << "systlabel: " << systLabel_ << endl;
           tag_obj.setSystLabel( systLabel_);
           // tag_obj.setDiPhotonIndex( diphoIndex );

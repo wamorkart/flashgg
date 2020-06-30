@@ -99,6 +99,10 @@ class H4GCustomize():
         "cosThetaStarCS_bdt := cosThetaStarCS",
         "cosTheta_a1_bdt := cosTheta_a1",
         "cosTheta_a2_bdt := cosTheta_a2",
+        "a1_p1i_bdt      := h4gDiPho1_iPho1",
+        "a1_p2i_bdt      := h4gDiPho1_iPho2",
+        "a2_p1i_bdt      := h4gDiPho2_iPho1",
+        "a2_p2i_bdt      := h4gDiPho2_iPho2",
         "a1_mass_dM      := h4gDiPho1_prime.mass()",
         "a2_mass_dM        := h4gDiPho2_prime.mass()",
         "a1_pt_dM        := h4gDiPho1_prime.pt()",
@@ -111,6 +115,11 @@ class H4GCustomize():
         "cosThetaStarCS_dM := cosThetaStarCS_prime",
         "cosTheta_a1_dM := cosTheta_a1_prime",
         "cosTheta_a2_dM := cosTheta_a2_prime",
+        "a1_p1i_dM      := h4gDiPho1_iPho1_prime",
+        "a1_p2i_dM      := h4gDiPho1_iPho2_prime",
+        "a2_p1i_dM      := h4gDiPho2_iPho1_prime",
+        "a2_p2i_dM      := h4gDiPho2_iPho2_prime",
+
 
         "dZ_bdtVtx        := dZ_bdtVtx",
         "tp_pt         := tp.pt()",
@@ -160,9 +169,11 @@ class H4GCustomize():
         "pho3_SC_Eta := pho3_SC_eta",
         "pho4_SC_Eta := pho4_SC_eta",
         "pho1_genType := pho1.genMatchType()",
+        "pho1_genType := pho1.genMatchType()",
         "pho2_genType := pho2.genMatchType()",
         "pho3_genType := pho3.genMatchType()",
         "pho4_genType := pho4.genMatchType()",
+
         "pho1_energy := pho1.energy()",
         "pho1_energy_init := pho1.energyAtStep('initial')",
 
@@ -191,6 +202,7 @@ class H4GCustomize():
         "pho24_dR   := deltaR(pho2.eta(), pho2.phi(), pho4.eta(), pho4.phi())",
         "pho34_dR   := deltaR(pho3.eta(), pho3.phi(), pho4.eta(), pho4.phi())",
 
+
         "diphoPair_MVA := diphoPair_MVA",
         "a1_mass_bdt       := h4gDiPho1.mass()",
         "a2_mass_bdt       := h4gDiPho2.mass()",
@@ -204,6 +216,10 @@ class H4GCustomize():
         "cosThetaStarCS_bdt := cosThetaStarCS",
         "cosTheta_a1_bdt := cosTheta_a1",
         "cosTheta_a2_bdt := cosTheta_a2",
+        "a1_p1i_bdt      := h4gDiPho1_iPho1",
+        "a1_p2i_bdt      := h4gDiPho1_iPho2",
+        "a2_p1i_bdt      := h4gDiPho2_iPho1",
+        "a2_p2i_bdt      := h4gDiPho2_iPho2",
         "a1_mass_dM      := h4gDiPho1_prime.mass()",
         "a2_mass_dM        := h4gDiPho2_prime.mass()",
         "a1_pt_dM        := h4gDiPho1_prime.pt()",
@@ -216,6 +232,11 @@ class H4GCustomize():
         "cosThetaStarCS_dM := cosThetaStarCS_prime",
         "cosTheta_a1_dM := cosTheta_a1_prime",
         "cosTheta_a2_dM := cosTheta_a2_prime",
+        "a1_p1i_dM      := h4gDiPho1_iPho1_prime",
+        "a1_p2i_dM      := h4gDiPho1_iPho2_prime",
+        "a2_p1i_dM      := h4gDiPho2_iPho1_prime",
+        "a2_p2i_dM      := h4gDiPho2_iPho2_prime",
+
 
         "dZ_bdtVtx        := dZ_bdtVtx",
         "tp_pt         := tp.pt()",
@@ -296,6 +317,7 @@ class H4GCustomize():
         "pho24_dR   := deltaR(pho2.eta(), pho2.phi(), pho4.eta(), pho4.phi())",
         "pho34_dR   := deltaR(pho3.eta(), pho3.phi(), pho4.eta(), pho4.phi())",
 
+
         "diphoPair_MVA := diphoPair_MVA",
         "a1_mass_bdt       := h4gDiPho1.mass()",
         "a2_mass_bdt       := h4gDiPho2.mass()",
@@ -309,6 +331,10 @@ class H4GCustomize():
         "cosThetaStarCS_bdt := cosThetaStarCS",
         "cosTheta_a1_bdt := cosTheta_a1",
         "cosTheta_a2_bdt := cosTheta_a2",
+        "a1_p1i_bdt      := h4gDiPho1_iPho1",
+        "a1_p2i_bdt      := h4gDiPho1_iPho2",
+        "a2_p1i_bdt      := h4gDiPho2_iPho1",
+        "a2_p2i_bdt      := h4gDiPho2_iPho2",
         "a1_mass_dM      := h4gDiPho1_prime.mass()",
         "a2_mass_dM        := h4gDiPho2_prime.mass()",
         "a1_pt_dM        := h4gDiPho1_prime.pt()",
@@ -321,6 +347,11 @@ class H4GCustomize():
         "cosThetaStarCS_dM := cosThetaStarCS_prime",
         "cosTheta_a1_dM := cosTheta_a1_prime",
         "cosTheta_a2_dM := cosTheta_a2_prime",
+        "a1_p1i_dM      := h4gDiPho1_iPho1_prime",
+        "a1_p2i_dM      := h4gDiPho1_iPho2_prime",
+        "a2_p1i_dM      := h4gDiPho2_iPho1_prime",
+        "a2_p2i_dM      := h4gDiPho2_iPho2_prime",
+
 
         "dZ_bdtVtx        := dZ_bdtVtx",
         "tp_pt         := tp.pt()",

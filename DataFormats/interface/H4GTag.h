@@ -29,7 +29,7 @@ namespace flashgg{
     H4GTag();
     ~H4GTag();
      // H4GTag(edm::Ptr<DiPhotonCandidate>);
-     H4GTag(edm::Ptr<DiPhotonCandidate>,  flashgg::Photon, flashgg::Photon, flashgg::Photon, flashgg::Photon, edm::Ptr<reco::Vertex>, float,std::vector<int>, float, reco::Candidate::LorentzVector, reco::Candidate::LorentzVector, reco::Candidate::LorentzVector, reco::Candidate::LorentzVector, reco::Candidate::LorentzVector, reco::Candidate::LorentzVector );
+     H4GTag(edm::Ptr<DiPhotonCandidate>,  flashgg::Photon, flashgg::Photon, flashgg::Photon, flashgg::Photon, edm::Ptr<reco::Vertex>, float,std::vector<int>, float, reco::Candidate::LorentzVector, reco::Candidate::LorentzVector, reco::Candidate::LorentzVector, reco::Candidate::LorentzVector, reco::Candidate::LorentzVector, reco::Candidate::LorentzVector, int, int, int, int );
      H4GTag(edm::Ptr<DiPhotonCandidate>, flashgg::Photon, flashgg::Photon, flashgg::Photon, edm::Ptr<reco::Vertex>, float);
      H4GTag(edm::Ptr<DiPhotonCandidate>, flashgg::Photon, flashgg::Photon, edm::Ptr<reco::Vertex>, float);
 
@@ -81,6 +81,10 @@ namespace flashgg{
     const reco::Candidate::LorentzVector& h4gDiPho1_Pho2() const { return dp1_pho2_; };
     const reco::Candidate::LorentzVector& h4gDiPho2_Pho1() const { return dp2_pho1_; };
     const reco::Candidate::LorentzVector& h4gDiPho2_Pho2() const { return dp2_pho2_; };
+    const int& h4gDiPho1_iPho1() const { return dp1_ipho1_; };
+    const int& h4gDiPho1_iPho2() const { return dp1_ipho2_; };
+    const int& h4gDiPho2_iPho1() const { return dp2_ipho1_; };
+    const int& h4gDiPho2_iPho2() const { return dp2_ipho2_; };
     const float& cosThetaStarCS() const {return cosThetaStarCS_;};
     const float& cosTheta_a1() const {return cosTheta_a1_;};
     const float& cosTheta_a2() const {return cosTheta_a2_;};
@@ -151,6 +155,10 @@ namespace flashgg{
     reco::Candidate::LorentzVector dp1_pho2_;
     reco::Candidate::LorentzVector dp2_pho1_;
     reco::Candidate::LorentzVector dp2_pho2_;
+    int dp1_ipho1_;
+    int dp1_ipho2_;
+    int dp2_ipho1_;
+    int dp2_ipho2_;
     float cosThetaStarCS_;
     float cosTheta_a1_;
     float cosTheta_a2_;

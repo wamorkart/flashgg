@@ -21,7 +21,7 @@ H4GTag::H4GTag() : DiPhotonTagBase::DiPhotonTagBase()
 
 H4GTag::~H4GTag() {}
 
-H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg::Photon pho2, flashgg::Photon pho3, flashgg::Photon pho4, edm::Ptr<reco::Vertex> vertex_chosen, float dZ_bdtVtx, std::vector<int> diphoton_pairing_indices_, float diphoPair_MVA, reco::Candidate::LorentzVector dp1_pho1, reco::Candidate::LorentzVector dp1_pho2, reco::Candidate::LorentzVector dp2_pho1, reco::Candidate::LorentzVector dp2_pho2, reco::Candidate::LorentzVector dp1, reco::Candidate::LorentzVector dp2 )
+H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg::Photon pho2, flashgg::Photon pho3, flashgg::Photon pho4, edm::Ptr<reco::Vertex> vertex_chosen, float dZ_bdtVtx, std::vector<int> diphoton_pairing_indices_, float diphoPair_MVA, reco::Candidate::LorentzVector dp1_pho1, reco::Candidate::LorentzVector dp1_pho2, reco::Candidate::LorentzVector dp2_pho1, reco::Candidate::LorentzVector dp2_pho2, reco::Candidate::LorentzVector dp1, reco::Candidate::LorentzVector dp2, int dp1_ipho1, int dp1_ipho2, int dp2_ipho1, int dp2_ipho2 )
 {
   dipho_ = dipho;
   pho1_  = pho1;
@@ -62,6 +62,12 @@ H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg:
   dp1_pho2_ = dp1_pho2;
   dp2_pho1_ = dp2_pho1;
   dp2_pho2_ = dp2_pho2;
+
+  dp1_ipho1_ = dp1_ipho1;
+  dp1_ipho2_ = dp1_ipho2;
+  dp2_ipho1_ = dp2_ipho1;
+  dp2_ipho2_ = dp2_ipho2;
+
 
 
   tp_ = pho1.p4()+pho2.p4()+pho3.p4()+pho4.p4();
