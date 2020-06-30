@@ -338,8 +338,36 @@ class H4GCustomize():
         self.process.load("flashgg.Taggers.flashggH4GTag_cff")
 
         self.process.flashggH4GTag.vertexIdMVAweightfileH4G = cms.untracked.FileInPath(str(self.metaConditions["H4GTag"]["vertexIdMVAweightfileH4G"]))
+        if (cms.string(str(self.metaConditions["H4GTag"]["year"])) == "2016"):
+            from flashgg.Taggers.flashggPreselectedDiPhotons_LowMass16_cfi import flashggPreselectedDiPhotonsLowMass
+            self.process.flashggH4GTag.idSelection = cms.PSet(
+                         rho = flashggPreselectedDiPhotonsLowMass.rho,
+                         cut = flashggPreselectedDiPhotonsLowMass.cut,
+                         variables = flashggPreselectedDiPhotonsLowMass.variables,
+                         categories = flashggPreselectedDiPhotonsLowMass.categories)
+        elif (cms.string(str(self.metaConditions["H4GTag"]["year"])) == "2017"):
+            from flashgg.Taggers.flashggPreselectedDiPhotons_LowMass17_cfi import flashggPreselectedDiPhotonsLowMass
+            self.process.flashggH4GTag.idSelection = cms.PSet(
+                         rho = flashggPreselectedDiPhotonsLowMass.rho,
+                         cut = flashggPreselectedDiPhotonsLowMass.cut,
+                         variables = flashggPreselectedDiPhotonsLowMass.variables,
+                         categories = flashggPreselectedDiPhotonsLowMass.categories)
 
-        ## remove single Higgs tags
+        # self.process.flashggH4GTag.preselecteddiphotonsLM = cms.
+        # teststr = self.metaConditions["H4GTag"]["preSelectedDiPhotons_cfi"]
+        # from cms.InputTag(self.metaConditions["H4GTag"]["preSelectedDiPhotons_cfi"]) import flashggPreselectedDiPhotonsLowMass
+        # from str(self.metaConditions["H4GTag"]["preSelectedDiPhotons_cfi"]) import flashggPreselectedDiPhotons
+        # process.flashggH4GTag.idSelection = cms.PSet(
+                    # rho = flashggPreselectedDiPhotonsLowMass.rho,
+                    # cut = flashggPreselectedDiPhotonsLowMass.cut,
+                    # variables = flashggPreselectedDiPhotonsLowMass.variables,
+                    # categories = flashggPreselectedDiPhotonsLowMass.categories)
+        # from flashgg.Taggers.flashggPreselectedDiPhotons_LowMass16_cfi import flashggPreselectedDiPhotonsLowMass
+        # process.flashggH4GTag.idSelection = cms.PSet(
+        #             rho = flashggPreselectedDiPhotonsLowMass.rho,
+        #             cut = flashggPreselectedDiPhotonsLowMass.cut,
+        #             variables = flashggPreselectedDiPhotonsLowMass.variables,
+        #             categories = flashggPreselectedDiPhotonsLowMass.categories)
 
         print'Removing single Higgs tags'
 
