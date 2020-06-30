@@ -81,6 +81,7 @@ and on data:
 *** Resubmitting missing jobs
     #+BEGIN_EXAMPLE
     python Systematics/scripts/resubmit_jobs.py -d <directory originally created by fggRunJobs> -s <directory where the jobs were staged to>
+    #+END_EXAMPLE
 
 *** 2016 H4G Tag ntuples
     #+BEGIN_EXAMPLE
