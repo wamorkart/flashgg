@@ -82,7 +82,9 @@ and on data:
 
     #+BEGIN_EXAMPLE
     fggRunJobs.py --load Taggers/test/H4G_2017_Tagger/H4G_Data.json -D -P -n 150 -d Tagger_Data_2017 -x cmsRun Systematics/test/workspaceStd.py -q tomorrow --no-copy-proxy analysisType=lowMassAnalysis maxEvents=-1 --stage-to /eos/user/t/twamorka/h4g_fullRun2/2017/
+    fggRunJobs.py --load Taggers/test/H4G_2017_Tagger/H4G_Signal.json -D -P -n 50 -d Tagger_Signal_2017 -x cmsRun Systematics/test/workspaceStd.py -q tomorrow --no-copy-proxy analysisType=lowMassAnalysis maxEvents=-1 --stage-to /eos/user/t/twamorka/h4g_fullRun2/2017/
     #+END_EXAMPLE
+
 
 *** Resubmitting missing jobs
     #+BEGIN_EXAMPLE
