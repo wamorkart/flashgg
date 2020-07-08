@@ -16,18 +16,18 @@ bkg_file = ROOT.TChain()
 bkg_file.AddFile('/eos/user/t/twamorka/h4g_fullRun2/2016/hadd/data_mix_weight.root/Data_13TeV_H4GTag_0')
 
 sig_file = ROOT.TChain()
-sig_file.AddFile('/eos/user/t/twamorka/h4g_fullRun2/2016/hadd/signal_m_60.root/tagsDumperDumper/trees/SUSYGluGluToHToAA_AToGG_M_60_TuneCUETP8M1_13TeV_pythia8_13TeV_H4GTag_0')
-sig_file.AddFile('/eos/user/t/twamorka/h4g_fullRun2/2016/hadd/signal_m_55.root/tagsDumperDumper/trees/SUSYGluGluToHToAA_AToGG_M_55_TuneCUETP8M1_13TeV_pythia8_13TeV_H4GTag_0')
-sig_file.AddFile('/eos/user/t/twamorka/h4g_fullRun2/2016/hadd/signal_m_50.root/tagsDumperDumper/trees/SUSYGluGluToHToAA_AToGG_M_50_TuneCUETP8M1_13TeV_pythia8_13TeV_H4GTag_0')
-sig_file.AddFile('/eos/user/t/twamorka/h4g_fullRun2/2016/hadd/signal_m_45.root/tagsDumperDumper/trees/SUSYGluGluToHToAA_AToGG_M_45_TuneCUETP8M1_13TeV_pythia8_13TeV_H4GTag_0')
-sig_file.AddFile('/eos/user/t/twamorka/h4g_fullRun2/2016/hadd/signal_m_40.root/tagsDumperDumper/trees/SUSYGluGluToHToAA_AToGG_M_40_TuneCUETP8M1_13TeV_pythia8_13TeV_H4GTag_0')
-sig_file.AddFile('/eos/user/t/twamorka/h4g_fullRun2/2016/hadd/signal_m_35.root/tagsDumperDumper/trees/SUSYGluGluToHToAA_AToGG_M_35_TuneCUETP8M1_13TeV_pythia8_13TeV_H4GTag_0')
-sig_file.AddFile('/eos/user/t/twamorka/h4g_fullRun2/2016/hadd/signal_m_30.root/tagsDumperDumper/trees/SUSYGluGluToHToAA_AToGG_M_30_TuneCUETP8M1_13TeV_pythia8_13TeV_H4GTag_0')
-sig_file.AddFile('/eos/user/t/twamorka/h4g_fullRun2/2016/hadd/signal_m_25.root/tagsDumperDumper/trees/SUSYGluGluToHToAA_AToGG_M_25_TuneCUETP8M1_13TeV_pythia8_13TeV_H4GTag_0')
-sig_file.AddFile('/eos/user/t/twamorka/h4g_fullRun2/2016/hadd/signal_m_20.root/tagsDumperDumper/trees/SUSYGluGluToHToAA_AToGG_M_20_TuneCUETP8M1_13TeV_pythia8_13TeV_H4GTag_0')
-sig_file.AddFile('/eos/user/t/twamorka/h4g_fullRun2/2016/hadd/signal_m_15.root/tagsDumperDumper/trees/SUSYGluGluToHToAA_AToGG_M_15_TuneCUETP8M1_13TeV_pythia8_13TeV_H4GTag_0')
-sig_file.AddFile('/eos/user/t/twamorka/h4g_fullRun2/2016/hadd/signal_m_10.root/tagsDumperDumper/trees/SUSYGluGluToHToAA_AToGG_M_10_TuneCUETP8M1_13TeV_pythia8_13TeV_H4GTag_0')
-sig_file.AddFile('/eos/user/t/twamorka/h4g_fullRun2/2016/hadd/signal_m_5.root/tagsDumperDumper/trees/SUSYGluGluToHToAA_AToGG_M_5_TuneCUETP8M1_13TeV_pythia8_13TeV_H4GTag_0')
+sig_file.AddFile('/eos/user/t/twamorka/h4g_fullRun2/2016/hadd/signal_m_60.root/tagsDumper/trees/SUSYGluGluToHToAA_AToGG_M_60_TuneCUETP8M1_13TeV_pythia8_13TeV_H4GTag_0')
+sig_file.AddFile('/eos/user/t/twamorka/h4g_fullRun2/2016/hadd/signal_m_55.root/tagsDumper/trees/SUSYGluGluToHToAA_AToGG_M_55_TuneCUETP8M1_13TeV_pythia8_13TeV_H4GTag_0')
+sig_file.AddFile('/eos/user/t/twamorka/h4g_fullRun2/2016/hadd/signal_m_50.root/tagsDumper/trees/SUSYGluGluToHToAA_AToGG_M_50_TuneCUETP8M1_13TeV_pythia8_13TeV_H4GTag_0')
+sig_file.AddFile('/eos/user/t/twamorka/h4g_fullRun2/2016/hadd/signal_m_45.root/tagsDumper/trees/SUSYGluGluToHToAA_AToGG_M_45_TuneCUETP8M1_13TeV_pythia8_13TeV_H4GTag_0')
+sig_file.AddFile('/eos/user/t/twamorka/h4g_fullRun2/2016/hadd/signal_m_40.root/tagsDumper/trees/SUSYGluGluToHToAA_AToGG_M_40_TuneCUETP8M1_13TeV_pythia8_13TeV_H4GTag_0')
+sig_file.AddFile('/eos/user/t/twamorka/h4g_fullRun2/2016/hadd/signal_m_35.root/tagsDumper/trees/SUSYGluGluToHToAA_AToGG_M_35_TuneCUETP8M1_13TeV_pythia8_13TeV_H4GTag_0')
+sig_file.AddFile('/eos/user/t/twamorka/h4g_fullRun2/2016/hadd/signal_m_30.root/tagsDumper/trees/SUSYGluGluToHToAA_AToGG_M_30_TuneCUETP8M1_13TeV_pythia8_13TeV_H4GTag_0')
+sig_file.AddFile('/eos/user/t/twamorka/h4g_fullRun2/2016/hadd/signal_m_25.root/tagsDumper/trees/SUSYGluGluToHToAA_AToGG_M_25_TuneCUETP8M1_13TeV_pythia8_13TeV_H4GTag_0')
+sig_file.AddFile('/eos/user/t/twamorka/h4g_fullRun2/2016/hadd/signal_m_20.root/tagsDumper/trees/SUSYGluGluToHToAA_AToGG_M_20_TuneCUETP8M1_13TeV_pythia8_13TeV_H4GTag_0')
+sig_file.AddFile('/eos/user/t/twamorka/h4g_fullRun2/2016/hadd/signal_m_15.root/tagsDumper/trees/SUSYGluGluToHToAA_AToGG_M_15_TuneCUETP8M1_13TeV_pythia8_13TeV_H4GTag_0')
+sig_file.AddFile('/eos/user/t/twamorka/h4g_fullRun2/2016/hadd/signal_m_10.root/tagsDumper/trees/SUSYGluGluToHToAA_AToGG_M_10_TuneCUETP8M1_13TeV_pythia8_13TeV_H4GTag_0')
+sig_file.AddFile('/eos/user/t/twamorka/h4g_fullRun2/2016/hadd/signal_m_5.root/tagsDumper/trees/SUSYGluGluToHToAA_AToGG_M_5_TuneCUETP8M1_13TeV_pythia8_13TeV_H4GTag_0')
 
 f_out = ROOT.TFile(outputDir+output+'.root','RECREATE')
 
@@ -38,14 +38,14 @@ mvaVars = [
 # 'CTStarCS',
 # 'CT_a1Pho1',
 # 'CT_a2Pho1',
-# 'a1_Pt/tp_mass',
+'a1_pt_dM/tp_mass',
 # 'a2_Pt/tp_mass',
 # 'a1_Pho1PtOvera1Mass',
 # 'a2_Pho1PtOvera2Mass',
 'pho1_MVA',
 'pho2_MVA',
 'pho3_MVA',
-'pho4_MVA',
+'pho4_MVA'
 #'pairMVAscore'
 # 'pho1_pt',
 # 'pho2_pt',
