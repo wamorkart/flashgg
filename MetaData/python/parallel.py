@@ -9,14 +9,14 @@ import copy
 import htcondor
 
 from threading import Thread, Semaphore
-import threading 
+import threading
 from multiprocessing import cpu_count
 from time import sleep
 from math import floor
 
 # -----------------------------------------------------------------------------------------------------
 class BatchRegistry:
-    
+
     domain = None
     host   = None
     proxy  = None
@@ -27,11 +27,11 @@ class BatchRegistry:
         "hep.ph.ic.ac.uk"  : "sge",
         "irfu.ext"         : "iclust",
         }
-    
+
     #----------------------------------------
     @staticmethod
     def getRunner(batchSystem):
-        if batchSystem == "auto": batchSystem = BatchRegistry.getBatchSystem()        
+        if batchSystem == "auto": batchSystem = BatchRegistry.getBatchSystem()
         if batchSystem == "lsf" : return LsfJob
         elif batchSystem == "htcondor": return HTCondorJob
         elif batchSystem == "sge": return SGEJob
@@ -51,11 +51,11 @@ class BatchRegistry:
             print( "\nINFO: We are at '%s', so we will use '%s' as batch system.\n     Please specify the batch system on the command line if you are not happy with this." % (domain,ret) )
             BatchRegistry.autoprint = False
         return ret
-    
+
     #----------------------------------------
     @staticmethod
     def getMonitor(batchSystem):
-        if batchSystem == "auto": batchSystem = BatchRegistry.getBatchSystem(BatchRegistry.getDomain())        
+        if batchSystem == "auto": batchSystem = BatchRegistry.getBatchSystem(BatchRegistry.getDomain())
         if batchSystem == "lsf" : return LsfMonitor
         elif batchSystem == "htcondor": return HTCondorMonitor
         elif batchSystem == "sge": return SGEMonitor
@@ -100,16 +100,16 @@ class BatchRegistry:
                 raise Exception,"Unable to voms proxy:\n%s" % out
             BatchRegistry.proxy = "%s:%s" % ( BatchRegistry.getHost(), out.strip("\n") )
         return BatchRegistry.proxy
-            
+
 # -----------------------------------------------------------------------------------------------------
 class WorkNodeJob(object):
-    
+
     nwarnings = 1
-    
+
     #----------------------------------------
     def __init__(self,*args,**kwargs):
-        
-        
+
+
         self.runner          = kwargs.pop("runner",LsfJob)
         self.stage_dest      = kwargs.pop("stage_dest")
         self.stage_cmd       = kwargs.pop("stage_cmd")
@@ -119,15 +119,15 @@ class WorkNodeJob(object):
         self.copy_proxy      = kwargs.pop("copy_proxy",True)
 
         self.runner = self.runner(*args,**kwargs)
-        
+
     def __getattr__(self,name):
         ## return runner attributes
         if hasattr(self.runner,name):
             return getattr(self.runner,name)
-            
+
         ## raise AttributeError, "No attribute %s in runner instance %s" % (name,str(self.runner))
         return object.__getattr__(name)
-           
+
     def __str__(self):
         return "WorkNodeJob: [%s]" % ( self.runner )
 
@@ -138,11 +138,11 @@ class WorkNodeJob(object):
         runner_kwargs = {}
         script = ""
         script += "#!/bin/bash\n"
-        
+
         # get specific preamble needed by the runner
         #     this commands are expected to bring the process to the job working directory in the worker node
         script += self.runner.preamble()+"\n"
-        
+
         # copy grid proxy over
         if self.copy_proxy and self.runner.copyProxy():
             try:
@@ -152,12 +152,12 @@ class WorkNodeJob(object):
                 script += "export X509_USER_PROXY=$PWD/%s\n" % proxyname
                 if WorkNodeJob.nwarnings > 0:
                     WorkNodeJob.nwarnings -= 1
-                    print 
+                    print
                     print
                     print "WARNING: We are counting fact that the jobs will be able to scp the follwing file: %s" % proxy
                     print "         Please make sure that ssh is properly configured."
                     print "         Alternatively, you can copy the proxy to your home folder, set the variable X509_USER_PROXY accordingly and run with the --no-copy-proxy"
-                    print 
+                    print
             except Exception, e:
                 if WorkNodeJob.nwarnings > 0:
                     WorkNodeJob.nwarnings -= 1
@@ -170,10 +170,10 @@ class WorkNodeJob(object):
                 script += "export X509_USER_PROXY=%s\n" % proxyname
                 if WorkNodeJob.nwarnings > 0:
                     WorkNodeJob.nwarnings -= 1
-                    print 
+                    print
                     print
                     print "WARNING: We are counting on the path for this proxy being visible to the remote jobs:",proxyname
-                    print 
+                    print
             except Exception, e:
                 if WorkNodeJob.nwarnings > 0:
                     WorkNodeJob.nwarnings -= 1
@@ -181,13 +181,13 @@ class WorkNodeJob(object):
                     print e
 
 
-                
+
         # set-up CMSSW
         script += "WD=$PWD\n"
         script += "echo\n"
         script += "echo\n"
         script += "echo\n"
-        
+
         if not self.tarball:
             script += "cd " + os.environ['CMSSW_BASE']+"\n"
         else:
@@ -200,16 +200,16 @@ class WorkNodeJob(object):
             script += "scram setup rabit\n"
             script += "scram setup xgboost\n"
             script += "scram b\n"
-            
+
         script += "eval $(scram runtime -sh)"+"\n"
         script += "cd $WD\n"
-        
+
         if self.job_outdir:
             script += "mkdir %s\n" % self.job_outdir
 
         script += 'echo "ls $X509_USER_PROXY"\n'
         script += 'ls $X509_USER_PROXY\n'
-        
+
         ###---dasmaps: allow jobs to use dasgoclient
         script += 'mkdir .dasmaps \n'
         script += 'mv das_maps_dbs_prod.js .dasmaps/ \n\n'
@@ -218,12 +218,12 @@ class WorkNodeJob(object):
         ###
         ###   HTCondor: In order to deal with failed jobs the original jobIds of the failed jobs
         ###   are stored in dummy cmd line option in job_utils.py.
-        ###   before submitting a new task the dummy options, if present, is stripped from 
+        ###   before submitting a new task the dummy options, if present, is stripped from
         ###   the cmd line and added to the script properly
         htc = False
-        if 'resubMap=' in cmd:            
+        if 'resubMap=' in cmd:
             htc = True
-            resubMap = cmd[cmd.find('resubMap='):cmd.find(' ', cmd.find('resubMap=')) if cmd.find(' ', cmd.find('resubMap='))>0 else len(cmd)]       
+            resubMap = cmd[cmd.find('resubMap='):cmd.find(' ', cmd.find('resubMap=')) if cmd.find(' ', cmd.find('resubMap='))>0 else len(cmd)]
             cmd = cmd.replace(resubMap, '')
             resubMap = resubMap.replace('resubMap=', '')
             script += 'declare -a jobIdsMap=('+resubMap.replace(',', ' ')+')\n'
@@ -237,7 +237,7 @@ class WorkNodeJob(object):
             script += 'if [[ $retval != 0 ]]; then\n'
             script += '    retval=$(( ${jobIdsMap[${1}]} + 1 )) \n'
             script += 'fi \n'
-        
+
         if self.tarball and self.job_outdir:
             script += 'cd %s\n' % self.job_outdir
             script += 'echo\n'
@@ -260,7 +260,7 @@ class WorkNodeJob(object):
         script += '       echo "$errors"\n'
         script += '       exit -2\n'
         script += '    fi\n'
-        script += 'fi\n'        
+        script += 'fi\n'
 
         # get specific epilogue needed by the runner
         # this can be used, for example, to propagate $retval by touching a file
@@ -268,20 +268,20 @@ class WorkNodeJob(object):
 
         script += 'exit $retval\n'
         script += '\n'
-        
+
         return self.runner.run(script, **runner_kwargs)
 
 
 # -----------------------------------------------------------------------------------------------------
 class WorkNodeJobFactory(object):
-    
+
     # ------------------------------------------------------------------------------------------------
     def __init__(self,stage_dest,
                  stage_cmd="cp -pv",stage_patterns=["'*.root'","'*.xml'"],job_outdir=None,runner=None,batchSystem="auto",copy_proxy=True):
-        
+
         if not runner:
             self.runner = BatchRegistry.getRunner(batchSystem)
-            
+
         self.stage_dest = stage_dest
         self.stage_cmd  = stage_cmd
         self.stage_patterns  = stage_patterns
@@ -296,12 +296,12 @@ class WorkNodeJobFactory(object):
     # ------------------------------------------------------------------------------------------------
     def setTarball(self,tarball):
         self.tarball = tarball
-        
+
     # ------------------------------------------------------------------------------------------------
     def mkTarball(self,tarball=None,
                   tarball_entries=["python","lib","bin","external","flashgg/MetaData/python/PU_MixFiles_2017_miniaodv2_310"],tarball_patterns=[("src/*","data")],
                   tarball_transform=None, light=False):
-        
+
         self.tarball = tarball
         content=tarball_entries
 
@@ -314,7 +314,7 @@ class WorkNodeJobFactory(object):
                 print "pattern: %s"
                 print out
                 sys.exit(stat)
-            content.extend( [f for f in out.split("\n") if f != ""] )                
+            content.extend( [f for f in out.split("\n") if f != ""] )
         args = []
         if tarball_transform:
             args.extend( ["--transform",tarball_transform] )
@@ -324,7 +324,7 @@ class WorkNodeJobFactory(object):
         else:
             args.extend(["-h","--show-transformed","-zvcf",tarball])
         args.extend(content)
-        print 
+        print
         print "Preparing tarball with the following content:"
         print "\n".join(content)
         print
@@ -335,11 +335,11 @@ class WorkNodeJobFactory(object):
             print "CMSSW_BASE: %s" % os.environ["CMSSW_BASE"]
             print "args: %s" % " ".join(args)
             print out
-    
+
 
     #----------------------------------------
     def getStageCmd(self):
-        
+
         stage_cmd = self.stage_cmd
         if stage_cmd != "guess":
             return stage_cmd
@@ -354,12 +354,12 @@ class WorkNodeJobFactory(object):
             stage_cmd = "cp -pv"
 
         return stage_cmd
-            
+
     #----------------------------------------
     def __call__(self,*args,**kwargs):
-        
+
         stage_cmd = self.getStageCmd()
-            
+
         kwargs["runner"]         = self.runner
         kwargs["stage_dest"]     = self.stage_dest
         kwargs["stage_cmd"]      = stage_cmd
@@ -367,7 +367,7 @@ class WorkNodeJobFactory(object):
         kwargs["tarball"]        = self.tarball
         kwargs["job_outdir"]     = self.job_outdir
         kwargs["copy_proxy"]     = self.copy_proxy
-        
+
         return WorkNodeJob(*args,**kwargs)
 
 # -----------------------------------------------------------------------------------------------------
@@ -376,17 +376,17 @@ class HTCondorJob(object):
 
     #----------------------------------------
     def __init__(self, htcondorQueue, jobName="", async=True, replacesJob=None, copy_proxy=False, ncondorcpu=1):
-        """ 
+        """
         @param cmd is the command to be executed inside the bsub script. Some CMSSW specific wrapper
         code will be added
         """
-        
+
         # super(LsfJob,self).__init()
-        
+
         self.htcondorQueue = htcondorQueue
         self.jobName = jobName
         self.cfgName = jobName+".sub"
-        self.execName = jobName+".sh"        
+        self.execName = jobName+".sh"
         self.jobid = None
         self.cmd = None
         self.replacesJob = replacesJob
@@ -397,13 +397,13 @@ class HTCondorJob(object):
             print "HTCondorJob: synchronous job processing is not supported by for HTCondor jobs ... running async jobs instead"
 
         self.async = True
-        
+
     def __str__(self):
         return "HTCondorJob: [%s] [%s]" % ( self.htcondorQueue, self.cfgName)
-        
+
     def setJobId(self,jobid):
         self.jobid = jobid
-        
+
     #----------------------------------------
     def preamble(self):
         # fix to ensure AAA redirecting works properly on lxplus/lxbatch
@@ -419,18 +419,19 @@ class HTCondorJob(object):
 
     #----------------------------------------
     def run(self, script, njobs=1):
-                
+
         logdir = os.path.dirname(self.jobName)
         if not os.path.exists(logdir):
             os.mkdir(logdir)
-                
+
         with open(self.execName, "w+") as fout:
             fout.write(script)
-            fout.close()        
+            fout.close()
 
         with open(self.cfgName, "w+") as fout:
             fout.write('+JobFlavour   = "'+self.htcondorQueue+'"\n\n')
             fout.write('+OnExitHold   = ExitStatus != 0 \n\n')
+            fout.write('+AccountingGroup = "group_u_CMS.CAF.ALCA" \n\n' )
             fout.write('periodic_release =  (NumJobStarts < 4) && ((CurrentTime - EnteredCurrentStatus) > 60) \n\n')
             fout.write('getenv        = True \n')
             fout.write('input         = %s/.dasmaps/das_maps_dbs_prod.js \n' % os.environ['HOME'])
@@ -445,7 +446,7 @@ class HTCondorJob(object):
             fout.write('RequestCpus   = {}\n'.format(self.ncondorcpu))
             fout.write('max_retries   = 2\n')
             fout.write('queue '+str(njobs)+' \n')
-            fout.close()        
+            fout.close()
 
         import subprocess
         htc = subprocess.Popen("condor_submit "+self.cfgName,
@@ -454,11 +455,11 @@ class HTCondorJob(object):
                                stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE,
                                close_fds=True)
-            
+
         out,err = htc.communicate()
 
         self.exitStatus = htc.returncode
-        
+
         if self.exitStatus != 0:
             print "error running job", self.jobName, self.exitStatus
             print out
@@ -479,23 +480,23 @@ class HTCondorJob(object):
 
     #----------------------------------------
     def __call__(self,cmd):
-        
+
         script = ""
         script += "#!/bin/bash\n"
-        
+
         script += "cd " + os.environ['CMSSW_BASE']+"\n"
         script += "eval `scram runtime -sh`"+"\n"
         script += "cd " + os.getcwd()+"\n"
-        
+
         if os.environ.get('X509_USER_PROXY',None):
             script += "export X509_USER_PROXY=%s\n" % os.environ['X509_USER_PROXY']
 
         ###---In order to deal with failed jobs the original jobIds of the failed jobs
         ###   are stored in dummy cmd line option in job_utils.py.
-        ###   before submitting a new task the dummy options, if present, is stripped from 
+        ###   before submitting a new task the dummy options, if present, is stripped from
         ###   the cmd line and added to the script properly
-        # if 'resubMap=' in cmd:     
-        #     resubMap = cmd[cmd.find('resubMap='):cmd.find(' ', cmd.find('resubMap=')) if cmd.find(' ', cmd.find('resubMap='))>0 else len(cmd)]       
+        # if 'resubMap=' in cmd:
+        #     resubMap = cmd[cmd.find('resubMap='):cmd.find(' ', cmd.find('resubMap=')) if cmd.find(' ', cmd.find('resubMap='))>0 else len(cmd)]
         #     cmd = cmd.replace(resubMap, '')
         #     resubMap = resubMap.replace('resubMap=', '')
         #     script += 'declare -a jobIdsMap=('+resubMap.replace(',', ' ')+')\n'
@@ -508,18 +509,18 @@ class HTCondorJob(object):
         #         script += 'declare -a jobIdsMap=(0)\n'
 
         self.cmd = cmd
-        
+
         #---the user command
         script += cmd+"\n"
-        
+
         return self.run(script)
-        
-    
+
+
     #----------------------------------------
     def handleOutput(self, jobid):
         self.exitStatus = -1
         if self.async and jobid:
-            evt_list = []       
+            evt_list = []
             jel = htcondor.JobEventLog(str(self.jobName+"_"+jobid+"_htc.log"))
             for event in jel.events(stop_after=0):
                 evt_jobid_str = str(event.cluster)+'.'+str(event.proc)
@@ -528,7 +529,7 @@ class HTCondorJob(object):
             jel.close()
 
             #---Normal exit
-            if evt_list[-1].type is htcondor.JobEventType.JOB_TERMINATED:                    
+            if evt_list[-1].type is htcondor.JobEventType.JOB_TERMINATED:
                 self.exitStatus = evt_list[-1]["ReturnValue"]
             #---Job killed by user
             elif evt_list[-1].type is htcondor.JobEventType.JOB_ABORTED:
@@ -545,7 +546,7 @@ class HTCondorJob(object):
             # if status == 0 and len(log) > 0:
             #     msg = log.split("\n")[0].replace("=", "").split()[-1]
             #     if msg == "0":
-            #         self.exitStatus = 0                    
+            #         self.exitStatus = 0
             #     else:
             #         self.exitStatus = -1
             # else:
@@ -555,10 +556,10 @@ class HTCondorJob(object):
             #             if "Job finished with exit code" in line:
             #                 exit_code = line.split()[-1]
             #                 if exit_code == "0":
-            #                     self.exitStatus = 0                    
+            #                     self.exitStatus = 0
             #                 else:
-            #                     self.exitStatus = -1                                
-                
+            #                     self.exitStatus = -1
+
         ###---collect both the stdout and stderr
         output = ""
         if self.jobName:
@@ -578,7 +579,7 @@ class HTCondorJob(object):
                     output += "%s_%s.err\n" % (self.jobName, jobid)
             except:
                 output+= "%s_%s.err\n" % (self.jobName, jobid)
-        
+
         return self.exitStatus, output, jobid
 
 # -----------------------------------------------------------------------------------------------------
@@ -603,24 +604,24 @@ class HTCondorMonitor(object):
                     for jobid in job.jobid:
                         self.jobsmap[jobid] = job
                     self.jobids[job.jobName] = job.jobid
-                    
+
                     if job.replacesJob:
                         if not job.replacesJob in clonesMap:
-                            self.clonesMap[job.replacesJob] = [jobids[job.replacesJob]]                        
+                            self.clonesMap[job.replacesJob] = [jobids[job.replacesJob]]
                         self.clonesMap[job.replacesJob].append(job.jobid)
-            
+
             self.monitor()
             sleep(0.1)
 
 
     def cancel(self,jobid):
         commands.getstatusoutput("condor_rm %d" % jobid)
-        
+
     def monitor(self):
         if len(self.jobsmap.keys())==0:
             return
-            
-        current_jobs = copy.deepcopy(self.jobsmap)        
+
+        current_jobs = copy.deepcopy(self.jobsmap)
         evt_list = {}
         for jobid, job in current_jobs.iteritems():
             evt_list[jobid] = []
@@ -628,7 +629,7 @@ class HTCondorMonitor(object):
             for event in jel.events(stop_after=0):
                 evt_jobid_str = str(event.cluster)+'.'+str(event.proc)
                 if evt_jobid_str == jobid:
-                    evt_list[jobid].append(event)                    
+                    evt_list[jobid].append(event)
             jel.close()
 
         for jobid, events in evt_list.iteritems():
@@ -646,16 +647,16 @@ class HTCondorMonitor(object):
             print "Error getting output of %s " % htcJob
             print jobid, status
             print e
-                    
+
         ancestor = htcJob.replacesJob if htcJob.replacesJob else htcJob.jobName
         if ancestor in self.clonesMap:
             for clone in self.clonesMap[ancestor]:
                 if clone != jobid:
                     self.cancel(clone)
                 self.jobsmap.pop(clone)
-                        
+
         self.jobsmap.pop(jobid)
-    
+
 # -----------------------------------------------------------------------------------------------------
 class LsfJob(object):
     """ a thread to run bsub and wait until it completes """
@@ -665,19 +666,19 @@ class LsfJob(object):
         """ @param cmd is the command to be executed inside the bsub script. Some CMSSW specific wrapper
             code will be added
         """
-        
+
         # super(LsfJob,self).__init()
-        
+
         self.lsfQueue = lsfQueue
         self.jobName = jobName
         self.async = async
         self.jobid = None
         self.cmd = None
         self.replacesJob = replacesJob
-        
+
     def __str__(self):
         return "LsfJob: [%s] [%s] [%s]" % ( self.lsfQueue, self.jobName, self.jobid )
-        
+
     def setJobId(self,jobid):
         self.jobid = jobid
     #----------------------------------------
@@ -695,40 +696,40 @@ class LsfJob(object):
 
     #----------------------------------------
     def run(self,script):
-        
+
         bsubCmdParts = [ "bsub",
                          "-q " + self.lsfQueue,
                          ]
-        
+
         if not self.async:
             bsubCmdParts.append("-K")  # bsub waits until job completes
-            
+
         if( self.jobName ):
             logdir = os.path.dirname(self.jobName)
             if not os.path.exists(logdir):
                 os.mkdir(logdir)
             bsubCmdParts.append("-J " + self.jobName)
             bsubCmdParts.append("-o %s.log" % self.jobName)
-        
+
         bsubCmd = " ".join(bsubCmdParts)
-        
+
         import subprocess
         lsf = subprocess.Popen(bsubCmd, shell=True, # bufsize=bufsize,
                                stdin=subprocess.PIPE,
                                stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE,
                                close_fds=True)
-        
+
         with open("%s.sh" % self.jobName,"w+") as fout:
             fout.write(script)
-            fout.close()        
-        
+            fout.close()
+
         out,err = lsf.communicate(script)
-        
+
         # wait for the job to complete
         ## self.exitStatus = lsf.wait()
         self.exitStatus = lsf.returncode
-        
+
         if self.exitStatus != 0:
             print "error running job",self.jobName, self.exitStatus
             print out
@@ -739,7 +740,7 @@ class LsfJob(object):
                 if line.startswith("Job <"):
                     self.jobid = int(line.split("<",1)[1].split(">",1)[0])
                     break
-            
+
         if self.async:
             return self.exitStatus, (out,(self.jobName,self.jobid))
 
@@ -747,24 +748,24 @@ class LsfJob(object):
 
     #----------------------------------------
     def __call__(self,cmd):
-        
+
         self.cmd = cmd
         script = ""
         script += "#!/bin/bash\n"
-        
+
         script += "cd " + os.environ['CMSSW_BASE']+"\n"
         script += "eval `scram runtime -sh`"+"\n"
         script += "cd " + os.getcwd()+"\n"
-        
+
         if os.environ.get('X509_USER_PROXY',None):
             script += "export X509_USER_PROXY=%s\n" % os.environ['X509_USER_PROXY']
-                    
+
         # the user command
         script += cmd+"\n"
-        
+
         return self.run(script)
-        
-    
+
+
     #----------------------------------------
     def handleOutput(self):
         ## print "handleOutput"
@@ -780,7 +781,7 @@ class LsfJob(object):
                     else:
                         self.exitStatus = -1
                     break
-            
+
         output = ""
         if self.jobName:
             try:
@@ -790,9 +791,9 @@ class LsfJob(object):
                     output += "%s.log\n" % self.jobName
             except:
                 output = "%s.log" % self.jobName
-        
-        return self.exitStatus, output        
-    
+
+        return self.exitStatus, output
+
 # -----------------------------------------------------------------------------------------------------
 class LsfMonitor(object):
     def __init__(self,jobsqueue,retqueue):
@@ -814,19 +815,19 @@ class LsfMonitor(object):
                 else:
                     self.jobsmap[str(job.jobid)] = job
                     self.jobids[job.jobName] = job.jobid
-                    
+
                     if job.replacesJob:
                         if not job.replacesJob in clonesMap:
-                            self.clonesMap[job.replacesJob] = [jobids[job.replacesJob]]                        
+                            self.clonesMap[job.replacesJob] = [jobids[job.replacesJob]]
                         self.clonesMap[job.replacesJob].append(job.jobid)
-            
+
             self.monitor()
             sleep(0.1)
 
 
     def cancel(self,jobid):
         commands.getstatusoutput("bkill -s 9 %d" % jobid)
-        
+
     def monitor(self):
         if len(self.jobsmap.keys())==0:
             return
@@ -837,7 +838,7 @@ class LsfMonitor(object):
             status = toks[2]
             if status in ["DONE","EXIT","ZOMBI","UNKWN"]:
                 self.jobFinished(jobid,status)
-                
+
     def jobFinished(self,jobid,status):
         if not jobid in self.jobsmap:
             print "%s not found: %s" % ( jobid, " ".join(self.jobsmap.keys()) )
@@ -849,14 +850,14 @@ class LsfMonitor(object):
             print "Error getting output of %s " % lsfJob
             print jobid, status
             print e
-                    
+
         ancestor = lsfJob.replacesJob if lsfJob.replacesJob else lsfJob.jobName
         if ancestor in self.clonesMap:
             for clone in self.clonesMap[ancestor]:
                 if clone != jobid:
                     self.cancel(clone)
                 self.jobsmap.pop(clone)
-                        
+
         self.jobsmap.pop(jobid)
 
 # -----------------------------------------------------------------------------------------------------
@@ -865,7 +866,7 @@ class SGEJob(LsfJob):
     def __init__(self,*args,**kwargs):
         #self.rebootMitigation = (BatchRegistry.getDomain() in ["hep.ph.ic.ac.uk"])
         self.rebootMitigation = False
-        
+
         super(SGEJob, self).__init__(*args, **kwargs)
 
     def __str__(self):
@@ -906,7 +907,7 @@ class SGEJob(LsfJob):
         if mydomain == "hep.ph.ic.ac.uk":
             return False
         return True
-        
+
     def run(self,script):
 
         mydomain = BatchRegistry.getDomain()
@@ -941,17 +942,17 @@ class SGEJob(LsfJob):
         qsubCmd = " ".join(qsubCmdParts)
 
         import subprocess
-        sge = subprocess.Popen(qsubCmd, shell=True, # bufsize=bufsize,                                                                                                                                                               
+        sge = subprocess.Popen(qsubCmd, shell=True, # bufsize=bufsize,
                                stdin=subprocess.PIPE,
                                stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE,
                                close_fds=True)
-        
+
         with open("%s.sh" % self.jobName,"w+") as fout:
             fout.write(script)
             fout.close()
         out,err = sge.communicate(script)
-                                                         
+
         self.exitStatus = sge.returncode
 
         if self.exitStatus != 0:
@@ -964,7 +965,7 @@ class SGEJob(LsfJob):
                 if line.startswith("Your job"):
                     self.jobid = int(line.split(" ")[2])
                     break
-            
+
         if self.async:
             return self.exitStatus, (out,(self.jobName,self.jobid))
 
@@ -987,7 +988,7 @@ class SGEJob(LsfJob):
                     checkcount += 1
                     if checkcount > 12:
                         break
-                    
+
             self.exitStatus = 0 # assume it is done unless listed
             for line in result[1].split("\n"):
                 if line.startswith(str(self.jobid)):
@@ -1044,7 +1045,7 @@ class IclustJob(LsfJob):
         if mydomain == "irfu.ext":
             return False
         return True
-        
+
     def run(self,script):
 
         qsubCmdParts = [ "clubatch" ]
@@ -1068,7 +1069,7 @@ class IclustJob(LsfJob):
             fout.close()
         stat,out = commands.getstatusoutput("chmod 755 %s" % scriptname)
         stat,out = commands.getstatusoutput("clubatch %s" % scriptname)
-                                                         
+
         self.exitStatus = stat
 
         if self.exitStatus != 0:
@@ -1124,12 +1125,12 @@ class IclustJob(LsfJob):
 class SGEMonitor(LsfMonitor):
     ### def __call__(self):
     ###     jobsmap = {}
-    ### 
+    ###
     ###     while not self.stop:
     ###         if not self.jobsqueue.empty():
     ###             job = self.jobsqueue.get()
     ###             jobsmap[str(job.jobid)] = job
-    ### 
+    ###
     ###         status = commands.getstatusoutput("qstat")
     ###         jobids = []
     ###         statuses = []
@@ -1148,7 +1149,7 @@ class SGEMonitor(LsfMonitor):
     def __init__(self,*args,**kwargs):
         #self.rebootMitigation = (BatchRegistry.getDomain() in ["hep.ph.ic.ac.uk"])
         self.rebootMitigation = False
-        
+
         super(SGEMonitor, self).__init__(*args, **kwargs)
 
     def monitor(self):
@@ -1181,7 +1182,7 @@ class SGEMonitor(LsfMonitor):
             if not jobids.count(jobid):
                 # i.e. job is no longer on the list, and hence done
                 self.jobFinished(jobid,None)
-                    
+
 # -----------------------------------------------------------------------------------------------------
 class IclustMonitor(LsfMonitor):
 
@@ -1201,7 +1202,7 @@ class IclustMonitor(LsfMonitor):
             if not jobids.count(jobid):
                 # i.e. job is no longer on the list, and hence done
                 self.jobFinished(jobid,None)
-                    
+
 # -----------------------------------------------------------------------------------------------------
 class Wrap:
     def __init__(self, func, args, retqueue, runqueue):
@@ -1209,7 +1210,7 @@ class Wrap:
         self.runqueue = runqueue
         self.func = func
         self.args = args
-        
+
     def __call__(self,interactive=False):
         if not interactive:
             self.runqueue.put(1)
@@ -1221,7 +1222,7 @@ class Wrap:
             self.runqueue.task_done()
             self.retqueue.put( ret  )
 
-    
+
 # -----------------------------------------------------------------------------------------------------
 class Parallel:
     def __init__(self,ncpu,lsfQueue=None,lsfJobName="job",asyncLsf=False,maxThreads=500,jobDriver=None,batchSystem="auto",ncondorcpu=1):
@@ -1236,7 +1237,7 @@ class Parallel:
         self.maxThreads = maxThreads
         self.asyncLsf = asyncLsf
         self.batchSystem = batchSystem
-        
+
         if BatchRegistry.getBatchSystem() == 'htcondor':
             self.ncondorcpu = ncondorcpu
 
@@ -1244,16 +1245,16 @@ class Parallel:
             self.running = Queue()
         else:
             self.running = Queue(ncpu)
-        
+
         if not self.JobDriver:
             self.JobDriver = BatchRegistry.getRunner(self.batchSystem)
-            
+
         if self.lsfQueue and self.asyncLsf:
             self.lsfMon = BatchRegistry.getMonitor(self.batchSystem)(self.lsfJobs,self.returned)
             thread = Thread(None,self.lsfMon)
             thread.start()
-        
-            
+
+
     def run(self,cmd,args,interactive=False,jobName=None):
         myargs = [cmd,args,interactive]
         if jobName:
@@ -1261,21 +1262,21 @@ class Parallel:
         wrap = Wrap( self, myargs, self.returned, self.running )
         if interactive:
             return wrap(interactive=True)
-        
+
         while threading.activeCount() > self.maxThreads:
             sleep(0.05)
-        
+
         ret = (None,(None,(None,(None,None))))
         if not ( self.lsfQueue and  self.asyncLsf ):
             thread = Thread(None,wrap)
             thread.start()
         else:
             ret = wrap(interactive=True)
-            
+
         self.sem.acquire()
 	self.njobs += len(ret[-1][-1][-1][-1]) if isinstance(ret[-1][-1][-1][-1], list) else 1
         self.sem.release()
-        
+
         return ret
 
     def addJob(self,cmd,args,batchId,jobName=None):
@@ -1294,7 +1295,7 @@ class Parallel:
         self.sem.acquire()
 	self.njobs += len(batchId) if isinstance(batchId, list) else 1
         self.sem.release()
-        
+
     def currJobId(self):
         self.sem.acquire()
         ret = self.jobId
@@ -1305,14 +1306,14 @@ class Parallel:
         self.sem.acquire()
         self.jobId = jobId
         self.sem.release()
-        
+
     def getJobId(self):
         self.sem.acquire()
         ret = self.jobId
         self.jobId += 1
         self.sem.release()
         return ret
-        
+
     def __call__(self,cmd,args,interactive,jobName=None,replacesJob=None):
 
         if type(cmd) == str or type(cmd) == unicode:
@@ -1333,11 +1334,11 @@ class Parallel:
         if self.lsfQueue and not interactive and self.asyncLsf:
             self.lsfJobs.put(cmd)
         return cmd,args,ret
-    
+
     def stop(self):
         if self.lsfQueue and self.asyncLsf:
             self.lsfMon.stop = True
-        
+
     def wait(self,handler=None,printOutput=True,struggleThr=0.):
         returns = []
         self.sem.acquire()
@@ -1362,12 +1363,12 @@ class Parallel:
                 nleft += handler.handleJobOutput(job, jobargs, ret)
             else:
                 returns.append( (job,jobargs,ret) )
-            nleft -= 1 
+            nleft -= 1
             if nleft != 0 and nleft == nstruggle and handler:
                 handler.analyzeStrugglers(self)
                 nstruggle = int(floor(nstruggle*struggleThr))
-            
-                
+
+
         self.sem.acquire()
         self.njobs -= njobs
         self.sem.release()

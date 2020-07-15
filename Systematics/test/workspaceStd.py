@@ -42,6 +42,12 @@ customize.options.register('doubleHTagsOnly',
                            VarParsing.VarParsing.varType.bool,
                            'doubleHTagsOnly'
                            )
+customize.options.register('H4GTagsOnly',
+                           False,
+                           VarParsing.VarParsing.multiplicity.singleton,
+                           VarParsing.VarParsing.varType.bool,
+                           'H4GTagsOnly'
+                           )
 customize.options.register('addVBFDoubleHTag',
                            True,
                            VarParsing.VarParsing.multiplicity.singleton,
@@ -89,6 +95,12 @@ customize.options.register('doDoubleHTag',
                            VarParsing.VarParsing.multiplicity.singleton,
                            VarParsing.VarParsing.varType.bool,
                            'doDoubleHTag'
+                           )
+customize.options.register('doH4GTag',
+                           False,
+                           VarParsing.VarParsing.multiplicity.singleton,
+                           VarParsing.VarParsing.varType.bool,
+                           'doH4GTag'
                            )
 customize.options.register('doDoubleHttHKiller',
                            False,
@@ -194,6 +206,7 @@ customize.options.register('applyNNLOPSweight',
                            )
 
 
+
 print "Printing defaults"
 print 'acceptance '+str(customize.acceptance)
 print 'tthTagsOnly '+str(customize.tthTagsOnly)
@@ -228,7 +241,7 @@ print 'tthTagsOnly '+str(customize.tthTagsOnly)
 # process.flashggTagSequence = flashggPrepareTagSequence(customize.metaConditions)
 
 # needed for 0th vertex from microAOD
-if customize.tthTagsOnly:
+if customize.tthTagsOnly or customize.H4GTagsOnly:
     process.load("flashgg/MicroAOD/flashggDiPhotons_cfi")
     process.flashggDiPhotons.whichVertex = cms.uint32(0)
     process.flashggDiPhotons.useZerothVertexFromMicro = cms.bool(True)
@@ -257,10 +270,18 @@ else:
         allowLargettHMVAs(process)
 
 if customize.doDoubleHTag:
-    import flashgg.Systematics.doubleHCustomize 
+    import flashgg.Systematics.doubleHCustomize
     hhc = flashgg.Systematics.doubleHCustomize.DoubleHCustomize(process, customize, customize.metaConditions)
     minimalVariables += hhc.variablesToDump()
     systematicVariables = hhc.systematicVariables()
+
+
+if customize.doH4GTag:
+    import flashgg.Systematics.H4GCustomize
+    h4gc = flashgg.Systematics.H4GCustomize.H4GCustomize(process, customize, customize.metaConditions)
+    minimalVariables += h4gc.variablesToDump()
+    systematicVariables = h4gc.systematicVariables()
+    dataVariables = h4gc.dataVariables()
 
 if customize.doStageOne:
     assert (not customize.doHTXS)
@@ -275,15 +296,15 @@ print 'here we print the tag sequence after'
 print process.flashggTagSequence
 
 if customize.tthTagsOnly:
-    process.flashggTagSorter.TagPriorityRanges = cms.VPSet(   
+    process.flashggTagSorter.TagPriorityRanges = cms.VPSet(
         cms.PSet(TagName = cms.InputTag('flashggTTHLeptonicTag')),
-        cms.PSet(TagName = cms.InputTag('flashggTTHHadronicTag')) 
+        cms.PSet(TagName = cms.InputTag('flashggTTHHadronicTag'))
     )
 
     print "customize.processId:",customize.processId
 
     print "Removing FracRVNvtxWeight from syst and adding  PixelSeed"
-    
+
     newvpset = cms.VPSet()
     for pset in process.flashggDiPhotonSystematics.SystMethods:
         if not pset.Label.value().count("FracRVNvtxWeight") :
@@ -291,9 +312,9 @@ if customize.tthTagsOnly:
             newvpset += [pset]
     #from flashgg.Systematics.flashggDiPhotonSystematics_cfi import PixelSeedWeight #FIXME: this does not currently work, so comment it out for now
     #newvpset += [ PixelSeedWeight ]
-    
+
     process.flashggDiPhotonSystematics.SystMethods = newvpset
-   
+
 
 print "customize.processId:",customize.processId
 # load appropriate scale and smearing bins here
@@ -305,12 +326,12 @@ useEGMTools(process)
 
 # Only run systematics for signal events
 # convention: ggh vbf wzh (wh zh) tth
-signal_processes = ["ggh_","vbf_","wzh_","wh_","zh_","bbh_","thq_","thw_","tth_","HHTo2B2G","GluGluHToGG","VBFHToGG","VHToGG","ttHToGG","Acceptance","hh","vbfhh","qqh","ggh","tth","vh"]
+signal_processes = ["ggh_","vbf_","wzh_","wh_","zh_","bbh_","thq_","thw_","tth_","HHTo2B2G","GluGluHToGG","VBFHToGG","VHToGG","ttHToGG","Acceptance","hh","vbfhh","qqh","ggh","tth","vh",""]
 is_signal = reduce(lambda y,z: y or z, map(lambda x: customize.processId.count(x), signal_processes))
 
 applyL1Prefiring = customizeForL1Prefiring(process, customize.metaConditions, customize.processId)
 
-#if customize.processId.count("h_") or customize.processId.count("vbf_") or customize.processId.count("Acceptance") or customize.processId.count("hh_"): 
+#if customize.processId.count("h_") or customize.processId.count("vbf_") or customize.processId.count("Acceptance") or customize.processId.count("hh_"):
 if is_signal:
     print "Signal MC, so adding systematics and dZ"
     if customize.doHTXS:
@@ -388,10 +409,15 @@ if customize.doubleHTagsOnly:
     variablesToUse = minimalVariables
    # if customize.processId == "Data":
    #     variablesToUse = minimalNonSignalVariables
-  
+
 if customize.doDoubleHTag:
    systlabels,jetsystlabels,metsystlabels = hhc.customizeSystematics(systlabels,jetsystlabels,metsystlabels)
-           
+
+if customize.H4GTagsOnly:
+    variablesToUse = minimalVariables
+    if customize.processId == "Data":
+        variablesToUse = minimalNonSignalVariables
+        variablesToUse += dataVariables
 
 print "--- Systematics  with independent collections ---"
 print systlabels
@@ -460,7 +486,12 @@ elif customize.doubleHTagsOnly:
     print "taglist is:"
     print tagList
     if customize.addVBFDoubleHTag and customize.addVBFDoubleHVariables:
-        tag_only_variables["VBFDoubleHTag"] = hhc.vbfHHVariables()    
+        tag_only_variables["VBFDoubleHTag"] = hhc.vbfHHVariables()
+elif customize.H4GTagsOnly:
+    tagList = h4gc.tagList
+    print "taglist is:"
+    print tagList
+
 elif customize.doStageOne:
     tagList = soc.tagList
 else:
@@ -481,7 +512,7 @@ else:
 definedSysts=set()
 process.tagsDumper.classifierCfg.remap=cms.untracked.VPSet()
 import flashgg.Taggers.dumperConfigTools as cfgTools
-for tag in tagList: 
+for tag in tagList:
   tagName=tag[0]
   tagCats=tag[1]
   # remap return value of class-based classifier
@@ -498,7 +529,7 @@ for tag in tagList:
       else:
           if customize.doHTXS:
               currentVariables = copy.deepcopy(systematicVariablesHTXS)
-          else:    
+          else:
               currentVariables = copy.deepcopy(systematicVariables)
       if tagName.upper().count("NOTAG"):
           if customize.doHTXS:
@@ -529,7 +560,7 @@ for tag in tagList:
                            systlabel,
                            classname=tagName,
                            cutbased=cutstring,
-                           subcats=tagCats, 
+                           subcats=tagCats,
                            variables=currentVariables,
                            histograms=minimalHistograms,
                            binnedOnly=isBinnedOnly,
@@ -598,7 +629,7 @@ else:
 process.flashggMetFilters.requiredFilterNames = cms.untracked.vstring([filter.encode("ascii") for filter in customize.metaConditions["flashggMetFilters"][metFilterSelector]])
 process.flashggMetFilters.filtersInputTag = filtersInputTag
 
-if customize.tthTagsOnly:
+if customize.tthTagsOnly :
     process.p = cms.Path(process.dataRequirements*
                          process.flashggMetFilters*
                          process.genFilter*
@@ -615,7 +646,26 @@ if customize.tthTagsOnly:
                          process.tagsDumper)
     # Now, we put the ttH tags back in the sequence with modified systematics workflow
     modifySystematicsWorkflowForttH(process, systlabels, phosystlabels, metsystlabels, jetsystlabels)
-
+elif customize.H4GTagsOnly:
+     from flashgg.MicroAOD.flashggTkVtxMap_cfi import flashggVertexMapUnique
+     process.load("flashgg/MicroAOD/flashggTkVtxMap_cfi")
+     process.p = cms.Path(
+                          process.flashggVertexMapUnique*
+                          process.dataRequirements*
+                          process.flashggMetFilters*
+                          process.genFilter*
+                          process.flashggDiPhotons* # needed for 0th vertex from microAOD
+                          process.flashggDifferentialPhoIdInputsCorrection*
+                          process.flashggDiPhotonSystematics*
+                          process.flashggMetSystematics*
+                          process.flashggMuonSystematics*process.flashggElectronSystematics*
+                          (process.flashggUnpackedJets*process.jetSystematicsSequence)*
+                         #  process.content*
+                          (process.flashggTagSequence*process.systematicsTagSequences)*
+                          process.flashggSystTagMerger*
+                          process.penultimateFilter*
+                          process.finalFilter*
+                          process.tagsDumper)
 else:
     process.p = cms.Path(process.dataRequirements*
                          process.flashggMetFilters*
@@ -630,14 +680,14 @@ else:
                          process.penultimateFilter*
                          process.finalFilter*
                          process.tagsDumper)
-    if customize.doStageOne: 
+    if customize.doStageOne:
         if soc.modifyForttH: soc.modifyWorkflowForttH(systlabels, phosystlabels, metsystlabels, jetsystlabels)
 
 if customize.doBJetRegression:
 
     bregProducers = []
     doubleHTagProducers = []
-    
+
     from flashgg.Taggers.flashggTags_cff import UnpackedJetCollectionVInputTag
     from flashgg.Taggers.flashggbRegressionProducer_cfi import flashggbRegressionProducer
     recoJetCollections = UnpackedJetCollectionVInputTag
@@ -664,13 +714,14 @@ if customize.doBJetRegression:
     if customize.metaConditions['bRegression']['useBRegressionJERsf'] :
        process.p.replace(process.jetSystematicsSequence,process.jetSystematicsSequence*process.bregJERJetsProducers*process.bregProducers)
     else : process.p.replace(process.jetSystematicsSequence,process.jetSystematicsSequence+process.bregProducers)
-    
+
 
 if customize.doDoubleHTag:
     process.p.remove(process.flashggMetFilters)
     hhc.doubleHTagRunSequence(systlabels,jetsystlabels,phosystlabels)
-  
 
+if customize.doH4GTag:
+    h4gc.H4GTagRunSequence(systlabels,jetsystlabels,phosystlabels)
 
 if( not hasattr(process,"options") ): process.options = cms.untracked.PSet()
 process.options.allowUnscheduled = cms.untracked.bool(True)
@@ -683,11 +734,11 @@ for mn in mns:
         print str(module),module.src
     elif hasattr(module,"DiPhotonTag"):
         print str(module),module.DiPhotonTag
-print
+
 printSystematicInfo(process)
 
 ### Rerun microAOD sequence on top of microAODs using the parent dataset
-if customize.useParentDataset:
+if customize.useParentDataset and not customize.H4GTagsOnly:
     runRivetSequence(process, customize.metaConditions, customize.processId)
     if customize.recalculatePDFWeights and is_signal and not customize.processId.count("bbh"):
         recalculatePDFWeights(process, customize.metaConditions)
@@ -696,7 +747,7 @@ if customize.useParentDataset:
 
 #####################################################################
 ## Memory and timing, n.b. igprof is very complicated to interpret ##
-##################################################################### 
+#####################################################################
 
 #from Validation.Performance.TimeMemoryInfo import customise as TimeMemoryCustomize
 #TimeMemoryCustomize(process)
@@ -727,7 +778,7 @@ if customize.verboseTagDump:
 if customize.verboseTagDump:
     process.flashggTagSorter.Debug = True
     customize.maxEvents = 10
-                           
+
 if customize.verboseSystDump:
     turnOnAllSystematicsDebug(process)
     customize.maxEVents = 10

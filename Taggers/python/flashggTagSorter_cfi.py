@@ -9,27 +9,28 @@ HTXSInputTags = cms.PSet(stage0bin = cms.InputTag("rivetProducerHTXS","stage0bin
                          )
 
 flashggTagSorter = cms.EDProducer('FlashggTagSorter',
-                                  DiPhotonTag = cms.InputTag('flashggPreselectedDiPhotons'),
+                                  DiPhotonTag = cms.InputTag('flashggDiPhotonSystematics'),
+                                  # DiPhotonTag = cms.InputTag('flashggPreselectedDiPhotons'),
                                   # Top of list is highest priority
                                   # Optionally can add category ranges if priority depends on category number
                                   TagPriorityRanges = cms.VPSet(
-#        cms.PSet(TagName = cms.InputTag('flashggTTHDiLeptonTag')), 
-        cms.PSet(TagName = cms.InputTag('flashggTTHLeptonicTag')), 
+#        cms.PSet(TagName = cms.InputTag('flashggTTHDiLeptonTag')),
+        cms.PSet(TagName = cms.InputTag('flashggTTHLeptonicTag')),
 	cms.PSet(TagName = cms.InputTag('flashggTHQLeptonicTag')),
         cms.PSet(TagName = cms.InputTag('flashggZHLeptonicTag')),
         cms.PSet(TagName = cms.InputTag('flashggWHLeptonicTag')),
-        cms.PSet(TagName = cms.InputTag('flashggTTHHadronicTag')),   
+        cms.PSet(TagName = cms.InputTag('flashggTTHHadronicTag')),
 #        cms.PSet(TagName = cms.InputTag('flashggDoubleHTag')), # hint priority for double H tag w/ ttH veto
-        cms.PSet(TagName = cms.InputTag('flashggVBFTag')),     
+        cms.PSet(TagName = cms.InputTag('flashggVBFTag')),
         cms.PSet(TagName = cms.InputTag('flashggVHMetTag')),
         cms.PSet(TagName = cms.InputTag('flashggVHHadronicTag')),
         cms.PSet(TagName = cms.InputTag('flashggUntagged'))
         ###                                                                 cms.PSet(TagName = cms.InputTag('flashggSigmaMoMpToMTag'))
         ),
-                                  MassCutUpper=cms.double(180.),
-                                  MassCutLower=cms.double(100),
+                                  MassCutUpper=cms.double(1000000000000.),
+                                  MassCutLower=cms.double(0),
                                   MinObjectWeightException = cms.double(0.0),
-                                  MaxObjectWeightException = cms.double(10.),
+                                  MaxObjectWeightException = cms.double(100000.),
                                   MinObjectWeightWarning = cms.double(0.4),
                                   MaxObjectWeightWarning = cms.double(2.5),
                                   StoreOtherTagInfo = cms.bool(False),
@@ -43,4 +44,3 @@ flashggTagSorter = cms.EDProducer('FlashggTagSorter',
                                   applyNNLOPSweight = cms.bool(False),
                                   SetHTXSinfo = cms.bool(True)
                                   )
-
