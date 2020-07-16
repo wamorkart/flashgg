@@ -326,7 +326,7 @@ useEGMTools(process)
 
 # Only run systematics for signal events
 # convention: ggh vbf wzh (wh zh) tth
-signal_processes = ["ggh_","vbf_","wzh_","wh_","zh_","bbh_","thq_","thw_","tth_","HHTo2B2G","GluGluHToGG","VBFHToGG","VHToGG","ttHToGG","Acceptance","hh","vbfhh","qqh","ggh","tth","vh",""]
+signal_processes = ["ggh_","vbf_","wzh_","wh_","zh_","bbh_","thq_","thw_","tth_","HHTo2B2G","GluGluHToGG","VBFHToGG","VHToGG","ttHToGG","Acceptance","hh","vbfhh","qqh","ggh","tth","vh","HToAA"]
 is_signal = reduce(lambda y,z: y or z, map(lambda x: customize.processId.count(x), signal_processes))
 
 applyL1Prefiring = customizeForL1Prefiring(process, customize.metaConditions, customize.processId)
@@ -350,19 +350,19 @@ if is_signal:
             phosystlabels.append("FNUFEE%s01sigma" % direction)
             phosystlabels.append("MCScaleGain6EB%s01sigma" % direction)
             phosystlabels.append("MCScaleGain1EB%s01sigma" % direction)
-            jetsystlabels.append("JEC%s01sigma" % direction)
-            jetsystlabels.append("JER%s01sigma" % direction)
-            jetsystlabels.append("PUJIDShift%s01sigma" % direction)
+            # jetsystlabels.append("JEC%s01sigma" % direction)
+            # jetsystlabels.append("JER%s01sigma" % direction)
+            # jetsystlabels.append("PUJIDShift%s01sigma" % direction)
             if customize.doGranularJEC:
                 for sourceName in customize.metaConditions['flashggJetSystematics']['listOfSources']:
                     jetsystlabels.append("JEC%s%s01sigma" % (str(sourceName),direction))
             if customize.metaConditions['flashggJetSystematics']['doHEMuncertainty']:
                 jetsystlabels.append("JetHEM%s01sigma" % direction)
-            metsystlabels.append("metJecUncertainty%s01sigma" % direction)
-            metsystlabels.append("metJerUncertainty%s01sigma" % direction)
-            metsystlabels.append("metPhoUncertainty%s01sigma" % direction)
-            metsystlabels.append("metUncUncertainty%s01sigma" % direction)
-            variablesToUse.append("LooseMvaSF%s01sigma[1,-999999.,999999.] := weight(\"LooseMvaSF%s01sigma\")" % (direction,direction))
+            # metsystlabels.append("metJecUncertainty%s01sigma" % direction)
+            # metsystlabels.append("metJerUncertainty%s01sigma" % direction)
+            # metsystlabels.append("metPhoUncertainty%s01sigma" % direction)
+            # metsystlabels.append("metUncUncertainty%s01sigma" % direction)
+            # variablesToUse.append("LooseMvaSF%s01sigma[1,-999999.,999999.] := weight(\"LooseMvaSF%s01sigma\")" % (direction,direction))
             variablesToUse.append("PreselSF%s01sigma[1,-999999.,999999.] := weight(\"PreselSF%s01sigma\")" % (direction,direction))
             variablesToUse.append("electronVetoSF%s01sigma[1,-999999.,999999.] := weight(\"electronVetoSF%s01sigma\")" % (direction,direction))
             variablesToUse.append("TriggerWeight%s01sigma[1,-999999.,999999.] := weight(\"TriggerWeight%s01sigma\")" % (direction,direction))

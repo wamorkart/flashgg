@@ -60,16 +60,6 @@ pho3_MVA_ (),
 pho4_MVA_ (),
 pho_MVA_min_(),
 pho_MVA_max_(),
-dp1_prime_(),
-dp2_prime_(),
-dp1_pho1_prime_ (),
-dp1_pho2_prime_ (),
-dp2_pho1_prime_ (),
-dp2_pho2_prime_ (),
-dp1_ipho1_prime_ (),
-dp1_ipho2_prime_ (),
-dp2_ipho1_prime_ (),
-dp2_ipho2_prime_ (),
 dp1_ (),
 dp2_ (),
 dp1_pho1_ (),
@@ -93,16 +83,11 @@ gen_a1_mass_(),
 gen_a2_mass_(),
 gen_h_mass_(),
 // diphoPhotonsVector_()
-diphoton_pairing_indices_(),
-diphoPair_MVA_()
-// CatMVAweightfileH4G_(),
-// cat_MVA_value_()
+diphoton_pairing_indices_()
 {}
   H4GCandidate::~H4GCandidate() {}
-  // H4GCandidate::H4GCandidate( std::vector<edm::Ptr<reco::Vertex>> Vertices, std::vector<edm::Ptr<reco::Vertex>> slim_Vertices, edm::Ptr<reco::Vertex> vertex_diphoton, edm::Ptr<reco::Vertex> vertex_bdt, reco::GenParticle::Point genVertex, math::XYZPoint BSPoint, std::vector<std::vector<float>> Vector, float MVA0, float MVA1, float MVA2, float dZ1, float dZ2, float dZtrue, int hgg_index, int trueVtx_index, int rndVtx_index, int bdtVtx_index, float tp_pt, float nVertices, float nConv, TMVA::Reader *VertexProbMva, double genTotalWeight, std::vector<flashgg::Photon> diphoPhotons, std::vector <edm::Ptr<flashgg::DiPhotonCandidate>> diPhoPtrs,float gen_a1_mass, float gen_a2_mass, float gen_h_mass, std::vector<int> diphoton_pairing_indices, float diphoPair_MVA)://,edm::FileInPath CatMVAweightfileH4G):
-  //  Vertices_(Vertices), slim_Vertices_(slim_Vertices),vertex_diphoton_(vertex_diphoton), vertex_bdt_(vertex_bdt), genVertex_(genVertex), BSPoint_(BSPoint), Vector_(Vector), MVA0_(MVA0), MVA1_(MVA1), MVA2_(MVA2), dZ1_(dZ1), dZ2_(dZ2), dZtrue_(dZtrue), hgg_index_(hgg_index), trueVtx_index_(trueVtx_index), rndVtx_index_(rndVtx_index), bdtVtx_index_(bdtVtx_index), tp_pt_(tp_pt), nVertices_(nVertices), nConv_(nConv), VertexProbMva_(VertexProbMva), genTotalWeight_(genTotalWeight),diphoPhotons_(diphoPhotons), diPhoPtrs_(diPhoPtrs), gen_a1_mass_(gen_a1_mass), gen_a2_mass_(gen_a2_mass), gen_h_mass_(gen_h_mass), diphoton_pairing_indices_(diphoton_pairing_indices),diphoPair_MVA_(diphoPair_MVA)//,CatMVAweightfileH4G_(CatMVAweightfileH4G)
-  H4GCandidate::H4GCandidate( std::vector<edm::Ptr<reco::Vertex>> Vertices, std::vector<edm::Ptr<reco::Vertex>> slim_Vertices, edm::Ptr<reco::Vertex> vertex_diphoton, edm::Ptr<reco::Vertex> vertex_bdt, reco::GenParticle::Point genVertex, math::XYZPoint BSPoint, float MVA0, float MVA1, float MVA2, float dZ1, float dZ2, float dZtrue, int hgg_index, int trueVtx_index, int rndVtx_index, int bdtVtx_index, float tp_pt, float nVertices, float nConv, double genTotalWeight, std::vector<flashgg::Photon> diphoPhotons, std::vector <edm::Ptr<flashgg::DiPhotonCandidate>> diPhoPtrs,float gen_a1_mass, float gen_a2_mass, float gen_h_mass, std::vector<int> diphoton_pairing_indices, float diphoPair_MVA)://,edm::FileInPath CatMVAweightfileH4G):
-   Vertices_(Vertices), slim_Vertices_(slim_Vertices),vertex_diphoton_(vertex_diphoton), vertex_bdt_(vertex_bdt), genVertex_(genVertex), BSPoint_(BSPoint), MVA0_(MVA0), MVA1_(MVA1), MVA2_(MVA2), dZ1_(dZ1), dZ2_(dZ2), dZtrue_(dZtrue), hgg_index_(hgg_index), trueVtx_index_(trueVtx_index), rndVtx_index_(rndVtx_index), bdtVtx_index_(bdtVtx_index), tp_pt_(tp_pt), nVertices_(nVertices), nConv_(nConv), genTotalWeight_(genTotalWeight),diphoPhotons_(diphoPhotons), diPhoPtrs_(diPhoPtrs), gen_a1_mass_(gen_a1_mass), gen_a2_mass_(gen_a2_mass), gen_h_mass_(gen_h_mass), diphoton_pairing_indices_(diphoton_pairing_indices),diphoPair_MVA_(diphoPair_MVA)//,CatMVAweightfileH4G_(CatMVAweightfileH4G)
+  H4GCandidate::H4GCandidate( std::vector<edm::Ptr<reco::Vertex>> Vertices, std::vector<edm::Ptr<reco::Vertex>> slim_Vertices, edm::Ptr<reco::Vertex> vertex_diphoton, edm::Ptr<reco::Vertex> vertex_bdt, reco::GenParticle::Point genVertex, math::XYZPoint BSPoint, std::vector<std::vector<float>> Vector, float MVA0, float MVA1, float MVA2, float dZ1, float dZ2, float dZtrue, int hgg_index, int trueVtx_index, int rndVtx_index, int bdtVtx_index, float tp_pt, float nVertices, float nConv, TMVA::Reader *VertexProbMva, double genTotalWeight, std::vector<flashgg::Photon> diphoPhotons, std::vector <edm::Ptr<flashgg::DiPhotonCandidate>> diPhoPtrs,float gen_a1_mass, float gen_a2_mass, float gen_h_mass, std::vector<int> diphoton_pairing_indices):
+   Vertices_(Vertices), slim_Vertices_(slim_Vertices),vertex_diphoton_(vertex_diphoton), vertex_bdt_(vertex_bdt), genVertex_(genVertex), BSPoint_(BSPoint), Vector_(Vector), MVA0_(MVA0), MVA1_(MVA1), MVA2_(MVA2), dZ1_(dZ1), dZ2_(dZ2), dZtrue_(dZtrue), hgg_index_(hgg_index), trueVtx_index_(trueVtx_index), rndVtx_index_(rndVtx_index), bdtVtx_index_(bdtVtx_index), tp_pt_(tp_pt), nVertices_(nVertices), nConv_(nConv), VertexProbMva_(VertexProbMva), genTotalWeight_(genTotalWeight),diphoPhotons_(diphoPhotons), diPhoPtrs_(diPhoPtrs), gen_a1_mass_(gen_a1_mass), gen_a2_mass_(gen_a2_mass), gen_h_mass_(gen_h_mass), diphoton_pairing_indices_(diphoton_pairing_indices)
 
   {
 
@@ -111,7 +96,6 @@ diphoPair_MVA_()
     int random_vtx = rand() % slim_Vertices_.size();
     Vertex_random_ = slim_Vertices_[random_vtx];
 
-    // cout << "bdtvtx_index " << bdtVtx_index << endl;
     float vtx_X = Vertices_[bdtVtx_index]->x();
     float vtx_Y = Vertices_[bdtVtx_index]->y();
     float vtx_Z = Vertices_[bdtVtx_index]->z();
@@ -186,15 +170,6 @@ diphoPair_MVA_()
     pho3_MVA_ = phoP4Corrected_dp_.size() > 2 ? phoP4Corrected_dp_[2].phoIdMvaDWrtVtx(Vertices_[bdtVtx_index]) : -999;
     pho4_MVA_ = phoP4Corrected_dp_.size() > 3 ? phoP4Corrected_dp_[3].phoIdMvaDWrtVtx(Vertices_[bdtVtx_index]) : -999;
 
-    // cout  << "pho1_MVA  " << pho1_MVA_  << endl;
-    // cout  << "pho2_MVA  " << pho2_MVA_  << endl;
-    // cout  << "pho3_MVA  " << pho3_MVA_  << endl;
-    // cout  << "pho4_MVA  " << pho4_MVA_  << endl;
-    // cout << "vertex bdt # " << bdtVtx_index << endl;
-    // cout << "pho1_pt " << phoP4Corrected_dp_[0].pt()  << endl;
-    // cout << "pho2_pt " << phoP4Corrected_dp_[1].pt()  << endl;
-    // cout << "pho3_pt " << phoP4Corrected_dp_[2].pt()  << endl;
-    // cout << "pho4_pt " << phoP4Corrected_dp_[3].pt()  << endl;
     std::vector<float> pho_MVA_vec;
     pho_MVA_vec.push_back(pho1_MVA_);
     pho_MVA_vec.push_back(pho2_MVA_);
@@ -204,92 +179,94 @@ diphoPair_MVA_()
     pho_MVA_min_ = *min_element(pho_MVA_vec.begin(),pho_MVA_vec.end());
     pho_MVA_max_ = *max_element(pho_MVA_vec.begin(),pho_MVA_vec.end());
 
-    float minDM = 1000000;
+    /*float minDM = 1000000;
     if (phoP4Corrected_dp_.size() > 3)
     {
       for (int i1=0; i1 < (int) phoP4Corrected_dp_.size(); i1++)
       {
-        flashgg::Photon pho1_prime = phoP4Corrected_dp_[i1];
+        flashgg::Photon pho1 = phoP4Corrected_dp_[i1];
         for (int i2=0; i2 < (int) phoP4Corrected_dp_.size(); i2++)
         {
           if (i2 <= i1 ){continue;}
-          flashgg::Photon pho2_prime = phoP4Corrected_dp_[i2];
+          flashgg::Photon pho2 = phoP4Corrected_dp_[i2];
           for (int i3=0; i3 < (int) phoP4Corrected_dp_.size(); i3++)
           {
             if (i3 == i2 || i3 == i1){continue;}
-            flashgg::Photon pho3_prime = phoP4Corrected_dp_[i3];
+            flashgg::Photon pho3 = phoP4Corrected_dp_[i3];
             for (int i4=0; i4 < (int) phoP4Corrected_dp_.size(); i4++)
             {
               if (i4 <= i3){continue;}
               if (i4 == i1 || i4 == i2){continue;}
-              flashgg::Photon pho4_prime = phoP4Corrected_dp_[i4];
-              auto dipho1_prime = pho1_prime.p4() + pho2_prime.p4();
-              auto dipho2_prime = pho3_prime.p4() + pho4_prime.p4();
-              float deltaM = fabs( dipho1_prime.mass() - dipho2_prime.mass());
+              flashgg::Photon pho4 = phoP4Corrected_dp_[i4];
+              auto dipho1 = pho1.p4() + pho2.p4();
+              auto dipho2 = pho3.p4() + pho4.p4();
+              float deltaM = fabs( dipho1.mass() - dipho2.mass());
               if (deltaM < minDM){
                 minDM = deltaM;
-                dp1_pho1_prime_ = pho1_prime.p4();
-                dp1_ipho1_prime_ = i1;
-                dp1_pho2_prime_ = pho2_prime.p4();
-                dp1_ipho2_prime_ = i2;
-                dp2_pho1_prime_ = pho3_prime.p4();
-                dp2_ipho1_prime_ = i3;
-                dp2_pho2_prime_ = pho4_prime.p4();
-                dp2_ipho2_prime_ = i4;
-                if (dipho1_prime.pt() > dipho2_prime.pt())
+                dp1_pho1_ = pho1.p4();
+                dp1_ipho1_ = i1;
+                dp1_pho2_ = pho2.p4();
+                dp1_ipho2_ = i2;
+                dp2_pho1_ = pho3.p4();
+                dp2_ipho1_ = i3;
+                dp2_pho2_ = pho4.p4();
+                dp2_ipho2_ = i4;
+                if (dipho1.pt() > dipho2.pt())
                 {
-                  dp1_prime_ = dipho1_prime;
-                  dp2_prime_ = dipho2_prime;
+                  dp1_ = dipho1;
+                  dp2_ = dipho2;
                 }
-                else if (dipho1_prime.pt() < dipho2_prime.pt())
+                else if (dipho1.pt() < dipho2.pt())
                 {
-                  dp1_prime_ = dipho2_prime;
-                  dp2_prime_ = dipho1_prime;
+                  dp1_ = dipho2;
+                  dp2_ = dipho1;
                 }
               }
             }
           }
         }
-      }
+      }*/
 
-      flashgg::Photon pho1 = phoP4Corrected_dp_[diphoton_pairing_indices_.at(0)];
-      flashgg::Photon pho2 = phoP4Corrected_dp_[diphoton_pairing_indices_.at(1)];
-      flashgg::Photon pho3 = phoP4Corrected_dp_[diphoton_pairing_indices_.at(2)];
-      flashgg::Photon pho4 = phoP4Corrected_dp_[diphoton_pairing_indices_.at(3)];
-      if(pho1.pt() > pho2.pt()){
-         dp1_pho1_ = pho1.p4();
-         dp1_pho2_ = pho2.p4();
-         dp1_ipho1_ = diphoton_pairing_indices_.at(0);
-         dp1_ipho2_ = diphoton_pairing_indices_.at(1);
-      }else{
-         dp1_pho1_ = pho2.p4();
-         dp1_pho2_ = pho3.p4();
-         dp1_ipho1_ = diphoton_pairing_indices_.at(1);
-         dp1_ipho2_ = diphoton_pairing_indices_.at(0);
-      }
-      if(pho3.pt() > pho4.pt()){
-         dp2_pho1_ = pho3.p4();
-         dp2_pho2_ = pho4.p4();
-         dp2_ipho1_ = diphoton_pairing_indices_.at(2);
-         dp2_ipho2_ = diphoton_pairing_indices_.at(3);
-      }else{
-         dp2_pho1_ = pho4.p4();
-         dp2_pho2_ = pho3.p4();
-         dp2_ipho1_ = diphoton_pairing_indices_.at(3);
-         dp2_ipho2_ = diphoton_pairing_indices_.at(2);
-      }
-      auto dipho1 = pho1.p4() + pho2.p4();
-      auto dipho2 = pho3.p4() + pho4.p4();
-      if (dipho1.pt() > dipho2.pt())
-      {
-          dp1_ = dipho1;
-          dp2_ = dipho2;
-      }
-      else if (dipho1.pt() < dipho2.pt())
-      {
-          dp1_ = dipho2;
-          dp2_ = dipho1;
-      }
+
+      if (phoP4Corrected_dp_.size() > 3){
+         flashgg::Photon pho1 = phoP4Corrected_dp_[diphoton_pairing_indices_.at(0)];
+         flashgg::Photon pho2 = phoP4Corrected_dp_[diphoton_pairing_indices_.at(1)];
+         flashgg::Photon pho3 = phoP4Corrected_dp_[diphoton_pairing_indices_.at(2)];
+         flashgg::Photon pho4 = phoP4Corrected_dp_[diphoton_pairing_indices_.at(3)];
+         if(pho1.pt() > pho2.pt()){
+            dp1_pho1_ = pho1.p4();
+            dp1_pho2_ = pho2.p4();
+            dp1_ipho1_ = diphoton_pairing_indices_.at(0);
+            dp1_ipho2_ = diphoton_pairing_indices_.at(1);
+         }else{
+            dp1_pho1_ = pho2.p4();
+            dp1_pho2_ = pho3.p4();
+            dp1_ipho1_ = diphoton_pairing_indices_.at(1);
+            dp1_ipho2_ = diphoton_pairing_indices_.at(0);
+         }
+         if(pho3.pt() > pho4.pt()){
+            dp2_pho1_ = pho3.p4();
+            dp2_pho2_ = pho4.p4();
+            dp2_ipho1_ = diphoton_pairing_indices_.at(2);
+            dp2_ipho2_ = diphoton_pairing_indices_.at(3);
+         }else{
+            dp2_pho1_ = pho4.p4();
+            dp2_pho2_ = pho3.p4();
+            dp2_ipho1_ = diphoton_pairing_indices_.at(3);
+            dp2_ipho2_ = diphoton_pairing_indices_.at(2);
+         }
+         auto dipho1 = pho1.p4() + pho2.p4();
+         auto dipho2 = pho3.p4() + pho4.p4();
+         if (dipho1.pt() > dipho2.pt())
+         {
+            dp1_ = dipho1;
+            dp2_ = dipho2;
+         }
+         else if (dipho1.pt() < dipho2.pt())
+         {
+            dp1_ = dipho2;
+            dp2_ = dipho1;
+         }
 
       tp_ = phoP4Corrected_dp_[0].p4() + phoP4Corrected_dp_[1].p4() + phoP4Corrected_dp_[2].p4() + phoP4Corrected_dp_[3].p4();
       pho12_ = phoP4Corrected_dp_[0].p4() + phoP4Corrected_dp_[1].p4();
@@ -364,38 +341,6 @@ diphoPair_MVA_()
 
     tp_pt =  tp_.pt();
     // vtxProbMVA_ = VertexProbMva_->EvaluateMVA( "BDT" );
-
-    // TMVA Variables
-    // float dp1_mass = dp1_.mass();
-    // float dp2_mass = dp2_.mass();
-    // float dp12_dr = deltaR(dp1_.eta(),dp1_.phi(),dp2_.eta(),dp2_.phi());
-    // float absCosThetaStar_CS = fabs(getCosThetaStar_CS());
-    // float absCosTheta_pho_a1 = fabs(CosThetaAngles()[0]);
-    // float absCosTheta_pho_a2 = fabs(CosThetaAngles()[1]);
-    // float (dp1_pt/tp_mass) = dp1_.pt()/tp_.mass();
-    // float (dp2_pt/tp_mass) = dp2_.pt()/tp_.mass();
-    // float dp1_PtoverMass = dp1_.pt()/dp1_.mass();
-    // float dp2_PtoverMass = dp2_.pt()/dp2_.mass();
-    // cout << dp1_mass << "  " << dp2_mass << "  " << dp12_dr << endl;
-    // cout << "pairing mva" << diphoPair_MVA << endl;
-    // float diphoPair_MVA = diphoPair_MVA
-    // TMVA::Reader *CatMVA_;
-    // CatMVA_ = new TMVA::Reader( "!Color:Silent" );
-    // CatMVA_->AddVariable("diphoPair_MVA",&diphoPair_MVA);
-    // // CatMVA_->AddVariable("dp1_mass",&dp1_mass);
-    // // CatMVA_->AddVariable("dp2_mass",&dp2_mass);
-    // // CatMVA_->AddVariable("dp12_dr",&dp12_dr);
-    // CatMVA_->AddVariable("absCosThetaStar_CS",&absCosThetaStar_CS);
-    // CatMVA_->AddVariable("absCosTheta_pho_a1",&absCosTheta_pho_a1);
-    // CatMVA_->AddVariable("absCosTheta_pho_a2",&absCosTheta_pho_a2);
-    // // CatMVA_->AddVariable("(dp1_pt
-    // // verMass",&a2pt_over_mass);
-    // CatMVA_->BookMVA( "BDT", CatMVAweightfileH4G_.fullPath() );
-    //
-    // cat_MVA_value_ = CatMVA_->EvaluateMVA( "BDT" );
-
-    // cout << cat_MVA_value_ << endl;
-
   }
 
   // good photon selection

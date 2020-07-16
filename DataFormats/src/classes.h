@@ -359,7 +359,7 @@ namespace  {
         std::vector<flashgg::H4GTag> vec_H4G;
         edm::Wrapper<std::vector<flashgg::H4GTag> > wrp_vec_H4G;
 
-         flashgg::H4GCandidate h4g;
+        flashgg::H4GCandidate h4g;
         std::vector<flashgg::H4GCandidate> vec_h4g;
         edm::Wrapper<std::vector<flashgg::H4GCandidate> > wrp_vec_h4g;
     };
