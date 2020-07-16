@@ -83,7 +83,7 @@ H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg:
 
   // -- dM pair method -- //
 
-  reco::Candidate::LorentzVector dp1_prime_, dp2_prime_, dp1_pho1_prime_, dp1_pho2_prime_, dp2_pho1_prime_,dp2_pho2_prime_   ;
+  //reco::Candidate::LorentzVector dp1_prime_, dp2_prime_, dp1_pho1_prime_, dp1_pho2_prime_, dp2_pho1_prime_,dp2_pho2_prime_   ;
 
   // min dM pairing begin-------
   for (int i1=0; i1 < (int) phoVect.size(); i1++)
