@@ -43,6 +43,20 @@ to set this proxy to your X509_USER_PROXY environment variable for the example a
 
 where x590up_u95168 would be replaced by whatever your proxy name is.
 
+
+** H4G CandidateDumper to produce Vtx trainign ntuples
+
+*** Running locally
+    #+BEGIN_EXAMPLE
+    cmsRun Taggers/test/H4GTest_cfg.py vtxBDTDumper=1 isCondor=0 year=2018 isSignal=1 mass=60 metaConditions=$CMSSW_BASE/src/flashgg/MetaData/data/MetaConditions/Era2018_RR-17Sep2018_v1.json doH4GVertex=1
+    #+END_EXAMPLE
+
+*** Running on condor
+      #+BEGIN_EXAMPLE
+      fggRunJobs.py --load Taggers/test/H4G_2018_Tagger/H4G_VtxTrees.json -D -P -n 500 -d 2018_vtx -x cmsRun Taggers/test/H4GTest_cfg.py --no-copy-proxy  maxEvents=-1 -q workday --stage-to /eos/user/t/twamorka/h4g_fullRun2/2018_VtxTrees/
+      #+END_EXAMPLE
+
+
 ** H4G Tagger
 
 *** Running Locally
