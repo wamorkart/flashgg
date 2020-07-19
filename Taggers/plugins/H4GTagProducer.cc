@@ -157,7 +157,7 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
       inputDiPhotonSuffixes_= iConfig.getParameter<std::vector<std::string> > ( "DiPhotonSuffixes" );
       std::vector<edm::InputTag>  diPhotonTags;
       for (auto & suffix : inputDiPhotonSuffixes_){
-        // cout << "suffix: " << suffix  << endl;
+         // cout << "suffix: " << suffix  << endl;
         systematicsLabels.push_back(suffix);
         std::string inputName = inputDiPhotonName_;
         inputName.append(suffix);
@@ -296,9 +296,12 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
         bool atLeastOneDiphoPass = false;
         for( unsigned int dpIndex = 0; dpIndex < diPhotons->size(); dpIndex++ )
         {
+          // cout << dpIndex << endl;
           edm::Ptr<flashgg::DiPhotonCandidate> thisDPPtr = diPhotons->ptrAt( dpIndex );
           flashgg::DiPhotonCandidate * thisDPPointer = const_cast<flashgg::DiPhotonCandidate *>(thisDPPtr.get());
           atLeastOneDiphoPass |= idSelector_(*thisDPPointer, evt);
+          // cout << "lead pho" << thisDPPtr->leadingPhoton()->pt() << endl;
+          // cout << "lead pho MVA " << thisDPPtr->leadingPhoton()->phoIdMvaDWrtVtx(thisDPPtr->vtx()) << endl;
         }
 
         if (atLeastOneDiphoPass){
@@ -388,15 +391,7 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
 
         if (diphoton_idx > 0) break;
       }
-      // cout << "# of vertices " << Vertices.size() << endl;
 
-      // vtx_X = vertex_chosen->x();
-      // vtx_Y = vertex_chosen->y();
-      // vtx_Z = vertex_chosen->z();
-
-      // cout << selected_vertex_index_ << endl;
-      // cout << vtx_X << "   " << vtx_Y << "   " << vtx_Z << endl;
-      // math::XYZVector vtx_Pos( vtx_X, vtx_Y, vtx_Z );
       math::XYZVector vtx_Pos( vtx_X, vtx_Y, vtx_Z );
 
 
@@ -435,9 +430,6 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
             diphoVec.push_back(dipho);
           }
 
-          // cout << selected_vertex_index_ << endl;
-          // cout  << vtx_X << "   " << vtx_Y << "   " << vtx_Z << endl;
-
           vector<flashgg::Photon> phoP4Corrected_dp;
           if (vecPho.size() > 0)
           {
@@ -459,6 +451,10 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
 
           if (phoP4Corrected_dp.size() > 3){
 
+            // cout << "systematic: " << inputDiPhotonSuffixes_[diphoton_idx] << endl;
+            //
+            // cout << "pt: " << phoP4Corrected_dp[0].pt() << "  " << phoP4Corrected_dp[1].pt() << "  " << phoP4Corrected_dp[2].pt() << "  " << phoP4Corrected_dp[3].pt() << endl;
+            // cout << "mva: " << phoP4Corrected_dp[0].phoIdMvaDWrtVtx(vertex_chosen) << "  " << phoP4Corrected_dp[1].phoIdMvaDWrtVtx(vertex_chosen) << "  " << phoP4Corrected_dp[2].phoIdMvaDWrtVtx(vertex_chosen) << "  " << phoP4Corrected_dp[3].phoIdMvaDWrtVtx(vertex_chosen) << endl;
 
             H4GTag tag_obj (dipho, phoP4Corrected_dp[0], phoP4Corrected_dp[1], phoP4Corrected_dp[2], phoP4Corrected_dp[3], vertex_chosen, dZ_bdtVtx );
             tag_obj.setCategoryNumber( 0 );
