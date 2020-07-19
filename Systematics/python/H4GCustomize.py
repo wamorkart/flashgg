@@ -362,25 +362,21 @@ class H4GCustomize():
                          variables = flashggPreselectedDiPhotonsLowMass.variables,
                          categories = flashggPreselectedDiPhotonsLowMass.categories)
 
-        # self.process.flashggH4GTag.preselecteddiphotonsLM = cms.
-        # teststr = self.metaConditions["H4GTag"]["preSelectedDiPhotons_cfi"]
-        # from cms.InputTag(self.metaConditions["H4GTag"]["preSelectedDiPhotons_cfi"]) import flashggPreselectedDiPhotonsLowMass
-        # from str(self.metaConditions["H4GTag"]["preSelectedDiPhotons_cfi"]) import flashggPreselectedDiPhotons
-        # process.flashggH4GTag.idSelection = cms.PSet(
-                    # rho = flashggPreselectedDiPhotonsLowMass.rho,
-                    # cut = flashggPreselectedDiPhotonsLowMass.cut,
-                    # variables = flashggPreselectedDiPhotonsLowMass.variables,
-                    # categories = flashggPreselectedDiPhotonsLowMass.categories)
-        # from flashgg.Taggers.flashggPreselectedDiPhotons_LowMass16_cfi import flashggPreselectedDiPhotonsLowMass
-        # process.flashggH4GTag.idSelection = cms.PSet(
-        #             rho = flashggPreselectedDiPhotonsLowMass.rho,
-        #             cut = flashggPreselectedDiPhotonsLowMass.cut,
-        #             variables = flashggPreselectedDiPhotonsLowMass.variables,
-        #             categories = flashggPreselectedDiPhotonsLowMass.categories)
+        elif (cms.string(str(self.metaConditions["H4GTag"]["year"])) == "2018"):
+            from flashgg.Taggers.flashggPreselectedDiPhotons_LowMass18_cfi import flashggPreselectedDiPhotonsLowMass
+            self.process.flashggH4GTag.idSelection = cms.PSet(
+                         rho = flashggPreselectedDiPhotonsLowMass.rho,
+                         cut = flashggPreselectedDiPhotonsLowMass.cut,
+                         variables = flashggPreselectedDiPhotonsLowMass.variables,
+                         categories = flashggPreselectedDiPhotonsLowMass.categories)
+
 
         print'Removing single Higgs tags'
 
         if self.customize.H4GTagsOnly:
+            self.process.flashggTagSequence.remove(self.process.flashggPrefireDiPhotons)
+            self.process.flashggTagSequence.replace(self.process.flashggPreselectedDiPhotons,self.process.flashggDiPhotonSystematics)
+            self.process.flashggTagSequence.remove(self.process.flashggDiPhotonMVA)
             self.process.flashggTagSequence.remove(self.process.flashggVBFTag)
             self.process.flashggTagSequence.remove(self.process.flashggTTHLeptonicTag)
             self.process.flashggTagSequence.remove(self.process.flashggTTHHadronicTag)
@@ -400,9 +396,6 @@ class H4GCustomize():
             self.process.flashggTagSequence.remove(self.process.flashggUntagged)
             self.process.flashggTagSequence.remove(self.process.flashggTHQLeptonicTag)
 
-
-            self.process.flashggTagSequence.replace(self.process.flashggPreselectedDiPhotons,self.process.flashggDiPhotonSystematics)
-            self.process.flashggTagSequence.remove(self.process.flashggDiPhotonMVA)
         #self.process.flashggTagSequence.replace(self.process.flashggTagSorter,self.process.flashggDiPhotonSystematics)
         # self.process.flashggTagSequence.replace(self.process.flashggTagSorter,self.process.flashggH4GTagSequence*self.process.flashggTagSorter)
         # self.process.flashggTagSorter.TagPriorityRanges = cms.VPSet( cms.PSet(TagName = cms.InputTag('flashggH4GTag')) )
@@ -420,11 +413,10 @@ class H4GCustomize():
 
 
 
-    def H4GTagRunSequence(self,systlabels,jetsystlabels,phosystlabels):
+    def H4GTagRunSequence(self,systlabels,phosystlabels):
         # print'not used'
         if self.customize.H4GTagsOnly:
           self.H4GTagMerger(systlabels)
 
         if len(systlabels)>1 :
-          getattr(self.process, "flashggH4GTag").JetsSuffixes = cms.vstring([systlabels[0]]+jetsystlabels)
           getattr(self.process, "flashggH4GTag").DiPhotonSuffixes = cms.vstring([systlabels[0]]+phosystlabels)
