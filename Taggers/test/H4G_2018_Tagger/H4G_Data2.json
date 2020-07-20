@@ -5,5 +5,5 @@
                   "/EGamma/spigazzi-Era2018_RR-17Sep2018_v2-legacyRun2FullV2-v0-Run2018B-17Sep2018-v1-e35808f23b4776d10c777cb2c9d2f07a/USER"
                            ]
                 },
-        "cmdLine" : "campaign=Era2018_RR-17Sep2018_v2 doPdfWeights=0 copyInputMicroAOD=1 doH4GTag=1 H4GTagsOnly=1 doSystematics=0 dumpWorkspace=0 dumpTrees=1 useParentDataset=1  useAAA=1 processId=Data processType=Data doPdfWeights=0 metaConditions=$CMSSW_BASE/src/flashgg/MetaData/data/MetaConditions/Era2018_RR-17Sep2018_v1.json"
+        "cmdLine" : "campaign=Era2018_RR-17Sep2018_v2 copyInputMicroAOD=1 doH4GTag=1 H4GTagsOnly=1 doSystematics=0 dumpWorkspace=0 dumpTrees=1 useParentDataset=1  useAAA=1 processId=Data processType=Data doPdfWeights=0 metaConditions=$CMSSW_BASE/src/flashgg/MetaData/data/MetaConditions/Era2018_RR-17Sep2018_v1.json"
 }

@@ -5,5 +5,5 @@
                                 "/DoubleEG/spigazzi-Era2017_RR-31Mar2018_v2-legacyRun2FullV1-v0-Run2017C-31Mar2018-v1-d9c0c6cde5cc4a64343ae06f842e5085/USER"
                            ]
                 },
-        "cmdLine" : "campaign=Era2017_RR-31Mar2018_v2 doPdfWeights=0  copyInputMicroAOD=1 doH4GTag=1 H4GTagsOnly=1 doSystematics=0 dumpWorkspace=0 dumpTrees=1 useParentDataset=1 useAAA=1 processId=Data processType=Data doPdfWeights=0 metaConditions=$CMSSW_BASE/src/flashgg/MetaData/data/MetaConditions/Era2017_RR-31Mar2018_v1.json"
+        "cmdLine" : "campaign=Era2017_RR-31Mar2018_v2  copyInputMicroAOD=1 doH4GTag=1 H4GTagsOnly=1 doSystematics=0 dumpWorkspace=0 dumpTrees=1 useParentDataset=1 useAAA=1 processId=Data processType=Data doPdfWeights=0 metaConditions=$CMSSW_BASE/src/flashgg/MetaData/data/MetaConditions/Era2017_RR-31Mar2018_v1.json"
 }

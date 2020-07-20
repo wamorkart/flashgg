@@ -720,6 +720,7 @@ if customize.doDoubleHTag:
     hhc.doubleHTagRunSequence(systlabels,jetsystlabels,phosystlabels)
 
 if customize.doH4GTag:
+    process.p.remove(process.flashggMetFilters)
     h4gc.H4GTagRunSequence(systlabels,phosystlabels)
 
 if( not hasattr(process,"options") ): process.options = cms.untracked.PSet()
