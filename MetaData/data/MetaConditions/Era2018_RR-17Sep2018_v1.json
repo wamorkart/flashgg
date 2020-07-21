@@ -57,7 +57,6 @@
 	    ],
 	    "lowMassAnalysis" :
 	    [
-		"HLT_Diphoton30_18_R9IdL_AND_HE_AND_IsoCaloId_NoPixelVeto_Mass55*",
 		"HLT_Diphoton30_18_R9IdL_AND_HE_AND_IsoCaloId_NoPixelVeto*"
 	    ],
 	    "tagAndProbe" :
