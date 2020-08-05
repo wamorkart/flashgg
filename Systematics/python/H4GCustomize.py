@@ -114,6 +114,7 @@ class H4GCustomize():
 
 
         "dZ_bdtVtx        := dZ_bdtVtx",
+        "dZ_ZeroVtx        := dZ_ZeroVtx",
         "tp_pt         := tp.pt()",
         "tp_eta         := tp.eta()",
         "tp_mass         := tp.mass()"
@@ -223,6 +224,7 @@ class H4GCustomize():
 
 
         "dZ_bdtVtx        := dZ_bdtVtx",
+        "dZ_ZeroVtx        := dZ_ZeroVtx",
         "tp_pt         := tp.pt()",
         "tp_eta         := tp.eta()",
         "tp_mass         := tp.mass()"
@@ -332,6 +334,7 @@ class H4GCustomize():
 
 
         "dZ_bdtVtx        := dZ_bdtVtx",
+        "dZ_ZeroVtx        := dZ_ZeroVtx",
         "tp_pt         := tp.pt()",
         "tp_eta         := tp.eta()",
         "tp_mass         := tp.mass()"
@@ -375,7 +378,8 @@ class H4GCustomize():
 
         if self.customize.H4GTagsOnly:
             self.process.flashggTagSequence.remove(self.process.flashggPrefireDiPhotons)
-            self.process.flashggTagSequence.replace(self.process.flashggPreselectedDiPhotons,self.process.flashggDiPhotonSystematics)
+            #self.process.flashggTagSequence.remove(self.process.flashggPreselectedDiPhotons)
+            #self.process.flashggTagSequence.replace(self.process.flashggPreselectedDiPhotons,self.process.flashggDiPhotonSystematics)
             self.process.flashggTagSequence.remove(self.process.flashggDiPhotonMVA)
             self.process.flashggTagSequence.remove(self.process.flashggVBFTag)
             self.process.flashggTagSequence.remove(self.process.flashggTTHLeptonicTag)

@@ -21,7 +21,7 @@ H4GTag::H4GTag() : DiPhotonTagBase::DiPhotonTagBase()
 
 H4GTag::~H4GTag() {}
 
-H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg::Photon pho2, flashgg::Photon pho3, flashgg::Photon pho4, edm::Ptr<reco::Vertex> vertex_chosen, float dZ_bdtVtx )
+H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg::Photon pho2, flashgg::Photon pho3, flashgg::Photon pho4, edm::Ptr<reco::Vertex> vertex_chosen, float dZ_bdtVtx, float dZ_ZeroVtx )
 {
   dipho_ = dipho;
   pho1_  = pho1;
@@ -73,6 +73,7 @@ H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg:
   tp_ = pho1.p4()+pho2.p4()+pho3.p4()+pho4.p4();
 
   dZ_bdtVtx_ = dZ_bdtVtx;
+  dZ_ZeroVtx_ = dZ_ZeroVtx;
 
   float minDM = 1000000;
   vector <flashgg::Photon> phoVect;
@@ -154,7 +155,7 @@ H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg:
 
 }
 
-H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg::Photon pho2, flashgg::Photon pho3, edm::Ptr<reco::Vertex> vertex_chosen, float dZ_bdtVtx)
+H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg::Photon pho2, flashgg::Photon pho3, edm::Ptr<reco::Vertex> vertex_chosen, float dZ_bdtVtx, float dZ_ZeroVtx)
 {
   dipho_ = dipho;
   pho1_  = pho1;
@@ -184,13 +185,14 @@ H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg:
   tp_ = pho1.p4()+pho2.p4()+pho3.p4();
 
   dZ_bdtVtx_ = dZ_bdtVtx;
+  dZ_ZeroVtx_ =dZ_ZeroVtx;
 
   pho12_ = pho1.p4() + pho2.p4();
   pho13_ = pho1.p4() + pho3.p4();
   pho23_ = pho2.p4() + pho3.p4();
 }
 
-H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg::Photon pho2, edm::Ptr<reco::Vertex> vertex_chosen, float dZ_bdtVtx)
+H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg::Photon pho2, edm::Ptr<reco::Vertex> vertex_chosen, float dZ_bdtVtx, float dZ_ZeroVtx)
 {
   dipho_ = dipho;
   pho1_  = pho1;
@@ -214,6 +216,7 @@ H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg:
   tp_ = pho1.p4()+pho2.p4();
 
   dZ_bdtVtx_ = dZ_bdtVtx;
+  dZ_ZeroVtx_ = dZ_ZeroVtx;
 }
 
 float H4GTag::getCosThetaStar_CS(reco::Candidate::LorentzVector a1, reco::Candidate::LorentzVector a2) const {

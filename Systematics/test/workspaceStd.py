@@ -735,6 +735,14 @@ for mn in mns:
     elif hasattr(module,"DiPhotonTag"):
         print str(module),module.DiPhotonTag
 
+#print "--- have mva in input tags ---"
+#for mn in mns:
+    #module = getattr(process,mn)
+    #if hasattr(module,"src") and type(module.src) == type(cms.InputTag("")) and module.src.value().count("MvaShift"):
+        #print str(module),module.src
+    #elif hasattr(module,"MvaShift"):
+        #print str(module),module.DiPhotonTag
+
 printSystematicInfo(process)
 
 ### Rerun microAOD sequence on top of microAODs using the parent dataset

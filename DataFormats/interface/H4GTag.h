@@ -29,9 +29,9 @@ namespace flashgg{
     H4GTag();
     ~H4GTag();
      // H4GTag(edm::Ptr<DiPhotonCandidate>);
-     H4GTag(edm::Ptr<DiPhotonCandidate>,  flashgg::Photon, flashgg::Photon, flashgg::Photon, flashgg::Photon, edm::Ptr<reco::Vertex>,  float);
-     H4GTag(edm::Ptr<DiPhotonCandidate>, flashgg::Photon, flashgg::Photon, flashgg::Photon, edm::Ptr<reco::Vertex>, float);
-     H4GTag(edm::Ptr<DiPhotonCandidate>, flashgg::Photon, flashgg::Photon, edm::Ptr<reco::Vertex>, float);
+     H4GTag(edm::Ptr<DiPhotonCandidate>,  flashgg::Photon, flashgg::Photon, flashgg::Photon, flashgg::Photon, edm::Ptr<reco::Vertex>,  float, float);
+     H4GTag(edm::Ptr<DiPhotonCandidate>, flashgg::Photon, flashgg::Photon, flashgg::Photon, edm::Ptr<reco::Vertex>, float, float);
+     H4GTag(edm::Ptr<DiPhotonCandidate>, flashgg::Photon, flashgg::Photon, edm::Ptr<reco::Vertex>, float, float);
 
 
     virtual H4GTag *clone() const override;
@@ -107,7 +107,7 @@ namespace flashgg{
     const reco::Candidate::LorentzVector& tp() const { return tp_; };
 
     float dZ_bdtVtx() const {return dZ_bdtVtx_;};
-
+    float dZ_ZeroVtx() const {return dZ_ZeroVtx_;};
     float getCosThetaStar_CS(reco::Candidate::LorentzVector a1, reco::Candidate::LorentzVector a2) const;
     std::vector<float> CosThetaAngles(reco::Candidate::LorentzVector a1, reco::Candidate::LorentzVector a2, reco::Candidate::LorentzVector a1_pho1, reco::Candidate::LorentzVector a2_pho1) const;
     float HelicityCosTheta( TLorentzVector Booster, TLorentzVector Boosted) const;
@@ -177,7 +177,7 @@ namespace flashgg{
     float cosTheta_a2_prime_;
     reco::Candidate::LorentzVector tp_;
     float dZ_bdtVtx_;
-
+    float dZ_ZeroVtx_;
 
 
   };

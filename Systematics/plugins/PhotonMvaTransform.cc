@@ -30,7 +30,7 @@ namespace flashgg {
         overall_range_( conf.getParameter<std::string>( "OverallRange" ) )
     {
         correctionFile_ = conf.getParameter<edm::FileInPath>("CorrectionFile");
-        std::cout<<correctionFile_.fullPath().c_str()<<std::endl;
+        //std::cout<<correctionFile_.fullPath().c_str()<<std::endl;
         TFile* f = TFile::Open(correctionFile_.fullPath().c_str());
         //        f->Print();
         corrections_.emplace_back( (TGraph*)((TGraph*) f->Get("trasfhebup"))->Clone());
