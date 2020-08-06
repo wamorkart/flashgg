@@ -35,6 +35,9 @@
             ],
             "SUSYGluGluToHToAA_AToGG_M-5_TuneCUETP8M1_13TeV_pythia8" : [
                 "/SUSYGluGluToHToAA_AToGG_M-5_TuneCUETP8M1_13TeV_pythia8"
+            ],
+            "SUSYGluGluToHToAA_AToGG_M-1_TuneCUETP8M1_13TeV_pythia8" : [
+                "/SUSYGluGluToHToAA_AToGG_M-1_TuneCUETP8M1_13TeV_pythia8"
             ]
 
         },
