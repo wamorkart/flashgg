@@ -11,8 +11,8 @@ from flashgg.Taggers.flashggDifferentialPhoIdInputsCorrection_cfi import flashgg
 
 def flashggPrepareTagSequence(process, options):
     setup_flashggDifferentialPhoIdInputsCorrection(process, options)
-    flashggPreselectedDiPhotons.src = "flashggDiPhotonSystematics"
-    #flashggPreselectedDiPhotons.src = "flashggDifferentialPhoIdInputsCorrection"
+    #flashggPreselectedDiPhotons.src = "flashggDiPhotonSystematics"
+    flashggPreselectedDiPhotons.src = "flashggDifferentialPhoIdInputsCorrection"
     #flashggPreselectedDiPhotons.src = "flashggPrefireDiPhotons"
 
     if "flashggDiPhotonMVA" in options:

@@ -33,7 +33,7 @@ def setupDiPhotonSystematics( process, options ):
    flashggDiPhotonSystematics.SystMethods.append(sysmodule.PreselSF)
    flashggDiPhotonSystematics.SystMethods.append(sysmodule.electronVetoSF)
    flashggDiPhotonSystematics.SystMethods.append(sysmodule.TriggerWeight)
-   flashggDiPhotonSystematics.SystMethods.append(sysmodule.LooseMvaSF)
+   #flashggDiPhotonSystematics.SystMethods.append(sysmodule.LooseMvaSF)
    flashggDiPhotonSystematics.SystMethods.append(sysmodule.SigmaEOverEShift)
    flashggDiPhotonSystematics.SystMethods.append(sysmodule.SigmaEOverESmearing)
 

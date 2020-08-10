@@ -65,6 +65,19 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
 
   namespace flashgg {
 
+    // struct GreaterByPt
+    // {
+    // public:
+    //   bool operator()( int dp1, int dp2, edm::Ptr<flashgg::DiPhotonCandidate> diPhotons  ) const
+    //   {
+    //       return dp1->pt() > dp2->pt();
+    //   };
+    //     // bool operator()( edm::Ptr<flashgg::DiPhotonCandidate> dp1, edm::Ptr<flashgg::DiPhotonCandidate> dp2 ) const
+    //     // {
+    //     //     return dp1->pt() > dp2->pt();
+    //     // };
+    // };
+
     struct Sorter {
       bool operator()( const std::pair<unsigned int, float> pair1, const std::pair<unsigned int, float> pair2 )
       {
@@ -379,12 +392,24 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
         std::unique_ptr<vector<H4GTag> > tags( new vector<H4GTag> );
 
         bool atLeastOneDiphoPass = false;
+        vector<int> preselDiPhoIndex;
+
+
         for( unsigned int dpIndex = 0; dpIndex < diPhotons->size(); dpIndex++ )
         {
           edm::Ptr<flashgg::DiPhotonCandidate> thisDPPtr = diPhotons->ptrAt( dpIndex );
           flashgg::DiPhotonCandidate * thisDPPointer = const_cast<flashgg::DiPhotonCandidate *>(thisDPPtr.get());
+
           atLeastOneDiphoPass |= idSelector_(*thisDPPointer, evt);
+          if (atLeastOneDiphoPass)
+          {
+            // cout << "diphoton sumpt " << thisDPPtr->sumPt() << endl;
+            preselDiPhoIndex.push_back(dpIndex);
+          }
         }
+
+
+
 
         if (atLeastOneDiphoPass_nominal)
         {
@@ -395,10 +420,17 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
             vector<edm::Ptr<flashgg::DiPhotonCandidate>> diphoVec;
             vector <flashgg::Photon> vecPho = getPhotons(diPhotons);
 
+            std::vector< std::pair< float, float> > pho_lead_sublead_pt ;
+            // vector<vector<float>> pho_lead_sublead_pt;
+
+
             for( unsigned int diphoIndex = 0; diphoIndex < diPhotons->size(); diphoIndex++ ) {
 
               dipho = diPhotons->ptrAt( diphoIndex ); // without systematic look (?)
               diphoVec.push_back(dipho);
+              pho_lead_sublead_pt.push_back(std::make_pair(dipho->leadingPhoton()->pt(), dipho->subLeadingPhoton()->pt()));
+              cout << "lead pho pt: "<< dipho->leadingPhoton()->pt() << endl;
+              cout << "sublead pho pt: "<< dipho->subLeadingPhoton()->pt() << endl;
             }
 
             vector<flashgg::Photon> phoP4Corrected_dp;
@@ -406,6 +438,7 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
             {
               for (int dp = 0; dp < (int) vecPho.size(); dp++)
               {
+                cout << "photon pt: "<< vecPho[dp].pt() << endl;
                 float sc_X_dp = vecPho[dp].superCluster()->x();
                 float sc_Y_dp = vecPho[dp].superCluster()->y();
                 float sc_Z_dp = vecPho[dp].superCluster()->z();
@@ -420,8 +453,8 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
             sorter_.clear();
             std::sort(phoP4Corrected_dp.begin(), phoP4Corrected_dp.end(), [](const flashgg::Photon a, const flashgg::Photon  b) {return a.pt() > b.pt(); });
 
-            if (phoP4Corrected_dp.size() > 3){
-
+            if (phoP4Corrected_dp.size() > 3 && (phoP4Corrected_dp[0].passElectronVeto()==1 && phoP4Corrected_dp[1].passElectronVeto()==1 && phoP4Corrected_dp[2].passElectronVeto()==1 && phoP4Corrected_dp[3].passElectronVeto()==1)){
+                // cout << diphoVec[preselDiPhoIndex[0]]->sumPt() << endl;
               //cout << "systematic: " << inputDiPhotonSuffixes_[diphoton_idx] << endl;
               //
               //cout << "pt: " << phoP4Corrected_dp[0].pt() << "  " << phoP4Corrected_dp[1].pt() << "  " << phoP4Corrected_dp[2].pt() << "  " << phoP4Corrected_dp[3].pt() << endl;
@@ -430,11 +463,19 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
               H4GTag tag_obj (dipho, phoP4Corrected_dp[0], phoP4Corrected_dp[1], phoP4Corrected_dp[2], phoP4Corrected_dp[3], vertex_chosen, dZ_bdtVtx, dZ_ZeroVtx );
               tag_obj.setCategoryNumber( 0 );
               tag_obj.setSystLabel( inputDiPhotonSuffixes_[diphoton_idx] );
-              for (int i1=0; i1 < (int) diphoVec.size() ; i1++)
-              {
-                auto diphotemp = diphoVec[i1];
-                tag_obj.includeWeights(* diphotemp);
-              }
+              // tag_obj.includeWeights(* dipho);
+              // cout << "diphoVec sumpt " << diphoVec[preselDiPhoIndex[0]]->sumPt() << endl;
+              tag_obj.includeWeightsByLabel( *diphoVec[preselDiPhoIndex[0]] ,"PreselSF");
+              tag_obj.includeWeightsByLabel( *diphoVec[preselDiPhoIndex[0]] ,"TriggerWeight");
+              /*for (auto it = tag_obj.weightListBegin() ; it != tag_obj.weightListEnd(); it++) {
+                        std::cout << " Weight Debug " << *it << " " << tag_obj.weight(*it) << std::endl;
+
+                    }*/
+              // for (int i1=0; i1 < (int) diphoVec.size() ; i1++)
+              // {
+              //   auto diphotemp = diphoVec[i1];
+              //   //tag_obj.includeWeights(* diphotemp);
+              // }
 
 
               tags->push_back(tag_obj);
@@ -444,16 +485,18 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
               }
             }
 
-            if (phoP4Corrected_dp.size() == 3)
+            if (phoP4Corrected_dp.size() == 3 && (phoP4Corrected_dp[0].passElectronVeto()==1 && phoP4Corrected_dp[1].passElectronVeto()==1 && phoP4Corrected_dp[2].passElectronVeto()==1))
             {
               H4GTag tag_obj (dipho, phoP4Corrected_dp[0], phoP4Corrected_dp[1], phoP4Corrected_dp[2],vertex_chosen, dZ_bdtVtx, dZ_ZeroVtx);
               tag_obj.setCategoryNumber( 1 );
               tag_obj.setSystLabel( inputDiPhotonSuffixes_[diphoton_idx] );
-              for (int i1=0; i1 < (int) diphoVec.size() ; i1++)
-              {
-                auto diphotemp = diphoVec[i1];
-                tag_obj.includeWeights(* diphotemp);
-              }
+              tag_obj.includeWeightsByLabel( *diphoVec[preselDiPhoIndex[0]] ,"PreselSF");
+              tag_obj.includeWeightsByLabel( *diphoVec[preselDiPhoIndex[0]] ,"TriggerWeight");
+              // for (int i1=0; i1 < (int) diphoVec.size() ; i1++)
+              // {
+              //   auto diphotemp = diphoVec[i1];
+              //   //tag_obj.includeWeights(* diphotemp);
+              // }
 
               tags->push_back( tag_obj );
               if( ! evt.isRealData() ) {
@@ -462,16 +505,18 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
 
             }
 
-            if (phoP4Corrected_dp.size() == 2)
+            if (phoP4Corrected_dp.size() == 2 && (phoP4Corrected_dp[0].passElectronVeto()==1 && phoP4Corrected_dp[1].passElectronVeto()==1))
             {
               H4GTag tag_obj (dipho, phoP4Corrected_dp[0], phoP4Corrected_dp[1], vertex_chosen, dZ_bdtVtx, dZ_ZeroVtx);
               tag_obj.setCategoryNumber( 2 );
               tag_obj.setSystLabel( inputDiPhotonSuffixes_[diphoton_idx] );
-              for (int i1=0; i1 < (int) diphoVec.size() ; i1++)
-              {
-                auto diphotemp = diphoVec[i1];
-                tag_obj.includeWeights(* diphotemp);
-              }
+              tag_obj.includeWeightsByLabel( *diphoVec[preselDiPhoIndex[0]] ,"PreselSF");
+              tag_obj.includeWeightsByLabel( *diphoVec[preselDiPhoIndex[0]] ,"TriggerWeight");
+              // for (int i1=0; i1 < (int) diphoVec.size() ; i1++)
+              // {
+              //   auto diphotemp = diphoVec[i1];
+              //   //tag_obj.includeWeights(* diphotemp);
+              // }
 
               tags->push_back( tag_obj );
               if( ! evt.isRealData() ) {
