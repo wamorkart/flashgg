@@ -62,15 +62,15 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
     return -1;
   }
 
-std::vector<std::pair<int,int>> photonIndices(Handle<View<flashgg::DiPhotonCandidate> > diPhotons, vector<flashgg::Photon> phoP4Corrected_dp)
+std::vector<std::pair<int,int>> photonIndices(Handle<View<flashgg::DiPhotonCandidate> > diPhotons, vector<const flashgg::Photon*> phoP4Corrected_dp)
   {
     std::vector<std::pair<int,int>> pairs;
     int dipho1 = -999;
     int dipho2 = -999;
     for( unsigned int diphoIndex = 0; diphoIndex < diPhotons->size(); diphoIndex++ ) {
 
-          double minLeading = 999.;
-          double minSubleading = 999.;
+          // double minLeading = 999.;
+          // double minSubleading = 999.;
           int leadIndex = -1;
           int subleadIndex = -1;
 
@@ -81,7 +81,7 @@ std::vector<std::pair<int,int>> photonIndices(Handle<View<flashgg::DiPhotonCandi
           // auto pho2 = diphoPtr->getSubLeadingPhoton();
 
           for( unsigned int phoIndex = 0; phoIndex < phoP4Corrected_dp.size(); phoIndex++ ) {
-              double dR_leading = deltaR(dipho->leadingPhoton()->eta(),dipho->leadingPhoton()->phi(),phoP4Corrected_dp[phoIndex].eta(),phoP4Corrected_dp[phoIndex].phi());
+              /*double dR_leading = deltaR(dipho->leadingPhoton()->eta(),dipho->leadingPhoton()->phi(),phoP4Corrected_dp[phoIndex].eta(),phoP4Corrected_dp[phoIndex].phi());
               double dR_subleading = deltaR(dipho->subLeadingPhoton()->eta(),dipho->subLeadingPhoton()->phi(),phoP4Corrected_dp[phoIndex].eta(),phoP4Corrected_dp[phoIndex].phi());
 
               if(dR_leading<minLeading){
@@ -91,7 +91,7 @@ std::vector<std::pair<int,int>> photonIndices(Handle<View<flashgg::DiPhotonCandi
               if(dR_subleading<minSubleading){
                  subleadIndex = phoIndex;
                  minSubleading = dR_subleading;
-              }
+              }*/
               // edm::Ptr<flashgg::DiPhotonCandidate> thisDiPho = diPhotons->ptrAt( diphoIndex );
               // flashgg::DiPhotonCandidate * thisDPPointer = const_cast<flashgg::DiPhotonCandidate *>(thisDiPho.get());
               // thisDPPointer->makePhotonsPersistent();
@@ -106,8 +106,8 @@ std::vector<std::pair<int,int>> photonIndices(Handle<View<flashgg::DiPhotonCandi
               // cout << "photon pt: " << phoP4Corrected_dp[phoIndex].pt() << endl;
               // if(dipho->leadingPhoton()==&phoP4Corrected_dp[phoIndex]) leadIndex = phoIndex;
               // if(dipho->subLeadingPhoton()==&phoP4Corrected_dp[phoIndex]) subleadIndex = phoIndex;
-              // if(dipho->leadingPhoton()==phoP4Corrected_dp[phoIndex]) leadIndex = phoIndex;
-              // if(dipho->subLeadingPhoton()==phoP4Corrected_dp[phoIndex]) subleadIndex = phoIndex;
+              if(dipho->leadingPhoton()==phoP4Corrected_dp[phoIndex]) leadIndex = phoIndex;
+              if(dipho->subLeadingPhoton()==phoP4Corrected_dp[phoIndex]) subleadIndex = phoIndex;
           }
 
           std::cout << "photonIndices: " << diphoIndex << " - " << leadIndex << " - " << subleadIndex << std::endl;
@@ -539,7 +539,7 @@ std::vector<std::pair<int,int>> photonIndices(Handle<View<flashgg::DiPhotonCandi
             std::sort(phoP4Corrected_dp.begin(), phoP4Corrected_dp.end(), [](const flashgg::Photon a, const flashgg::Photon  b) {return a.pt() > b.pt(); });
             std::sort(phoP4Corrected_dp_Ptr.begin(), phoP4Corrected_dp_Ptr.end(), [](const flashgg::Photon* a, const flashgg::Photon*  b) {return a->pt() > b->pt(); });
 
-            std::vector<std::pair<int,int>> pairs = photonIndices(diPhotons,phoP4Corrected_dp);
+            std::vector<std::pair<int,int>> pairs = photonIndices(diPhotons,phoP4Corrected_dp_Ptr);
 
             if (phoP4Corrected_dp.size() > 3 && (phoP4Corrected_dp[0].passElectronVeto()==1 && phoP4Corrected_dp[1].passElectronVeto()==1 && phoP4Corrected_dp[2].passElectronVeto()==1 && phoP4Corrected_dp[3].passElectronVeto()==1)){
                 // cout << diphoVec[preselDiPhoIndex[0]]->sumPt() << endl;
