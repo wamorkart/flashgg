@@ -65,8 +65,8 @@ int mcTruthVertexIndex_h4g( const std::vector<edm::Ptr<reco::GenParticle> > &gen
 std::vector<std::pair<int,int>> photonIndices(Handle<View<flashgg::DiPhotonCandidate> > diPhotons, vector<const flashgg::Photon*> phoP4Corrected_dp)
   {
     std::vector<std::pair<int,int>> pairs;
-    int dipho1 = -999;
-    int dipho2 = -999;
+    // int dipho1 = -999;
+    // int dipho2 = -999;
     for( unsigned int diphoIndex = 0; diphoIndex < diPhotons->size(); diphoIndex++ ) {
 
           // double minLeading = 999.;
@@ -110,19 +110,19 @@ std::vector<std::pair<int,int>> photonIndices(Handle<View<flashgg::DiPhotonCandi
               if(dipho->subLeadingPhoton()==phoP4Corrected_dp[phoIndex]) subleadIndex = phoIndex;
           }
 
-          std::cout << "photonIndices: " << diphoIndex << " - " << leadIndex << " - " << subleadIndex << std::endl;
+          // std::cout << "photonIndices: " << diphoIndex << " - " << leadIndex << " - " << subleadIndex << std::endl;
           if(leadIndex != subleadIndex) pairs.push_back(std::make_pair(leadIndex,subleadIndex));
           else pairs.push_back(std::make_pair(-1,-1));
-          if(leadIndex == 0 && subleadIndex == 1)
-          {
-            dipho1 = diphoIndex;
-          }
-          if(leadIndex == 2 && subleadIndex == 3)
-          {
-            dipho2 = diphoIndex;
-          }
+          // if(leadIndex == 0 && subleadIndex == 1)
+          // {
+          //   dipho1 = diphoIndex;
+          // }
+          // if(leadIndex == 2 && subleadIndex == 3)
+          // {
+          //   dipho2 = diphoIndex;
+          // }
     }
-    cout << "#dipho1: " << dipho1 << "   " << "#dipho2: " << dipho2 << endl;
+    // cout << "#dipho1: " << dipho1 << "   " << "#dipho2: " << dipho2 << endl;
     return pairs;
   }
 
@@ -505,7 +505,7 @@ std::vector<std::pair<int,int>> photonIndices(Handle<View<flashgg::DiPhotonCandi
             {
               for (int dp = 0; dp < (int) vecPho.size(); dp++)
               {
-                cout << "photon pt: "<< vecPho[dp].pt() << endl;
+                // cout << "photon pt: "<< vecPho[dp].pt() << endl;
                 float sc_X_dp = vecPho[dp].superCluster()->x();
                 float sc_Y_dp = vecPho[dp].superCluster()->y();
                 float sc_Z_dp = vecPho[dp].superCluster()->z();
@@ -553,13 +553,17 @@ std::vector<std::pair<int,int>> photonIndices(Handle<View<flashgg::DiPhotonCandi
               tag_obj.setSystLabel( inputDiPhotonSuffixes_[diphoton_idx] );
               // tag_obj.includeWeights(* dipho);
               // cout << "diphoVec sumpt " << diphoVec[preselDiPhoIndex[0]]->sumPt() << endl;
+              // tag_obj.includeWeightsByLabel( *diphoVec[preselDiPhoIndex[0]] ,"PreselSF",false); //-- be default the flag is set to true. when the flag is set to false we can print the values of the individual weights. the central weight is a product of the other weights
+              // tag_obj.includeWeightsByLabel( *diphoVec[preselDiPhoIndex[0]] ,"TriggerWeight",false);
+              // tag_obj.includeWeightsByLabel( *diphoVec[1] ,"electronVetoSF", false);
+
               tag_obj.includeWeightsByLabel( *diphoVec[preselDiPhoIndex[0]] ,"PreselSF");
               tag_obj.includeWeightsByLabel( *diphoVec[preselDiPhoIndex[0]] ,"TriggerWeight");
               tag_obj.includeWeightsByLabel( *diphoVec[1] ,"electronVetoSF");
-              for (auto it = tag_obj.weightListBegin() ; it != tag_obj.weightListEnd(); it++) {
-                        std::cout << " Weight Debug " << *it << " " << tag_obj.weight(*it) << std::endl;
-
-                    }
+              // for (auto it = tag_obj.weightListBegin() ; it != tag_obj.weightListEnd(); it++) {
+              //           std::cout << " Weight Debug " << *it << " " << tag_obj.weight(*it) << std::endl;
+              //
+              //       }
               // for (int i1=0; i1 < (int) diphoVec.size() ; i1++)
               // {
               //   auto diphotemp = diphoVec[i1];
