@@ -74,9 +74,9 @@ and on data:
 
 *** Running on condor with systematics
     #+BEGIN_EXAMPLE
-    fggRunJobs.py --load Taggers/test/H4G_2016_Tagger/H4G_Signal_syst.json -D -P -n 100 -d Tagger_Signal_2016_wSyst -x cmsRun Systematics/test/workspaceStd.py -q workday --no-copy-proxy analysisType=lowMassAnalysis maxEvents=-1 --stage-to /eos/user/t/twamorka/h4g_fullRun2/withSystematics/2016/
-    fggRunJobs.py --load Taggers/test/H4G_2017_Tagger/H4G_Signal_syst.json -D -P -n 100 -d Tagger_Signal_2017_wSyst -x cmsRun Systematics/test/workspaceStd.py -q workday --no-copy-proxy analysisType=lowMassAnalysis maxEvents=-1 --stage-to /eos/user/t/twamorka/h4g_fullRun2/withSystematics/2017/
-    fggRunJobs.py --load Taggers/test/H4G_2018_Tagger/H4G_Signal.json -D -P -n 100 -d Tagger_Signal_2018_wSyst -x cmsRun Systematics/test/workspaceStd.py -q workday --no-copy-proxy analysisType=lowMassAnalysis maxEvents=-1 --stage-to /eos/user/t/twamorka/h4g_fullRun2/withSystematics/2018/
+    fggRunJobs.py --load Taggers/test/H4G_2016_Tagger/H4G_Signal_syst.json -D -P -n 100 -d Tagger_Signal_2016_wSyst -x cmsRun Systematics/test/workspaceStd.py -q tomorrow --no-copy-proxy analysisType=lowMassAnalysis maxEvents=-1 --stage-to /eos/user/t/twamorka/h4g_fullRun2/withSystematics/2016/
+    fggRunJobs.py --load Taggers/test/H4G_2017_Tagger/H4G_Signal_syst.json -D -P -n 100 -d Tagger_Signal_2017_wSyst -x cmsRun Systematics/test/workspaceStd.py -q tomorrow --no-copy-proxy analysisType=lowMassAnalysis maxEvents=-1 --stage-to /eos/user/t/twamorka/h4g_fullRun2/withSystematics/2017/
+    fggRunJobs.py --load Taggers/test/H4G_2018_Tagger/H4G_Signal.json -D -P -n 100 -d Tagger_Signal_2018_wSyst -x cmsRun Systematics/test/workspaceStd.py -q tomorrow --no-copy-proxy analysisType=lowMassAnalysis maxEvents=-1 --stage-to /eos/user/t/twamorka/h4g_fullRun2/withSystematics/2018/
     #+END_EXAMPLE
 
 *** Running on condor 2016
