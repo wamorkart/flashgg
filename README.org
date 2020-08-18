@@ -79,6 +79,15 @@ and on data:
     fggRunJobs.py --load Taggers/test/H4G_2018_Tagger/H4G_Signal.json -D -P -n 100 -d Tagger_Signal_2018_wSyst -x cmsRun Systematics/test/workspaceStd.py -q tomorrow --no-copy-proxy analysisType=lowMassAnalysis maxEvents=-1 --stage-to /eos/user/t/twamorka/h4g_fullRun2/withSystematics/2018/
     #+END_EXAMPLE
 
+*** Running on data condor with systematics
+    #+BEGIN_EXAMPLE
+    fggRunJobs.py --load Taggers/test/H4G_2017_Tagger/H4G_Data1.json -D -P -n 500 -d Tagger_Data1_2017 -x cmsRun Systematics/test/workspaceStd.py -q workday --no-copy-proxy analysisType=lowMassAnalysis maxEvents=-1 --stage-to /eos/user/t/twamorka/h4g_fullRun2/withSystematics/data_2017/
+    fggRunJobs.py --load Taggers/test/H4G_2017_Tagger/H4G_Data2.json -D -P -n 500 -d Tagger_Data2_2017 -x cmsRun Systematics/test/workspaceStd.py -q workday --no-copy-proxy analysisType=lowMassAnalysis maxEvents=-1 --stage-to /eos/user/t/twamorka/h4g_fullRun2/withSystematics/data_2017/
+    fggRunJobs.py --load Taggers/test/H4G_2017_Tagger/H4G_Data3.json -D -P -n 500 -d Tagger_Data3_2017 -x cmsRun Systematics/test/workspaceStd.py -q workday --no-copy-proxy analysisType=lowMassAnalysis maxEvents=-1 --stage-to /eos/user/t/twamorka/h4g_fullRun2/withSystematics/data_2017/
+    fggRunJobs.py --load Taggers/test/H4G_2018_Tagger/H4G_Data1.json -D -P -n 500 -d Tagger_Data1_2018 -x cmsRun Systematics/test/workspaceStd.py -q workday --no-copy-proxy analysisType=lowMassAnalysis maxEvents=-1 --stage-to /eos/user/t/twamorka/h4g_fullRun2/withSystematics/data_2018/
+    fggRunJobs.py --load Taggers/test/H4G_2018_Tagger/H4G_Data2.json -D -P -n 500 -d Tagger_Data2_2018 -x cmsRun Systematics/test/workspaceStd.py -q workday --no-copy-proxy analysisType=lowMassAnalysis maxEvents=-1 --stage-to /eos/user/t/twamorka/h4g_fullRun2/withSystematics/data_2018/
+    fggRunJobs.py --load Taggers/test/H4G_2018_Tagger/H4G_Data3.json -D -P -n 500 -d Tagger_Data3_2018 -x cmsRun Systematics/test/workspaceStd.py -q workday --no-copy-proxy analysisType=lowMassAnalysis maxEvents=-1 --stage-to /eos/user/t/twamorka/h4g_fullRun2/withSystematics/data_2018/
+    #+END_EXAMPLE
 *** Running on condor 2016
 
    Change the --stage-to option to the folder where you want the output root files to land
