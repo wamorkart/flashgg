@@ -574,7 +574,7 @@ for tag in tagList:
                            )
 
 # Require standard diphoton trigger
-#filterHLTrigger(process, customize)
+filterHLTrigger(process, customize)
 
 process.options = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
 
