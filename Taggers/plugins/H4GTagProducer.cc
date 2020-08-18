@@ -75,16 +75,14 @@ std::pair<int,int> photonIndices(Handle<View<flashgg::DiPhotonCandidate> > diPho
           int subleadIndex = -1;
 
           auto dipho = diPhotons->ptrAt( diphoIndex );
-          // flashgg::DiPhotonCandidate * diphoPtr = const_cast<flashgg::DiPhotonCandidate *>(dipho.get());
-          // diphoPtr->makePhotonsPersistent();
-          // auto pho1 = diphoPtr->getLeadingPhoton();
-          // auto pho2 = diphoPtr->getSubLeadingPhoton();
+
 
           for( unsigned int phoIndex = 0; phoIndex < phoP4Corrected_dp.size(); phoIndex++ ) {
-              double dR_leading = deltaR(dipho->leadingPhoton()->eta(),dipho->leadingPhoton()->phi(),phoP4Corrected_dp[phoIndex].eta(),phoP4Corrected_dp[phoIndex].phi());
-              double dR_subleading = deltaR(dipho->subLeadingPhoton()->eta(),dipho->subLeadingPhoton()->phi(),phoP4Corrected_dp[phoIndex].eta(),phoP4Corrected_dp[phoIndex].phi());
-
-              if(dR_leading<minLeading){
+              double dR_leading = deltaR(dipho->leadingPhoton()->superCluster()->eta(),dipho->leadingPhoton()->superCluster()->phi(),phoP4Corrected_dp[phoIndex].superCluster()->eta(),phoP4Corrected_dp[phoIndex].superCluster()->phi());
+              double dR_subleading = deltaR(dipho->subLeadingPhoton()->superCluster()->eta(),dipho->subLeadingPhoton()->superCluster()->phi(),phoP4Corrected_dp[phoIndex].superCluster()->eta(),phoP4Corrected_dp[phoIndex].superCluster()->phi());
+              // cout << "dR_leading: " << dR_leading << endl;
+              // cout << "check: " << sqrt(pow(phoP4Corrected_dp[phoIndex].superCluster()->eta()-dipho->leadingPhoton()->superCluster()->eta(),2)+pow(phoP4Corrected_dp[phoIndex].superCluster()->phi()-dipho->leadingPhoton()->superCluster()->phi(),2)) << endl;
+               if(dR_leading<minLeading){
                  leadIndex = phoIndex;
                  minLeading = dR_leading;
               }
@@ -92,56 +90,70 @@ std::pair<int,int> photonIndices(Handle<View<flashgg::DiPhotonCandidate> > diPho
                  subleadIndex = phoIndex;
                  minSubleading = dR_subleading;
               }
-              // edm::Ptr<flashgg::DiPhotonCandidate> thisDiPho = diPhotons->ptrAt( diphoIndex );
-              // flashgg::DiPhotonCandidate * thisDPPointer = const_cast<flashgg::DiPhotonCandidate *>(thisDiPho.get());
-              // thisDPPointer->makePhotonsPersistent();
-              // auto pho1 = thisDPPointer->getLeadingPhoton();
-              // auto pho2 = thisDPPointer->getSubLeadingPhoton();
+              // if (minLeading  > 0.0001) {leadIndex = phoIndex;}
+              // if (minSubleading  > 0.0001) {subleadIndex = phoIndex;}
 
-              // cout << "leadPhoton: " << dipho->leadingPhoton()->pt() <<  "   " << "subLeadPhoton: " << dipho->subLeadingPhoton()->pt()  << endl;
-              // if(pho1==phoP4Corrected_dp[phoIndex]) leadIndex = phoIndex;
-              // if(pho2==phoP4Corrected_dp[phoIndex]) subleadIndex = phoIndex;
-              // if(pho1==phoP4Corrected_dp[phoIndex]) leadIndex = phoIndex;
-              // if(pho2==phoP4Corrected_dp[phoIndex]) subleadIndex = phoIndex;
-              // cout << "photon pt: " << phoP4Corrected_dp[phoIndex].pt() << endl;
-              // if(dipho->leadingPhoton()==&phoP4Corrected_dp[phoIndex]) leadIndex = phoIndex;
-              // if(dipho->subLeadingPhoton()==&phoP4Corrected_dp[phoIndex]) subleadIndex = phoIndex;
-              // if(dipho->leadingPhoton()==phoP4Corrected_dp[phoIndex]) leadIndex = phoIndex;
-              // if(dipho->subLeadingPhoton()==phoP4Corrected_dp[phoIndex]) subleadIndex = phoIndex;
           }
+          std::cout << "photonIndices: " << diphoIndex << " - " << leadIndex << " - " << subleadIndex << std::endl;
 
-          // std::cout << "photonIndices: " << diphoIndex << " - " << leadIndex << " - " << subleadIndex << std::endl;
-          // if(leadIndex != subleadIndex) pairs.push_back(std::make_pair(leadIndex,subleadIndex));
-          // else pairs.push_back(std::make_pair(-1,-1));
           if((leadIndex == 0 && subleadIndex == 1 ) || (leadIndex == 1 && subleadIndex == 0 ) )
           {
+            cout << "diphot1" << endl;
             index_dipho1 = diphoIndex;
           }
           if((leadIndex == 2 && subleadIndex == 3) || (leadIndex == 3 && subleadIndex == 2 ))
           {
+            cout << "dipho2" << endl;
             index_dipho2 = diphoIndex;
           }
+
+
+
+
+
+
+          // if((leadIndex == 0 && subleadIndex == 1 ) || (leadIndex == 1 && subleadIndex == 0 ) )
+          // {
+          //   cout << "10 or 01 case" << endl;
+          //   index_dipho1 = diphoIndex;
+          //   if((leadIndex == 2 && subleadIndex == 3) || (leadIndex == 3 && subleadIndex == 2 ) )
+          //   {
+          //     cout << "23 or 32 case" << endl;
+          //     index_dipho2 = diphoIndex;
+          //   }
+          // }
+          //
+          // else if((leadIndex == 0 && subleadIndex == 2 ) || (leadIndex == 2 && subleadIndex == 0 ) )
+          // {
+          //   cout << "02 or 20 case" << endl;
+          //   index_dipho1 = diphoIndex;
+          //   if((leadIndex == 1 && subleadIndex == 3) || (leadIndex == 3 && subleadIndex == 1 ) )
+          //   {
+          //     cout << "13 or 31 case" << endl;
+          //     index_dipho2 = diphoIndex;
+          //   }
+          // }
+          //
+          // else if((leadIndex == 0 && subleadIndex == 3 ) || (leadIndex == 3 && subleadIndex == 0 ) )
+          // {
+          //   cout << "03 or 30 case" << endl;
+          //   index_dipho1 = diphoIndex;
+          //   if((leadIndex == 2 && subleadIndex == 1) || (leadIndex == 1 && subleadIndex == 2 ) )
+          //   {
+          //     cout << "21 or 12 case" << endl;
+          //     index_dipho2 = diphoIndex;
+          //   }
+          // }
+
     }
     pairs = std::make_pair(index_dipho1,index_dipho2);
-    // cout << "#dipho1: " << index_dipho1 << "   " << "#dipho2: " << index_dipho2 << endl;
+    cout << "#dipho1: " << index_dipho1 << "   " << "#dipho2: " << index_dipho2 << endl;
     return pairs;
   }
 
 
   namespace flashgg {
 
-    // struct GreaterByPt
-    // {
-    // public:
-    //   bool operator()( int dp1, int dp2, edm::Ptr<flashgg::DiPhotonCandidate> diPhotons  ) const
-    //   {
-    //       return dp1->pt() > dp2->pt();
-    //   };
-    //     // bool operator()( edm::Ptr<flashgg::DiPhotonCandidate> dp1, edm::Ptr<flashgg::DiPhotonCandidate> dp2 ) const
-    //     // {
-    //     //     return dp1->pt() > dp2->pt();
-    //     // };
-    // };
 
     struct Sorter {
       bool operator()( const std::pair<unsigned int, float> pair1, const std::pair<unsigned int, float> pair2 )
@@ -490,13 +502,7 @@ std::pair<int,int> photonIndices(Handle<View<flashgg::DiPhotonCandidate> > diPho
 
               dipho = diPhotons->ptrAt( diphoIndex ); // without systematic look (?)
               diphoVec.push_back(dipho);
-              // dipho->centralWeight("electronVetoSF");
-              // flashgg::DiPhotonCandidate * thisDPPointer = const_cast<flashgg::DiPhotonCandidate *>(dipho.get());
-              // cout << dipho->leadingPhoton()->weight("electronVetoSF") << endl;
-              // diphoPtrVec.push_back(thisDPPointer);
-              // diphoPtrVec[diphoIndex].makePhotonsPersistent();
-              // cout << "lead pho pt: "<< dipho->leadingPhoton()->pt() << endl;
-              // cout << "sublead pho pt: "<< dipho->subLeadingPhoton()->pt() << endl;
+
             }
 
             vector<flashgg::Photon> phoP4Corrected_dp;
@@ -522,35 +528,29 @@ std::pair<int,int> photonIndices(Handle<View<flashgg::DiPhotonCandidate> > diPho
             sorter_.clear();
             std::sort(phoP4Corrected_dp.begin(), phoP4Corrected_dp.end(), [](const flashgg::Photon a, const flashgg::Photon  b) {return a.pt() > b.pt(); });
 
-            // std::vector<std::pair<int,int>> pairs = photonIndices(diPhotons,phoP4Corrected_dp);
-            // cout << std::get<0>(pairs) << std::get<1>(pairs) << endl;
+
+
+
 
             if (phoP4Corrected_dp.size() > 3){
               H4GTag tag_obj (dipho, phoP4Corrected_dp[0], phoP4Corrected_dp[1], phoP4Corrected_dp[2], phoP4Corrected_dp[3], vertex_chosen, dZ_bdtVtx, dZ_ZeroVtx );
-              std::pair<int,int> pairs = photonIndices(diPhotons,phoP4Corrected_dp);
+              vector<flashgg::Photon> phoP4Corrected_dp_reduced;
+
+              for (int p=0; p < 4; p++)
+              {
+                phoP4Corrected_dp_reduced.push_back(phoP4Corrected_dp[p]);
+              }
+              std::pair<int,int> pairs = photonIndices(diPhotons,phoP4Corrected_dp_reduced);
+              // std::pair<int,int> pairs = photonIndices(diPhotons,phoP4Corrected_dp);
               tag_obj.setCategoryNumber( 0 );
               tag_obj.setSystLabel( inputDiPhotonSuffixes_[diphoton_idx] );
 
-              // for (int diphoIndex=0; diphoIndex < diphoVec.size(); diphoIndex++)
-              // {
-              //    cout << std::get<0>(pairs[diphoIndex]) << std::get<1>(pairs[diphoIndex]) << endl;
-              // }
 
               tag_obj.includeWeightsByLabel( *diphoVec[preselDiPhoIndex[0]] ,"PreselSF");
               tag_obj.includeWeightsByLabel( *diphoVec[preselDiPhoIndex[0]] ,"TriggerWeight");
-              // tag_obj.includeWeightsByLabel( *diphoVec[1] ,"electronVetoSF");
               tag_obj.includeWeightsByLabel(*diphoVec[std::get<0>(pairs)],"electronVetoSF");
               tag_obj.includeWeightsByLabel(*diphoVec[std::get<1>(pairs)],"electronVetoSF");
-              // cout << diphoVec[0]->centralWeight("electronVetoSF") << endl;
-              // for (auto it = tag_obj.weightListBegin() ; it != tag_obj.weightListEnd(); it++) {
-              //           std::cout << " Weight Debug " << *it << " " << tag_obj.weight(*it) << std::endl;
-              //
-              //       }
-              // for (int i1=0; i1 < (int) diphoVec.size() ; i1++)
-              // {
-              //   auto diphotemp = diphoVec[i1];
-              //   //tag_obj.includeWeights(* diphotemp);
-              // }
+
 
 
               tags->push_back(tag_obj);
@@ -568,11 +568,7 @@ std::pair<int,int> photonIndices(Handle<View<flashgg::DiPhotonCandidate> > diPho
               tag_obj.setSystLabel( inputDiPhotonSuffixes_[diphoton_idx] );
               tag_obj.includeWeightsByLabel( *diphoVec[preselDiPhoIndex[0]] ,"PreselSF");
               tag_obj.includeWeightsByLabel( *diphoVec[preselDiPhoIndex[0]] ,"TriggerWeight");
-              // for (int i1=0; i1 < (int) diphoVec.size() ; i1++)
-              // {
-              //   auto diphotemp = diphoVec[i1];
-              //   //tag_obj.includeWeights(* diphotemp);
-              // }
+
 
               tags->push_back( tag_obj );
               if( ! evt.isRealData() ) {
@@ -588,11 +584,6 @@ std::pair<int,int> photonIndices(Handle<View<flashgg::DiPhotonCandidate> > diPho
               tag_obj.setSystLabel( inputDiPhotonSuffixes_[diphoton_idx] );
               tag_obj.includeWeightsByLabel( *diphoVec[preselDiPhoIndex[0]] ,"PreselSF");
               tag_obj.includeWeightsByLabel( *diphoVec[preselDiPhoIndex[0]] ,"TriggerWeight");
-              // for (int i1=0; i1 < (int) diphoVec.size() ; i1++)
-              // {
-              //   auto diphotemp = diphoVec[i1];
-              //   //tag_obj.includeWeights(* diphotemp);
-              // }
 
               tags->push_back( tag_obj );
               if( ! evt.isRealData() ) {
@@ -631,8 +622,10 @@ std::pair<int,int> photonIndices(Handle<View<flashgg::DiPhotonCandidate> > diPho
         else{
           float minDR1 = 999, minDR2 = 999;
           for (size_t p=0; p < phoVector.size(); p++){
-            float deltar1 = sqrt(pow(phoVector[p].superCluster()->eta()-pho1.superCluster()->eta(),2)+pow(phoVector[p].superCluster()->phi()-pho1.superCluster()->phi(),2));
-            float deltar2 = sqrt(pow(phoVector[p].superCluster()->eta()-pho2.superCluster()->eta(),2)+pow(phoVector[p].superCluster()->phi()-pho2.superCluster()->phi(),2));
+            float deltar1 = deltaR(phoVector[p].superCluster()->eta(),phoVector[p].superCluster()->phi(),pho1.superCluster()->eta(),pho1.superCluster()->phi());
+            float deltar2 = deltaR(phoVector[p].superCluster()->eta(),phoVector[p].superCluster()->phi(),pho2.superCluster()->eta(),pho2.superCluster()->phi());
+            // float deltar1 = sqrt(pow(phoVector[p].superCluster()->eta()-pho1.superCluster()->eta(),2)+pow(phoVector[p].superCluster()->phi()-pho1.superCluster()->phi(),2));
+            // float deltar2 = sqrt(pow(phoVector[p].superCluster()->eta()-pho2.superCluster()->eta(),2)+pow(phoVector[p].superCluster()->phi()-pho2.superCluster()->phi(),2));
             if (deltar1 < minDR1) minDR1 = deltar1;
             if (deltar2 < minDR2) minDR2 = deltar2;
           }
