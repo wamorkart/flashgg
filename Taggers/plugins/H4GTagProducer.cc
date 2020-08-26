@@ -94,16 +94,16 @@ std::pair<int,int> photonIndices(Handle<View<flashgg::DiPhotonCandidate> > diPho
               // if (minSubleading  > 0.0001) {subleadIndex = phoIndex;}
 
           }
-          std::cout << "photonIndices: " << diphoIndex << " - " << leadIndex << " - " << subleadIndex << std::endl;
+          //std::cout << "photonIndices: " << diphoIndex << " - " << leadIndex << " - " << subleadIndex << std::endl;
 
           if((leadIndex == 0 && subleadIndex == 1 ) || (leadIndex == 1 && subleadIndex == 0 ) )
           {
-            cout << "diphot1" << endl;
+            //cout << "diphot1" << endl;
             index_dipho1 = diphoIndex;
           }
           if((leadIndex == 2 && subleadIndex == 3) || (leadIndex == 3 && subleadIndex == 2 ))
           {
-            cout << "dipho2" << endl;
+            //cout << "dipho2" << endl;
             index_dipho2 = diphoIndex;
           }
 
@@ -147,7 +147,7 @@ std::pair<int,int> photonIndices(Handle<View<flashgg::DiPhotonCandidate> > diPho
 
     }
     pairs = std::make_pair(index_dipho1,index_dipho2);
-    cout << "#dipho1: " << index_dipho1 << "   " << "#dipho2: " << index_dipho2 << endl;
+    //cout << "#dipho1: " << index_dipho1 << "   " << "#dipho2: " << index_dipho2 << endl;
     return pairs;
   }
 
