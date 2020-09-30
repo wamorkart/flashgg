@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
   parser = argparse.ArgumentParser(description='Mixing')
   parser.add_argument(   "-i", "--inputFile",   dest="inputFile",    default="input.root",       type=str,  help="Input file" )
-  parser.add_argument(   "-t", "--tree",  dest="tree",   default="tree",      type=str,  help="tree")
+  # parser.add_argument(   "-t", "--tree",  dest="tree",   default="tree",      type=str,  help="tree")
   parser.add_argument(   "-i1", "--i1",  dest="i1",   default=0,      type=int,  help="p1")
   # parser.add_argument(   "-i2", "--i2",  dest="i2",   default=0,      type=int,  help="p2")
   # parser.add_argument(   "-i3", "--i3",  dest="i3",   default=0,      type=int,  help="p3")
@@ -24,7 +24,8 @@ if __name__ == '__main__':
 
   options = parser.parse_args()
 
-  itree = ROOT.TChain(str(options.tree))
+  # itree = ROOT.TChain(str(options.tree))
+  itree = ROOT.TChain('tagsDumper/trees/Data_13TeV_H4GTag_0')
   itree.AddFile(options.inputFile)
 
   print "Total number of events to be analyzed:", itree.GetEntries()
