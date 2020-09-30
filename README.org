@@ -146,5 +146,5 @@ and on data:
 
 ** H4G Mixing
    #+BEGIN_EXAMPLE
-   python H4GTreeMixing.py  -i /eos/user/t/twamorka/h4g_fullRun2/withSystematics/2016/hadd/data_2016.root -t 'tagsDumper/trees/Data_13TeV_H4GTag_0' -i1 1 -o test.root
-   #+END_EXAMPLE    
+   python H4GTreeMixing.py  -i /eos/user/t/twamorka/h4g_fullRun2/withSystematics/2016/hadd/data_2016.root -t 'tagsDumper/trees/Data_13TeV_H4GTag_0' -i1 1 -y 2016 -o test.root
+   #+END_EXAMPLE
