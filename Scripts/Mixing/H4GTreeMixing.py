@@ -20,7 +20,7 @@ if __name__ == '__main__':
   # parser.add_argument(   "-i3", "--i3",  dest="i3",   default=0,      type=int,  help="p3")
   # parser.add_argument(   "-i4", "--i4",  dest="i4",   default=0,      type=int,  help="p4")
   parser.add_argument(   "-y", "--y",  dest="year",   default="2016",      type=str,  help="year")
-  parser.add_argument(   "-o", "--outputFile",  dest="outputFile",   default="output.root",      type=str,  help="Output file")
+  parser.add_argument(   "-o", "--outputDir",  dest="outputDit",   default="",      type=str,  help="Output Dir")
 
   options = parser.parse_args()
 
@@ -30,7 +30,7 @@ if __name__ == '__main__':
 
   print "Total number of events to be analyzed:", itree.GetEntries()
 
-  outRoot = ROOT.TFile(options.outputFile, "RECREATE")
+  outRoot = ROOT.TFile(options.outputDir+"/data_mix_"+str(e)+".root", "RECREATE")
   treeSkimmer = SkimmedTreeTools()
   otree = treeSkimmer.MakeSkimmedTree()
 
