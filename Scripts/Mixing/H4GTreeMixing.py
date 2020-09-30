@@ -15,7 +15,7 @@ if __name__ == '__main__':
   parser = argparse.ArgumentParser(description='Mixing')
   parser.add_argument(   "-i", "--inputFile",   dest="inputFile",    default="input.root",       type=str,  help="Input file" )
   # parser.add_argument(   "-t", "--tree",  dest="tree",   default="tree",      type=str,  help="tree")
-  parser.add_argument(   "-i1", "--i1",  dest="i1",   default=0,      type=int,  help="p1")
+  parser.add_argument(   "-e", "--e",  dest="e",   default=0,      type=int,  help="e")
   # parser.add_argument(   "-i2", "--i2",  dest="i2",   default=0,      type=int,  help="p2")
   # parser.add_argument(   "-i3", "--i3",  dest="i3",   default=0,      type=int,  help="p3")
   # parser.add_argument(   "-i4", "--i4",  dest="i4",   default=0,      type=int,  help="p4")
@@ -52,7 +52,7 @@ if __name__ == '__main__':
       itree.GetEntry(0)
     else :
        # print "1st photon from event#: ", options.i1
-       itree.GetEntry(evt+(options.i1))
+       itree.GetEntry(evt+(options.e))
 
     ObjList = [key.GetName() for key in  itree.GetListOfBranches()]
     for branch in ObjList:
@@ -66,7 +66,7 @@ if __name__ == '__main__':
       itree.GetEntry(0)
     else :
       # print "2nd photon from event#: ", options.i2
-      itree.GetEntry(evt+options.i1+1)
+      itree.GetEntry(evt+options.e+1)
 
     ObjList = [key.GetName() for key in  itree.GetListOfBranches()]
     for branch in ObjList:
@@ -81,7 +81,7 @@ if __name__ == '__main__':
       itree.GetEntry(0)
     else :
         # print "3rd photon from event#: ", options.i3
-        itree.GetEntry(evt+options.i1+2)
+        itree.GetEntry(evt+options.e+2)
 
     ObjList = [key.GetName() for key in  itree.GetListOfBranches()]
     for branch in ObjList:
@@ -97,7 +97,7 @@ if __name__ == '__main__':
       itree.GetEntry(0)
     else :
       # print "4th photon from event#: ", options.i4
-      itree.GetEntry(evt+options.i1+3)
+      itree.GetEntry(evt+options.e+3)
     ObjList = [key.GetName() for key in  itree.GetListOfBranches()]
     for branch in ObjList:
       nameToSearch1 = "pho" + str(int(dp2_p2i)+1) + "_"
