@@ -16,9 +16,9 @@ if __name__ == '__main__':
   parser.add_argument(   "-i", "--inputFile",   dest="inputFile",    default="input.root",       type=str,  help="Input file" )
   parser.add_argument(   "-t", "--tree",  dest="tree",   default="tree",      type=str,  help="tree")
   parser.add_argument(   "-i1", "--i1",  dest="i1",   default=0,      type=int,  help="p1")
-  parser.add_argument(   "-i2", "--i2",  dest="i2",   default=0,      type=int,  help="p2")
-  parser.add_argument(   "-i3", "--i3",  dest="i3",   default=0,      type=int,  help="p3")
-  parser.add_argument(   "-i4", "--i4",  dest="i4",   default=0,      type=int,  help="p4")
+  # parser.add_argument(   "-i2", "--i2",  dest="i2",   default=0,      type=int,  help="p2")
+  # parser.add_argument(   "-i3", "--i3",  dest="i3",   default=0,      type=int,  help="p3")
+  # parser.add_argument(   "-i4", "--i4",  dest="i4",   default=0,      type=int,  help="p4")
   parser.add_argument(   "-y", "--y",  dest="year",   default="2016",      type=str,  help="year")
   parser.add_argument(   "-o", "--outputFile",  dest="outputFile",   default="output.root",      type=str,  help="Output file")
 
@@ -65,7 +65,7 @@ if __name__ == '__main__':
       itree.GetEntry(0)
     else :
       # print "2nd photon from event#: ", options.i2
-      itree.GetEntry(evt+options.i2)
+      itree.GetEntry(evt+options.i1+1)
 
     ObjList = [key.GetName() for key in  itree.GetListOfBranches()]
     for branch in ObjList:
@@ -80,7 +80,7 @@ if __name__ == '__main__':
       itree.GetEntry(0)
     else :
         # print "3rd photon from event#: ", options.i3
-        itree.GetEntry(evt+options.i3)
+        itree.GetEntry(evt+options.i1+2)
 
     ObjList = [key.GetName() for key in  itree.GetListOfBranches()]
     for branch in ObjList:
@@ -96,7 +96,7 @@ if __name__ == '__main__':
       itree.GetEntry(0)
     else :
       # print "4th photon from event#: ", options.i4
-      itree.GetEntry(evt+options.i4)
+      itree.GetEntry(evt+options.i1+3)
     ObjList = [key.GetName() for key in  itree.GetListOfBranches()]
     for branch in ObjList:
       nameToSearch1 = "pho" + str(int(dp2_p2i)+1) + "_"
@@ -281,8 +281,8 @@ if __name__ == '__main__':
     treeSkimmer.tp_eta[0] = Pgggg.Eta()
     treeSkimmer.tp_mass[0] = Pgggg.M()
 
-    if (treeSkimmer.isPresel[0] == 1):
-        otree.Fill()
+    #if (treeSkimmer.isPresel[0] == 1):
+    otree.Fill()
     # else: print "Failed preselection"
   outRoot.cd()
   otree.Write()
