@@ -15,7 +15,7 @@ if __name__ == '__main__':
 
   parser = OptionParser()
   parser.add_option(   "-i", "--input",     dest="input",     default="",   type="string", help="input root file" )
-  parser.add_option(   "-e", "--event",     dest="event",     default="",   type="string", help="event" )
+  parser.add_option(   "-m", "--max",     dest="max",     default="",   type="string", help="max" )
   parser.add_option(   "-y", "--year",     dest="year",     default="",   type="string", help="year" )
   parser.add_option(   "-o", "--output",     dest="output",     default="",   type="string", help="output" )
 
@@ -23,12 +23,12 @@ if __name__ == '__main__':
   (options, args) = parser.parse_args()
 
   input     = options.input
-  event     = options.event
+  max     = options.max
   year      = options.year
   output    = options.output
 
   print "input    =",input
-  print "event    =",event
+  print "max      =",max
   print "year     =",year
   print "output    =",output
 
@@ -92,7 +92,7 @@ OUTPUTDIR=$4;
 cd $INPUTDIR/
 
 echo -e "evaluate"
-eval `scramv1 ru -sh`
+#eval `scramv1 ru -sh`
 
 echo -e "Compute SoB";
 # python runSoBOptimization.py -s \"${INPUTSTRING}\"
@@ -101,9 +101,11 @@ python /afs/cern.ch/work/t/twamorka/flashgg_16aug2020/CMSSW_10_6_8/src/flashgg/S
 echo -e "DONE";
 '''
   arguments=[]
-  # for i in range(1,int(max)+1):
-  arguments.append("\""+"{} {} {} {}".format(input,"\'"+event+"\'",year+"\'",output)+"\"")
-  # with open("arguments.txt", "w") as args:
-     # args.write("\n".join(arguments))
+  # max = 30
+  for i in range(1,int(max)+1):
+      arguments.append("\""+"{} {} {} {}".format(input,i,"\'"+year+"\'",output)+"\"")
+      # arguments.append("\""+"{} {} {} {}".format(input,"\'"+i+"\"",year+"\"",output)+"\"")
+  with open("arguments.txt", "w") as args:
+     args.write("\n".join(arguments))
   with open("run_script.sh", "w") as rs:
      rs.write(script)
