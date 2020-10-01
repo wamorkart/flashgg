@@ -30,7 +30,6 @@
 ** Things to do
     The MiniAOD DAS links are:
     #+BEGIN_EXAMPLE
-    [[https://indico.cern.ch/event/847927/contributions/3606888/attachments/1930081/3196452/HH_WWgg_Analysis_Status_21_October_2019.pdf][21 October 2019 Analysis Status]]
     2016: https://cmsweb.cern.ch/das/request?view=list&limit=50&instance=prod%2Fglobal&input=dataset%3D%2FHAHMHToAA_AToGG_MA-*GeV_TuneCUETP8M1_PSweights_13TeV-madgraph_pythia8%2F*%2FMINIAODSIM
     2017: https://cmsweb.cern.ch/das/request?view=list&limit=50&instance=prod%2Fglobal&input=dataset%3D%2FHAHMHToAA_AToGG_MA-*GeV_TuneCP5_PSweights_13TeV-madgraph_pythia8%2F*RunIIFall17*%2FMINIAODSIM
     2018: https://cmsweb.cern.ch/das/request?view=list&limit=50&instance=prod%2Fglobal&input=dataset%3D%2FHAHMHToAA_AToGG_MA-*GeV_TuneCP5_PSweights_13TeV-madgraph_pythia8%2F*RunIIAutumn18*%2FMINIAODSIM
