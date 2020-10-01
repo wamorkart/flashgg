@@ -28,6 +28,22 @@
    #+END_EXAMPLE
 
 ** Things to do
+    The MiniAOD DAS links are:
+    #+BEGIN_EXAMPLE
+    2016: https://cmsweb.cern.ch/das/request?view=list&limit=50&instance=prod%2Fglobal&input=dataset%3D%2FHAHMHToAA_AToGG_MA-*GeV_TuneCUETP8M1_PSweights_13TeV-madgraph_pythia8%2F*%2FMINIAODSIM
+    2017: https://cmsweb.cern.ch/das/request?view=list&limit=50&instance=prod%2Fglobal&input=dataset%3D%2FHAHMHToAA_AToGG_MA-*GeV_TuneCP5_PSweights_13TeV-madgraph_pythia8%2F*RunIIFall17*%2FMINIAODSIM
+    2018: https://cmsweb.cern.ch/das/request?view=list&limit=50&instance=prod%2Fglobal&input=dataset%3D%2FHAHMHToAA_AToGG_MA-*GeV_TuneCP5_PSweights_13TeV-madgraph_pythia8%2F*RunIIAutumn18*%2FMINIAODSIM
+    #+END_EXAMPLE
+
+    Prepare the json file for microAOD submission: For now, the samples are processed under 'bkg'. At some point we need to investigate the signal customization which will allow us to add PDF weights.
+    #+BEGIN_EXAMPLE
+    2016: MetaData/work/H4G_2016_signal.json
+    2017: MetaData/work/H4G_2017_signal.json
+    2018: MetaData/work/H4G_2018_signal.json
+    #+END_EXAMPLE
+
+    Add the list of samples to be processed under MetaData/data/cross_sections.json
+
     You should copy the xml weight files that are required for microAOD production to an area before CRAB job submission. This is to ensure that the tar ball of the CRAB job is not big (the jobs crash if it is larger than 200 MB).
     #+BEGIN_EXAMPLE
     cd CMSSW_10_6_8/src/flashgg
@@ -47,5 +63,5 @@
     "photonIdMVAweightfile_EB" : "flashgg/MicroAOD/data/HggPhoId_94X_barrel_BDT_v2.weights.xml", -> "photonIdMVAweightfile_EB" : "HggPhoId_94X_barrel_BDT_v2.weights.xml",
     "photonIdMVAweightfile_EE" : "flashgg/MicroAOD/data/HggPhoId_94X_endcap_BDT_v2.weights.xml", -> "photonIdMVAweightfile_EE" : "HggPhoId_94X_endcap_BDT_v2.weights.xml",
     "vertexIdMVAweightfile" : "flashgg/MicroAOD/data/TMVAClassification_BDTVtxId_SL_2016.xml", -> "vertexIdMVAweightfile" : "TMVAClassification_BDTVtxId_SL_2016.xml",
-    "vertexProbMVAweightfile" : "flashgg/MicroAOD/data/TMVAClassification_BDTVtxProb_SL_2016.xml" -> "vertexProbMVAweightfile" : "TMVAClassification_BDTVtxProb_SL_2016.xml"         
+    "vertexProbMVAweightfile" : "flashgg/MicroAOD/data/TMVAClassification_BDTVtxProb_SL_2016.xml" -> "vertexProbMVAweightfile" : "TMVAClassification_BDTVtxProb_SL_2016.xml"
     #+END_EXAMPLE
