@@ -46,7 +46,7 @@
 
     You should copy the xml weight files that are required for microAOD production to an area before CRAB job submission. This is to ensure that the tar ball of the CRAB job is not big (the jobs crash if it is larger than 200 MB).
     #+BEGIN_EXAMPLE
-    cd CMSSW_10_6_8/src/flashgg
+    cd $CMSSW_BASE/src/flashgg
     mkdir ../../external/slc7_amd64_gcc700/data/
     #+END_EXAMPLE
 
@@ -64,4 +64,28 @@
     "photonIdMVAweightfile_EE" : "flashgg/MicroAOD/data/HggPhoId_94X_endcap_BDT_v2.weights.xml", -> "photonIdMVAweightfile_EE" : "HggPhoId_94X_endcap_BDT_v2.weights.xml",
     "vertexIdMVAweightfile" : "flashgg/MicroAOD/data/TMVAClassification_BDTVtxId_SL_2016.xml", -> "vertexIdMVAweightfile" : "TMVAClassification_BDTVtxId_SL_2016.xml",
     "vertexProbMVAweightfile" : "flashgg/MicroAOD/data/TMVAClassification_BDTVtxProb_SL_2016.xml" -> "vertexProbMVAweightfile" : "TMVAClassification_BDTVtxProb_SL_2016.xml"
+    #+END_EXAMPLE
+
+    To submit CRAB jobs, make sure you are in the correct directory:
+    #+BEGIN_EXAMPLE
+    cd $CMSSW_BASE/src/flashgg/MetaData/work
+    #+END_EXAMPLE
+
+    Next, set up the environment:
+    #+BEGIN_EXAMPLE
+    cmsenv
+    voms-proxy-init --voms cms --valid 168:00
+    source /cvmfs/cms.cern.ch/crab3/crab.sh
+    #+END_EXAMPLE
+
+    The H4G MicroAOD's land here: /store/group/phys_higgs/HiggsExo/H4Gamma/ so make sure you can write to this area
+    Follow the commands to submit the CRAB jobs:
+    #+BEGIN_EXAMPLE
+    Its important for the value of the -V argument to contain the proper naming. This is used in the later stages of running the H4G Tagger in picking up the correct PU distribution.
+    2016:./prepareCrabJobs.py -p ${CMSSW_BASE}/src/flashgg/MicroAOD/test/microAODstd.py -C H4G_2016_Signal_Sep2020 -U 1 -L 25 -s H4G_2016_signal.json  -V PUMoriond17 -o /store/group/phys_higgs/HiggsExo/H4Gamma/H4G_Signal_Sep2020/2016 --meta-conditions ${CMSSW_BASE}/src/flashgg/MetaData/data/MetaConditions/Era2016_RR-17Jul2018_v1.json
+
+    2017:./prepareCrabJobs.py -p ${CMSSW_BASE}/src/flashgg/MicroAOD/test/microAODstd.py -C H4G_2017_Signal_Sep2020 -U 1 -L 25 -s H4G_2017_signal.json  -V 94X_mc2017 -o /store/group/phys_higgs/HiggsExo/H4Gamma/H4G_Signal_Sep2020/2017 --meta-conditions ${CMSSW_BASE}/src/flashgg/MetaData/data/MetaConditions//Era2017_RR-31Mar2018_v1.json
+
+    2018:./prepareCrabJobs.py -p ${CMSSW_BASE}/src/flashgg/MicroAOD/test/microAODstd.py -C H4G_2018_Signal_Sep2020 -U 1 -L 25 -s H4G_2018_signal.json  -V 102X_mc-RunIIAutumn18 -o /store/group/phys_higgs/HiggsExo/H4Gamma/H4G_Signal_Sep2020/2018 --meta-conditions ${CMSSW_BASE}/src/flashgg/MetaData/data/MetaConditions/Era2018_RR-17Sep2018_v1.json
+
     #+END_EXAMPLE
