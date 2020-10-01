@@ -144,6 +144,8 @@ class MicroAODCustomize(object):
                 self.customizeTH(process)
             elif "hh" in customize.datasetName.lower():
                 self.customizeHH(process)
+            elif "hahmhtoaa" in customize.datasetName.lower():
+                self.customizeH4G(process)
             else:
                 raise Exception,"processType=sig but datasetName does not contain recognized production mechanism - see MicroAODCustomize.py"
         if self.processType == "background" or self.processType == "bkg":
@@ -530,7 +532,9 @@ class MicroAODCustomize(object):
 
     def customizeHH(self,process):
         print "using HH sample, treating them as signals"
-
+    
+    def customizeH4G(self,process):
+       print "using H4G sample, treating them as signals"
 
 
     def customizeTH(self,process):
