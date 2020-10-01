@@ -147,4 +147,5 @@ and on data:
 ** H4G Mixing
    #+BEGIN_EXAMPLE
    python H4GTreeMixing.py  -i /eos/user/t/twamorka/h4g_fullRun2/withSystematics/2016/hadd/data_2016.root -i1 1 -y 2016 -o test.root
+   python runMixing_Condor.py  -m 2000
    #+END_EXAMPLE
