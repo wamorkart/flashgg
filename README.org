@@ -94,4 +94,6 @@
     #+BEGIN_EXAMPLE
     cd <campaignName> for eg: cd H4G_2016_Signal_Sep2020
     echo crab_* | xargs -n 1 crab sub
+    You can check on the jobs using:
+    echo crab_* | xargs -n 1 crab status
     #+END_EXAMPLE
