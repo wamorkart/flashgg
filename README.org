@@ -78,7 +78,7 @@
     source /cvmfs/cms.cern.ch/crab3/crab.sh
     #+END_EXAMPLE
 
-    The H4G MicroAOD's land here: /store/group/phys_higgs/HiggsExo/H4Gamma/ so make sure you can write to this area
+    The H4G MicroAOD's land here --/eos/cms/store/group/phys_higgs/HiggsExo/H4Gamma/ so make sure you can write to this area
     Follow the commands to submit the CRAB jobs:
     #+BEGIN_EXAMPLE
     Its important for the value of the -V argument to contain the proper naming. This is used in the later stages of running the H4G Tagger in picking up the correct PU distribution.
@@ -88,4 +88,10 @@
 
     2018:./prepareCrabJobs.py -p ${CMSSW_BASE}/src/flashgg/MicroAOD/test/microAODstd.py -C H4G_2018_Signal_Sep2020 -U 1 -L 25 -s H4G_2018_signal.json  -V 102X_mc-RunIIAutumn18 -o /store/group/phys_higgs/HiggsExo/H4Gamma/H4G_Signal_Sep2020/2018 --meta-conditions ${CMSSW_BASE}/src/flashgg/MetaData/data/MetaConditions/Era2018_RR-17Sep2018_v1.json
 
+    #+END_EXAMPLE
+
+    You should then
+    #+BEGIN_EXAMPLE
+    cd <campaignName> for eg: cd H4G_2016_Signal_Sep2020
+    echo crab_* | xargs -n 1 crab sub
     #+END_EXAMPLE
