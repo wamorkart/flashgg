@@ -97,3 +97,10 @@
     You can check on the jobs using:
     echo crab_* | xargs -n 1 crab status
     #+END_EXAMPLE
+
+    Once the jobs are finished, you should check if they have been published on DAS. Then, in order to create the json files corresponding to the campaign do the following steps (these json files are used when running the tagger):
+    #+BEGIN_EXAMPLE
+    fggManageSamples.py -C <campaignName> -V <version>  import (eg: fggManageSamples.py -C H4G_2018_Signal_Sep2020 -V 102X_mc-RunIIAutumn18-v0  import)
+    fggManageSamples.py -C <campaignName> -V <version>  review
+    fggManageSamples.py -C <campaignName> -V <version>  check
+    #+END_EXAMPLE
