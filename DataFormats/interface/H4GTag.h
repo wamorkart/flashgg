@@ -29,12 +29,13 @@ namespace flashgg{
     H4GTag();
     ~H4GTag();
      // H4GTag(edm::Ptr<DiPhotonCandidate>);
-     H4GTag(edm::Ptr<DiPhotonCandidate>,  flashgg::Photon, flashgg::Photon, flashgg::Photon, flashgg::Photon, edm::Ptr<reco::Vertex>,  float, float);
-     H4GTag(edm::Ptr<DiPhotonCandidate>, flashgg::Photon, flashgg::Photon, flashgg::Photon, edm::Ptr<reco::Vertex>, float, float);
-     H4GTag(edm::Ptr<DiPhotonCandidate>, flashgg::Photon, flashgg::Photon, edm::Ptr<reco::Vertex>, float, float);
+     H4GTag(edm::Ptr<DiPhotonCandidate>,  flashgg::Photon, flashgg::Photon, flashgg::Photon, flashgg::Photon, edm::Ptr<reco::Vertex>,  float, float, float,  std::vector<reco::Candidate::LorentzVector >);
+     H4GTag(edm::Ptr<DiPhotonCandidate>, flashgg::Photon, flashgg::Photon, flashgg::Photon, edm::Ptr<reco::Vertex>, float, float, float,  std::vector<reco::Candidate::LorentzVector >);
+     H4GTag(edm::Ptr<DiPhotonCandidate>, flashgg::Photon, flashgg::Photon, edm::Ptr<reco::Vertex>, float, float, float,  std::vector<reco::Candidate::LorentzVector >);
 
 
     virtual H4GTag *clone() const override;
+
     const flashgg::Photon pho1() const {return pho1_;};
     const flashgg::Photon pho2() const {return pho2_;};
     const flashgg::Photon pho3() const {return pho3_;};
@@ -75,19 +76,6 @@ namespace flashgg{
     const reco::Candidate::LorentzVector& pho24() const { return pho24_; };
     const reco::Candidate::LorentzVector& pho34() const { return pho34_; };
 
-    // const reco::Candidate::LorentzVector& h4gDiPho1() const { return dp1_; };
-    // const reco::Candidate::LorentzVector& h4gDiPho2() const { return dp2_; };
-    // const reco::Candidate::LorentzVector& h4gDiPho1_Pho1() const { return dp1_pho1_; };
-    // const reco::Candidate::LorentzVector& h4gDiPho1_Pho2() const { return dp1_pho2_; };
-    // const reco::Candidate::LorentzVector& h4gDiPho2_Pho1() const { return dp2_pho1_; };
-    // const reco::Candidate::LorentzVector& h4gDiPho2_Pho2() const { return dp2_pho2_; };
-    // const int& h4gDiPho1_iPho1() const { return dp1_ipho1_; };
-    // const int& h4gDiPho1_iPho2() const { return dp1_ipho2_; };
-    // const int& h4gDiPho2_iPho1() const { return dp2_ipho1_; };
-    // const int& h4gDiPho2_iPho2() const { return dp2_ipho2_; };
-    // const float& cosThetaStarCS() const {return cosThetaStarCS_;};
-    // const float& cosTheta_a1() const {return cosTheta_a1_;};
-    // const float& cosTheta_a2() const {return cosTheta_a2_;};
 
     const reco::Candidate::LorentzVector& h4gDiPho1_prime() const { return dp1_prime_; };
     const reco::Candidate::LorentzVector& h4gDiPho2_prime() const { return dp2_prime_; };
@@ -108,6 +96,35 @@ namespace flashgg{
 
     float dZ_bdtVtx() const {return dZ_bdtVtx_;};
     float dZ_ZeroVtx() const {return dZ_ZeroVtx_;};
+    float dZ_HggVtx() const {return dZ_HggVtx_;};
+    float gen_pho1_pt() const {return gen_pho1_pt_;};
+    float gen_pho2_pt() const {return gen_pho2_pt_;};
+    float gen_pho3_pt() const {return gen_pho3_pt_;};
+    float gen_pho4_pt() const {return gen_pho4_pt_;};
+    float gen_pho1_eta() const {return gen_pho1_eta_;};
+    float gen_pho2_eta() const {return gen_pho2_eta_;};
+    float gen_pho3_eta() const {return gen_pho3_eta_;};
+    float gen_pho4_eta() const {return gen_pho4_eta_;};
+    float gen_pho12_dR() const {return gen_pho12_dR_;};
+    float gen_pho13_dR() const {return gen_pho13_dR_;};
+    float gen_pho14_dR() const {return gen_pho14_dR_;};
+    float gen_pho23_dR() const {return gen_pho23_dR_;};
+    float gen_pho24_dR() const {return gen_pho24_dR_;};
+    float gen_pho34_dR() const {return gen_pho34_dR_;};
+    float gen_pho12_M() const {return gen_pho12_M_;};
+    float gen_pho13_M() const {return gen_pho13_M_;};
+    float gen_pho14_M() const {return gen_pho14_M_;};
+    float gen_pho23_M() const {return gen_pho23_M_;};
+    float gen_pho24_M() const {return gen_pho24_M_;};
+    float gen_pho34_M() const {return gen_pho34_M_;};
+    float gen_a1_pt() const {return gen_a1_pt_;};
+    float gen_a2_pt() const {return gen_a2_pt_;};
+    float gen_a1_eta() const {return gen_a1_eta_;};
+    float gen_a2_eta() const {return gen_a1_eta_; };
+    float gen_a1a2_dR() const {return gen_a1a2_dR_; };
+    float gen_h_mass() const {return gen_h_mass_;};
+    float gen_h_pt() const {return gen_h_pt_;};
+    float gen_h_eta() const {return gen_h_eta_;};
     float getCosThetaStar_CS(reco::Candidate::LorentzVector a1, reco::Candidate::LorentzVector a2) const;
     std::vector<float> CosThetaAngles(reco::Candidate::LorentzVector a1, reco::Candidate::LorentzVector a2, reco::Candidate::LorentzVector a1_pho1, reco::Candidate::LorentzVector a2_pho1) const;
     float HelicityCosTheta( TLorentzVector Booster, TLorentzVector Boosted) const;
@@ -149,19 +166,6 @@ namespace flashgg{
     reco::Candidate::LorentzVector pho23_;
     reco::Candidate::LorentzVector pho24_;
     reco::Candidate::LorentzVector pho34_;
-    // reco::Candidate::LorentzVector dp1_;
-    // reco::Candidate::LorentzVector dp2_;
-    // reco::Candidate::LorentzVector dp1_pho1_;
-    // reco::Candidate::LorentzVector dp1_pho2_;
-    // reco::Candidate::LorentzVector dp2_pho1_;
-    // reco::Candidate::LorentzVector dp2_pho2_;
-    // int dp1_ipho1_;
-    // int dp1_ipho2_;
-    // int dp2_ipho1_;
-    // int dp2_ipho2_;
-    // float cosThetaStarCS_;
-    // float cosTheta_a1_;
-    // float cosTheta_a2_;
     reco::Candidate::LorentzVector dp1_prime_;
     reco::Candidate::LorentzVector dp2_prime_;
     reco::Candidate::LorentzVector dp1_pho1_prime_;
@@ -178,6 +182,37 @@ namespace flashgg{
     reco::Candidate::LorentzVector tp_;
     float dZ_bdtVtx_;
     float dZ_ZeroVtx_;
+    float dZ_HggVtx_;
+
+    float gen_pho1_pt_;
+    float gen_pho2_pt_;
+    float gen_pho3_pt_;
+    float gen_pho4_pt_;
+    float gen_pho1_eta_;
+    float gen_pho2_eta_;
+    float gen_pho3_eta_;
+    float gen_pho4_eta_;
+    float gen_pho12_dR_;
+    float gen_pho13_dR_;
+    float gen_pho14_dR_;
+    float gen_pho23_dR_;
+    float gen_pho24_dR_;
+    float gen_pho34_dR_;
+    float gen_pho12_M_;
+    float gen_pho13_M_;
+    float gen_pho14_M_;
+    float gen_pho23_M_;
+    float gen_pho24_M_;
+    float gen_pho34_M_;
+    float gen_a1_pt_;
+    float gen_a2_pt_;
+    float gen_a1_eta_;
+    float gen_a2_eta_;
+    float gen_a1a2_dR_;
+    float gen_h_mass_;
+    float gen_h_pt_;
+    float gen_h_eta_;
+
 
 
   };

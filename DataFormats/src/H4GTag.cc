@@ -21,7 +21,7 @@ H4GTag::H4GTag() : DiPhotonTagBase::DiPhotonTagBase()
 
 H4GTag::~H4GTag() {}
 
-H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg::Photon pho2, flashgg::Photon pho3, flashgg::Photon pho4, edm::Ptr<reco::Vertex> vertex_chosen, float dZ_bdtVtx, float dZ_ZeroVtx )
+H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg::Photon pho2, flashgg::Photon pho3, flashgg::Photon pho4, edm::Ptr<reco::Vertex> vertex_chosen, float dZ_bdtVtx, float dZ_ZeroVtx, float dZ_HggVtx,   std::vector<reco::Candidate::LorentzVector > genPhos )
 {
   dipho_ = dipho;
   pho1_  = pho1;
@@ -74,6 +74,7 @@ H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg:
 
   dZ_bdtVtx_ = dZ_bdtVtx;
   dZ_ZeroVtx_ = dZ_ZeroVtx;
+  dZ_HggVtx_ = dZ_HggVtx;
 
   float minDM = 1000000;
   vector <flashgg::Photon> phoVect;
@@ -150,12 +151,48 @@ H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg:
   pho24_ = pho2.p4() + pho4.p4();
   pho34_ = pho3.p4() + pho4.p4();
 
+  if (genPhos.size() == 4)
+  {
+    gen_pho1_pt_ = genPhos[0].pt();
+    gen_pho2_pt_ = genPhos[1].pt();
+    gen_pho3_pt_ = genPhos[2].pt();
+    gen_pho4_pt_ = genPhos[3].pt();
+    gen_pho1_eta_ = genPhos[0].eta();
+    gen_pho2_eta_ = genPhos[1].eta();
+    gen_pho3_eta_ = genPhos[2].eta();
+    gen_pho4_eta_ = genPhos[3].eta();
+
+    gen_pho12_dR_ = deltaR(genPhos[0].eta(), genPhos[0].phi(), genPhos[1].eta(), genPhos[1].phi());
+    gen_pho13_dR_ = deltaR(genPhos[0].eta(), genPhos[0].phi(), genPhos[2].eta(), genPhos[2].phi());
+    gen_pho14_dR_ = deltaR(genPhos[0].eta(), genPhos[0].phi(), genPhos[3].eta(), genPhos[3].phi());
+    gen_pho23_dR_ = deltaR(genPhos[1].eta(), genPhos[1].phi(), genPhos[2].eta(), genPhos[2].phi());
+    gen_pho24_dR_ = deltaR(genPhos[1].eta(), genPhos[1].phi(), genPhos[3].eta(), genPhos[3].phi());
+    gen_pho34_dR_ = deltaR(genPhos[2].eta(), genPhos[2].phi(), genPhos[3].eta(), genPhos[3].phi());
+
+    gen_pho12_M_ = (genPhos[0]+genPhos[1]).M();
+    gen_pho13_M_ = (genPhos[0]+genPhos[2]).M();
+    gen_pho14_M_ = (genPhos[0]+genPhos[3]).M();
+    gen_pho23_M_ = (genPhos[1]+genPhos[2]).M();
+    gen_pho24_M_ = (genPhos[1]+genPhos[3]).M();
+    gen_pho34_M_ = (genPhos[2]+genPhos[3]).M();
+
+    gen_a1_pt_ = (genPhos[0]+genPhos[1]).pt();
+    gen_a2_pt_ = (genPhos[2]+genPhos[3]).pt();
+    gen_a1_eta_ = (genPhos[0]+genPhos[1]).eta();
+    gen_a2_eta_ = (genPhos[2]+genPhos[3]).eta();
+    gen_a1a2_dR_ = deltaR( (genPhos[0]+genPhos[1]).eta(), (genPhos[0]+genPhos[1]).phi(),(genPhos[2]+genPhos[3]).eta(), (genPhos[2]+genPhos[3]).phi()  );
+    gen_h_mass_ = (genPhos[0]+genPhos[1]+genPhos[2]+genPhos[3]).M();
+    gen_h_pt_ = (genPhos[0]+genPhos[1]+genPhos[2]+genPhos[3]).pt();
+    gen_h_eta_ = (genPhos[0]+genPhos[1]+genPhos[2]+genPhos[3]).eta();
+
+  }
+
 
 
 
 }
 
-H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg::Photon pho2, flashgg::Photon pho3, edm::Ptr<reco::Vertex> vertex_chosen, float dZ_bdtVtx, float dZ_ZeroVtx)
+H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg::Photon pho2, flashgg::Photon pho3, edm::Ptr<reco::Vertex> vertex_chosen, float dZ_bdtVtx, float dZ_ZeroVtx, float dZ_HggVtx,   std::vector<reco::Candidate::LorentzVector > genPhos)
 {
   dipho_ = dipho;
   pho1_  = pho1;
@@ -192,7 +229,7 @@ H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg:
   pho23_ = pho2.p4() + pho3.p4();
 }
 
-H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg::Photon pho2, edm::Ptr<reco::Vertex> vertex_chosen, float dZ_bdtVtx, float dZ_ZeroVtx)
+H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg::Photon pho2, edm::Ptr<reco::Vertex> vertex_chosen, float dZ_bdtVtx, float dZ_ZeroVtx, float dZ_HggVtx,   std::vector<reco::Candidate::LorentzVector > genPhos)
 {
   dipho_ = dipho;
   pho1_  = pho1;

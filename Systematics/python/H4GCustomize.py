@@ -115,9 +115,38 @@ class H4GCustomize():
 
         "dZ_bdtVtx        := dZ_bdtVtx",
         "dZ_ZeroVtx        := dZ_ZeroVtx",
+        "dZ_HggVtx        := dZ_HggVtx",
         "tp_pt         := tp.pt()",
         "tp_eta         := tp.eta()",
-        "tp_mass         := tp.mass()"
+        "tp_mass         := tp.mass()",
+        "gen_pho1_pt     := gen_pho1_pt",
+        "gen_pho2_pt     := gen_pho2_pt",
+        "gen_pho3_pt     := gen_pho3_pt",
+        "gen_pho4_pt     := gen_pho4_pt",
+        "gen_pho1_eta     := gen_pho1_eta",
+        "gen_pho2_eta     := gen_pho2_eta",
+        "gen_pho3_eta     := gen_pho3_eta",
+        "gen_pho4_eta     := gen_pho4_eta",
+        "gen_pho12_dR     := gen_pho12_dR",
+        "gen_pho13_dR     := gen_pho13_dR",
+        "gen_pho14_dR     := gen_pho14_dR",
+        "gen_pho23_dR     := gen_pho23_dR",
+        "gen_pho24_dR     := gen_pho24_dR",
+        "gen_pho34_dR     := gen_pho34_dR",
+        "gen_pho12_M      := gen_pho12_M",
+        "gen_pho13_M      := gen_pho13_M",
+        "gen_pho14_M      := gen_pho14_M",
+        "gen_pho23_M      := gen_pho23_M",
+        "gen_pho24_M      := gen_pho24_M",
+        "gen_pho34_M      := gen_pho34_M",
+        "gen_a1_pt        := gen_a1_pt",
+        "gen_a2_pt        := gen_a2_pt",
+        "gen_a1_eta      := gen_a1_eta",
+        "gen_a2_eta      := gen_a2_eta",
+        "gen_a1a2_dR      := gen_a1a2_dR",
+        "gen_h_mass       := gen_h_mass",
+        "gen_h_pt         := gen_h_pt",
+        "gen_h_eta        := gen_h_eta"
 
         ]
         return variables
@@ -337,7 +366,37 @@ class H4GCustomize():
         "dZ_ZeroVtx        := dZ_ZeroVtx",
         "tp_pt         := tp.pt()",
         "tp_eta         := tp.eta()",
-        "tp_mass         := tp.mass()"
+        "tp_mass         := tp.mass()",
+        "gen_pho1_pt     := gen_pho1_pt",
+        "gen_pho2_pt     := gen_pho2_pt",
+        "gen_pho3_pt     := gen_pho3_pt",
+        "gen_pho4_pt     := gen_pho4_pt",
+        "gen_pho1_eta     := gen_pho1_eta",
+        "gen_pho2_eta     := gen_pho2_eta",
+        "gen_pho3_eta     := gen_pho3_eta",
+        "gen_pho4_eta     := gen_pho4_eta",
+        "gen_pho12_dR     := gen_pho12_dR",
+        "gen_pho13_dR     := gen_pho13_dR",
+        "gen_pho14_dR     := gen_pho14_dR",
+        "gen_pho23_dR     := gen_pho23_dR",
+        "gen_pho24_dR     := gen_pho24_dR",
+        "gen_pho34_dR     := gen_pho34_dR",
+        "gen_pho12_M      := gen_pho12_M",
+        "gen_pho13_M      := gen_pho13_M",
+        "gen_pho14_M      := gen_pho14_M",
+        "gen_pho23_M      := gen_pho23_M",
+        "gen_pho24_M      := gen_pho24_M",
+        "gen_pho34_M      := gen_pho34_M",
+        "gen_a1_pt        := gen_a1_pt",
+        "gen_a2_pt        := gen_a2_pt",
+        "gen_a1_eta      := gen_a1_eta",
+        "gen_a2_eta      := gen_a2_eta",
+        "gen_a1a2_dR      := gen_a1a2_dR",
+        "gen_h_mass       := gen_h_mass",
+        "gen_h_pt         := gen_h_pt",
+        "gen_h_eta        := gen_h_eta"
+
+
            ]
 
       return systematicVariables
@@ -379,7 +438,7 @@ class H4GCustomize():
         if self.customize.H4GTagsOnly:
             self.process.flashggTagSequence.remove(self.process.flashggPrefireDiPhotons)
             #self.process.flashggTagSequence.remove(self.process.flashggPreselectedDiPhotons)
-            #self.process.flashggTagSequence.replace(self.process.flashggPreselectedDiPhotons,self.process.flashggDiPhotonSystematics)
+            self.process.flashggTagSequence.replace(self.process.flashggPreselectedDiPhotons,self.process.flashggDiPhotonSystematics)
             self.process.flashggTagSequence.remove(self.process.flashggDiPhotonMVA)
             self.process.flashggTagSequence.remove(self.process.flashggVBFTag)
             self.process.flashggTagSequence.remove(self.process.flashggTTHLeptonicTag)
