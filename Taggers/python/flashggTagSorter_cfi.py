@@ -9,8 +9,6 @@ HTXSInputTags = cms.PSet(stage0bin = cms.InputTag("rivetProducerHTXS","stage0bin
                          )
 
 flashggTagSorter = cms.EDProducer('FlashggTagSorter',
-                                  #DiPhotonTag = cms.InputTag('flashggDiPhotons'),
-                                  #DiPhotonTag = cms.InputTag('flashggDiPhotonSystematics'),
                                   DiPhotonTag = cms.InputTag('flashggPreselectedDiPhotons'),
                                   # Top of list is highest priority
                                   # Optionally can add category ranges if priority depends on category number
