@@ -1,0 +1,14 @@
+* How to run categorization training script
+
+We are testing two types of trainings:
+   #+BEGIN_EXAMPLE
+   Standard: Input variables are: 'a1_mass_dM-a2_mass_dM', 'cosTheta_a1_dM', 'a1_pt_dM', 'a2_pt_dM', 'pho1_MVA', 'pho2_MVA', 'pho3_MVA', 'pho4_MVA'
+   GenMass: Input variables are: 'genMass', 'a1_mass_dM-a2_mass_dM', 'cosTheta_a1_dM', 'a1_pt_dM', 'a2_pt_dM', 'pho1_MVA', 'pho2_MVA', 'pho3_MVA', 'pho4_MVA'
+   #+END_EXAMPLE
+You can switch between the two at the time of running the training. You can also pick if you want to run on a single mass point, or a combination of all masses. Additionally, you can choose to perform a year-wise training or a full run 2 training.
+The bash script runCatTrain.sh runs the python training script.
+   #+BEGIN_EXAMPLE
+   ./runCatTrain.sh <Type of training> <Masses> <Year>  <Name>
+   For eg, if you want to run the GenMass training on all masses for the year 2016, you can do: ./runCatTrain.sh GenMass 60,45,35,25,15 2016  AllMasses
+   If you want to run the standard training for m(a) = 60 GeV using full run 2 you would do: ./runCatTrain.sh Standard 60 Run2  M60
+   #+END_EXAMPLE
