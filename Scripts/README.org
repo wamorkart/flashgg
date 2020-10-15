@@ -12,3 +12,5 @@ The bash script runCatTrain.sh runs the python training script.
    For eg, if you want to run the GenMass training on all masses for the year 2016, you can do: ./runCatTrain.sh GenMass 60,45,35,25,15 2016  AllMasses
    If you want to run the standard training for m(a) = 60 GeV using full run 2 you would do: ./runCatTrain.sh Standard 60 Run2  M60
    #+END_EXAMPLE
+
+The training weights are saved in the TrainingWeights folder.
