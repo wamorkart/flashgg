@@ -1,4 +1,5 @@
 {
+    "SUSYGluGluToHToAA_AToGG_M-60_TuneCUETP8M1_13TeV_pythia8"          : {"xs" : 0.001},
     "GluGluToBulkGravitonToHHTo2B2G_M-1000_narrow_13TeV-madgraph"      : { "xs" : 0.00, "kf" : 1.06                               },
     "GluGluToBulkGravitonToHHTo2B2G_M-250_narrow_13TeV-madgraph"      : { "xs" : 0.001, "kf" : 1.06                              },
     "GluGluToBulkGravitonToHHTo2B2G_M-260_narrow_13TeV-madgraph"      : { "xs" : 0.001, "kf" : 1.06                              },
