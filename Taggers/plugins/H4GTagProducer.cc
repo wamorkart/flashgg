@@ -507,16 +507,16 @@ std::pair<int,int> photonIndices(Handle<View<flashgg::DiPhotonCandidate> > diPho
               {
                 phoP4Corrected_dp_reduced.push_back(phoP4Corrected_dp[p]);
               }
-              std::pair<int,int> pairs = photonIndices(diPhotons,phoP4Corrected_dp_reduced);
+              //std::pair<int,int> pairs = photonIndices(diPhotons,phoP4Corrected_dp_reduced);
               tag_obj.setCategoryNumber( 0 );
               tag_obj.setSystLabel( inputDiPhotonSuffixes_[diphoton_idx] );
 
-
-              tag_obj.includeWeightsByLabel( *diphoVec[preselDiPhoIndex[0]] ,"PreselSF");
+              tag_obj.includeWeights( *diphoVec[preselDiPhoIndex[0]] );
+              /*tag_obj.includeWeightsByLabel( *diphoVec[preselDiPhoIndex[0]] ,"PreselSF");
               tag_obj.includeWeightsByLabel( *diphoVec[preselDiPhoIndex[0]] ,"TriggerWeight");
               tag_obj.includeWeightsByLabel( *diphoVec[preselDiPhoIndex[0]] ,"prefireWeight");
               tag_obj.includeWeightsByLabel(*diphoVec[std::get<0>(pairs)],"electronVetoSF");
-              tag_obj.includeWeightsByLabel(*diphoVec[std::get<1>(pairs)],"electronVetoSF");
+              tag_obj.includeWeightsByLabel(*diphoVec[std::get<1>(pairs)],"electronVetoSF");*/
 
 
 
