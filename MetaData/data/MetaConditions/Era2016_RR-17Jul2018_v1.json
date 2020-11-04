@@ -303,7 +303,13 @@
         "ttHKiller_listmean" : [  1.04960120e+02,  -5.49804481e-03,   3.08285275e-02],
         "ttHKiller_liststd" : [ 85.77034272,   1.03762195,   1.83170033]
     },
+    
+    "H4GTag":
+    {
+  "vertexIdMVAweightfileH4G" : "flashgg/MicroAOD/data/TMVAClassification_BDTVtxId_H4G_Total_2016.xml",
+  "year" : "2016"
 
+    },
 
 
     "PhoIdInputCorrections":
@@ -325,7 +331,7 @@
     "L1Prefiring" :
     {
         "isRelevant" : true,
-        "applyToCentral" : false,
+        "applyToCentral" : true,
         "photonFileName" : "flashgg/Taggers/data/L1prefiring_photonpt_2016BtoH.root",
         "photonHistName" : "L1prefiring_photonpt_2016BtoH",
         "jetFileName"    : "flashgg/Taggers/data/L1prefiring_jetpt_2016BtoH.root",

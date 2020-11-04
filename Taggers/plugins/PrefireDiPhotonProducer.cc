@@ -136,10 +136,13 @@ namespace flashgg {
                     }
                     prefireProd *= 1. - objProb;
                     prefireProdUnc += pow(objProbUnc, 2); // add statistical uncs in quadrature
+                    cout << "[prefireProd]: " << prefireProd << endl;
+                    cout << "[prefireProdUnc]: " << prefireProdUnc << endl;
                 }
             }
-      
+
             double prefireProbability = 1. - prefireProd;
+            cout << "[prefireProbability]: " << prefireProbability << endl;
             if (prefireProbability < 0. || prefireProbability > 1.) {
                 throw cms::Exception("Unphysical probablility found");
             }
@@ -148,6 +151,8 @@ namespace flashgg {
 
             double prefireProbabilityUnc = std::max(0.2 * prefireProbability, prefireProdUnc);
 
+            cout << "[prefireProbabilityUnc] : " << prefireProbabilityUnc << endl;
+
             flashgg::DiPhotonCandidate *updatedDipho = dipho->clone();
             WeightedObject prefireObject;
             if (applyToCentral_) {
@@ -155,6 +160,8 @@ namespace flashgg {
                 prefireObject.setWeight("prefireWeightUp01sigma",   std::min(1.,  1. - prefireProbability + prefireProbabilityUnc));
                 prefireObject.setWeight("prefireWeightDown01sigma", std::max(0.,  1. - prefireProbability - prefireProbabilityUnc));
                 updatedDipho->includeWeights(prefireObject);
+                cout << "[prefireWeightUp01sigma]: " << std::min(1.,  1. - prefireProbability + prefireProbabilityUnc) << endl;
+                cout << "[prefireWeightDown01sigma]: " << std::max(0.,  1. - prefireProbability - prefireProbabilityUnc) << endl;
             }
             else {
                 prefireObject.setWeight("prefireWeight", (1. - prefireProbability) );
@@ -180,4 +187,3 @@ DEFINE_FWK_MODULE( FlashggPrefireDiPhotonProducer );
 // c-basic-offset:4
 // End:
 // vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
-
