@@ -90,8 +90,13 @@
         "MC" : "JetCorrectorParametersCollection_Fall17_17Nov2017_V32_102X_MC_AK4PFchs"
     },
 
+<<<<<<< HEAD
     "flashggDiPhotonMVA" :
     {
+=======
+    "flashggDiPhotonMVA" : 
+    {  
+>>>>>>> upstream/dev_legacy_runII
         "weightFile" : "flashgg/Taggers/data/STXSmodels/legacyDiphoModelMerged.xml",
         "version" : "xgb"
     },
@@ -348,10 +353,10 @@
 
     "THQLeptonicTag":
     {
-        "MVAweights_VsAllBkg" : "flashgg/Taggers/data/TMVA_THQLeptonicTag_tHq_Vs_NonPeakingBkg_BDT_17.weights.xml",
-	"MVAweights_VsttH" : "flashgg/Taggers/data/TMVA_THQLeptonicTag_tHq_Vs_ttH_BDT.weights.xml",
+        "MVAweights_VsAllBkg" : "flashgg/Taggers/data/TMVA_THQLeptonicTag_tHq_Vs_NonPeakingBkg_BDT_17_v1.weights.xml",
+        "MVAweights_VsttH" : "flashgg/Taggers/data/TMVA_THQLeptonicTag_tHq_Vs_ttH_BDT.weights.xml",
         "MVAThreshold_VsAllBkg" : 0.05,
-	"MVAThreshold_VsttH" : -0.02
+        "MVAThreshold_VsttH" : -0.02
     }
 
 }
