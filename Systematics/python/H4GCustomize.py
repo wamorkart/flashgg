@@ -436,9 +436,9 @@ class H4GCustomize():
         print'Removing single Higgs tags'
 
         if self.customize.H4GTagsOnly:
-            self.process.flashggTagSequence.remove(self.process.flashggPrefireDiPhotons)
+            # self.process.flashggTagSequence.remove(self.process.flashggPrefireDiPhotons)
             #self.process.flashggTagSequence.remove(self.process.flashggPreselectedDiPhotons)
-            self.process.flashggTagSequence.replace(self.process.flashggPreselectedDiPhotons,self.process.flashggDiPhotonSystematics)
+            #self.process.flashggTagSequence.replace(self.process.flashggPreselectedDiPhotons,self.process.flashggDiPhotonSystematics)
             self.process.flashggTagSequence.remove(self.process.flashggDiPhotonMVA)
             self.process.flashggTagSequence.remove(self.process.flashggVBFTag)
             self.process.flashggTagSequence.remove(self.process.flashggTTHLeptonicTag)
