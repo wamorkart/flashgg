@@ -101,7 +101,7 @@ from flashgg.Taggers.h4gCandidateDumper_cfi import h4gCandidateDumper
 
 process.h4gCandidateDumper_vtxBDT_sig = h4gCandidateDumper.clone()
 process.h4gCandidateDumper_vtxBDT_sig.dumpTrees = True
-process.h4gCandidateDumper_vtxBDT_sig.dumpWorkspace = True
+process.h4gCandidateDumper_vtxBDT_sig.dumpWorkspace = False
 
 
 cfgTools.addCategories(process.h4gCandidateDumper_vtxBDT_sig,
@@ -118,7 +118,7 @@ cfgTools.addCategories(process.h4gCandidateDumper_vtxBDT_sig,
 
 process.h4gCandidateDumper_vtxBDT_bkg = h4gCandidateDumper.clone()
 process.h4gCandidateDumper_vtxBDT_bkg.dumpTrees = True
-process.h4gCandidateDumper_vtxBDT_bkg.dumpWorkspace = True
+process.h4gCandidateDumper_vtxBDT_bkg.dumpWorkspace = False
 
 cfgTools.addCategories(process.h4gCandidateDumper_vtxBDT_bkg,
                         [
