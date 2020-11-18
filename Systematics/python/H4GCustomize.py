@@ -410,7 +410,8 @@ class H4GCustomize():
 
         self.process.flashggH4GTag.vertexIdMVAweightfileH4G = cms.untracked.FileInPath(str(self.metaConditions["H4GTag"]["vertexIdMVAweightfileH4G"]))
         if (cms.string(str(self.metaConditions["H4GTag"]["year"])) == "2016"):
-            from flashgg.Taggers.flashggPreselectedDiPhotons_LowMass16_cfi import flashggPreselectedDiPhotonsLowMass
+            #from flashgg.Taggers.flashggPreselectedDiPhotons_LowMass16_cfi import flashggPreselectedDiPhotonsLowMass
+            from flashgg.Taggers.flashggPreselectedDiPhotons_LowMass16_NoCuts_cfi import flashggPreselectedDiPhotonsLowMass
             self.process.flashggH4GTag.idSelection = cms.PSet(
                          rho = flashggPreselectedDiPhotonsLowMass.rho,
                          cut = flashggPreselectedDiPhotonsLowMass.cut,
