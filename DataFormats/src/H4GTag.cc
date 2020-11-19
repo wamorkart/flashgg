@@ -29,6 +29,21 @@ H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg:
   pho3_  = pho3;
   pho4_  = pho4;
 
+  pho1_pfPhoIso03_ = pho1.pfPhoIso03();
+  pho2_pfPhoIso03_ = pho2.pfPhoIso03();
+  pho3_pfPhoIso03_ = pho3.pfPhoIso03();
+  pho4_pfPhoIso03_ = pho4.pfPhoIso03();
+
+  pho1_trkSumPtHollowConeDR03_ = pho1.trkSumPtHollowConeDR03();
+  pho2_trkSumPtHollowConeDR03_ = pho2.trkSumPtHollowConeDR03();
+  pho3_trkSumPtHollowConeDR03_ = pho3.trkSumPtHollowConeDR03();
+  pho4_trkSumPtHollowConeDR03_ = pho4.trkSumPtHollowConeDR03();
+
+  pho1_full5x5_sigmaIetaIeta_ = pho1.full5x5_sigmaIetaIeta();
+  pho2_full5x5_sigmaIetaIeta_ = pho2.full5x5_sigmaIetaIeta();
+  pho3_full5x5_sigmaIetaIeta_ = pho3.full5x5_sigmaIetaIeta();
+  pho4_full5x5_sigmaIetaIeta_ = pho4.full5x5_sigmaIetaIeta();
+
   pho1_MVA_ = pho1.phoIdMvaDWrtVtx(vertex_chosen);
   pho2_MVA_ = pho2.phoIdMvaDWrtVtx(vertex_chosen);
   pho3_MVA_ = pho3.phoIdMvaDWrtVtx(vertex_chosen);
@@ -199,6 +214,19 @@ H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg:
   pho2_  = pho2;
   pho3_  = pho3;
 
+  pho1_pfPhoIso03_ = pho1.pfPhoIso03();
+  pho2_pfPhoIso03_ = pho2.pfPhoIso03();
+  pho3_pfPhoIso03_ = pho3.pfPhoIso03();
+
+  pho1_trkSumPtHollowConeDR03_ = pho1.trkSumPtHollowConeDR03();
+  pho2_trkSumPtHollowConeDR03_ = pho2.trkSumPtHollowConeDR03();
+  pho3_trkSumPtHollowConeDR03_ = pho3.trkSumPtHollowConeDR03();
+
+  pho1_full5x5_sigmaIetaIeta_ = pho1.full5x5_sigmaIetaIeta();
+  pho2_full5x5_sigmaIetaIeta_ = pho2.full5x5_sigmaIetaIeta();
+  pho3_full5x5_sigmaIetaIeta_ = pho3.full5x5_sigmaIetaIeta();
+
+
   pho1_MVA_ = pho1.phoIdMvaDWrtVtx(vertex_chosen);
   pho2_MVA_ = pho2.phoIdMvaDWrtVtx(vertex_chosen);
   pho3_MVA_ = pho3.phoIdMvaDWrtVtx(vertex_chosen);
@@ -234,6 +262,15 @@ H4GTag::H4GTag(edm::Ptr<DiPhotonCandidate> dipho, flashgg::Photon pho1, flashgg:
   dipho_ = dipho;
   pho1_  = pho1;
   pho2_  = pho2;
+
+  pho1_pfPhoIso03_ = pho1.pfPhoIso03();
+  pho2_pfPhoIso03_ = pho2.pfPhoIso03();
+
+  pho1_trkSumPtHollowConeDR03_ = pho1.trkSumPtHollowConeDR03();
+  pho2_trkSumPtHollowConeDR03_ = pho2.trkSumPtHollowConeDR03();
+
+  pho1_full5x5_sigmaIetaIeta_ = pho1.full5x5_sigmaIetaIeta();
+  pho2_full5x5_sigmaIetaIeta_ = pho2.full5x5_sigmaIetaIeta();
 
   pho1_MVA_ = pho1.phoIdMvaDWrtVtx(vertex_chosen);
   pho2_MVA_ = pho2.phoIdMvaDWrtVtx(vertex_chosen);

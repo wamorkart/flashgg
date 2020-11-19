@@ -27,6 +27,19 @@ class H4GCustomize():
         "pho2_phi   := pho2.phi()",
         "pho3_phi   := pho3.phi()",
         "pho4_phi   := pho4.phi()",
+        "pho1_pfPhoIso03 := pho1_pfPhoIso03",
+        "pho2_pfPhoIso03 := pho2_pfPhoIso03",
+        "pho3_pfPhoIso03 := pho3_pfPhoIso03",
+        "pho4_pfPhoIso03 := pho4_pfPhoIso03",
+        "pho1_trkSumPtHollowConeDR03 := pho1_trkSumPtHollowConeDR03",
+        "pho2_trkSumPtHollowConeDR03 := pho2_trkSumPtHollowConeDR03",
+        "pho3_trkSumPtHollowConeDR03 := pho3_trkSumPtHollowConeDR03",
+        "pho4_trkSumPtHollowConeDR03 := pho4_trkSumPtHollowConeDR03",
+        "pho1_full5x5_sigmaIetaIeta := pho1_full5x5_sigmaIetaIeta",
+        "pho2_full5x5_sigmaIetaIeta := pho2_full5x5_sigmaIetaIeta",
+        "pho3_full5x5_sigmaIetaIeta := pho3_full5x5_sigmaIetaIeta",
+        "pho4_full5x5_sigmaIetaIeta := pho4_full5x5_sigmaIetaIeta",
+
         "pho1_MVA  := pho1_MVA ",
         "pho2_MVA  := pho2_MVA ",
         "pho3_MVA  := pho3_MVA ",
@@ -166,6 +179,18 @@ class H4GCustomize():
         "pho2_phi   := pho2.phi()",
         "pho3_phi   := pho3.phi()",
         "pho4_phi   := pho4.phi()",
+        "pho1_pfPhoIso03 := pho1_pfPhoIso03",
+        "pho2_pfPhoIso03 := pho2_pfPhoIso03",
+        "pho3_pfPhoIso03 := pho3_pfPhoIso03",
+        "pho4_pfPhoIso03 := pho4_pfPhoIso03",
+        "pho1_trkSumPtHollowConeDR03 := pho1_trkSumPtHollowConeDR03",
+        "pho2_trkSumPtHollowConeDR03 := pho2_trkSumPtHollowConeDR03",
+        "pho3_trkSumPtHollowConeDR03 := pho3_trkSumPtHollowConeDR03",
+        "pho4_trkSumPtHollowConeDR03 := pho4_trkSumPtHollowConeDR03",
+        "pho1_full5x5_sigmaIetaIeta := pho1_full5x5_sigmaIetaIeta",
+        "pho2_full5x5_sigmaIetaIeta := pho2_full5x5_sigmaIetaIeta",
+        "pho3_full5x5_sigmaIetaIeta := pho3_full5x5_sigmaIetaIeta",
+        "pho4_full5x5_sigmaIetaIeta := pho4_full5x5_sigmaIetaIeta",
         "pho1_MVA  := pho1_MVA ",
         "pho2_MVA  := pho2_MVA ",
         "pho3_MVA  := pho3_MVA ",
@@ -274,6 +299,18 @@ class H4GCustomize():
         "pho2_phi   := pho2.phi()",
         "pho3_phi   := pho3.phi()",
         "pho4_phi   := pho4.phi()",
+        "pho1_pfPhoIso03 := pho1_pfPhoIso03",
+        "pho2_pfPhoIso03 := pho2_pfPhoIso03",
+        "pho3_pfPhoIso03 := pho3_pfPhoIso03",
+        "pho4_pfPhoIso03 := pho4_pfPhoIso03",
+        "pho1_trkSumPtHollowConeDR03 := pho1_trkSumPtHollowConeDR03",
+        "pho2_trkSumPtHollowConeDR03 := pho2_trkSumPtHollowConeDR03",
+        "pho3_trkSumPtHollowConeDR03 := pho3_trkSumPtHollowConeDR03",
+        "pho4_trkSumPtHollowConeDR03 := pho4_trkSumPtHollowConeDR03",
+        "pho1_full5x5_sigmaIetaIeta := pho1_full5x5_sigmaIetaIeta",
+        "pho2_full5x5_sigmaIetaIeta := pho2_full5x5_sigmaIetaIeta",
+        "pho3_full5x5_sigmaIetaIeta := pho3_full5x5_sigmaIetaIeta",
+        "pho4_full5x5_sigmaIetaIeta := pho4_full5x5_sigmaIetaIeta",
         "pho1_MVA  := pho1_MVA ",
         "pho2_MVA  := pho2_MVA ",
         "pho3_MVA  := pho3_MVA ",
@@ -410,8 +447,8 @@ class H4GCustomize():
 
         self.process.flashggH4GTag.vertexIdMVAweightfileH4G = cms.untracked.FileInPath(str(self.metaConditions["H4GTag"]["vertexIdMVAweightfileH4G"]))
         if (cms.string(str(self.metaConditions["H4GTag"]["year"])) == "2016"):
-            #from flashgg.Taggers.flashggPreselectedDiPhotons_LowMass16_cfi import flashggPreselectedDiPhotonsLowMass
-            from flashgg.Taggers.flashggPreselectedDiPhotons_LowMass16_NoCuts_cfi import flashggPreselectedDiPhotonsLowMass
+            from flashgg.Taggers.flashggPreselectedDiPhotons_LowMass16_cfi import flashggPreselectedDiPhotonsLowMass
+            #from flashgg.Taggers.flashggPreselectedDiPhotons_LowMass16_NoCuts_cfi import flashggPreselectedDiPhotonsLowMass
             self.process.flashggH4GTag.idSelection = cms.PSet(
                          rho = flashggPreselectedDiPhotonsLowMass.rho,
                          cut = flashggPreselectedDiPhotonsLowMass.cut,

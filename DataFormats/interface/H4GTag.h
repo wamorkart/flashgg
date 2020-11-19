@@ -46,6 +46,21 @@ namespace flashgg{
     float pho3_MVA() const {return pho3_MVA_;};
     float pho4_MVA() const {return pho4_MVA_;};
 
+    float pho1_pfPhoIso03() const {return pho1_pfPhoIso03_;};
+    float pho2_pfPhoIso03() const {return pho2_pfPhoIso03_;};
+    float pho3_pfPhoIso03() const {return pho3_pfPhoIso03_;};
+    float pho4_pfPhoIso03() const {return pho4_pfPhoIso03_;};
+
+    float pho1_trkSumPtHollowConeDR03() const {return pho1_trkSumPtHollowConeDR03_;};
+    float pho2_trkSumPtHollowConeDR03() const {return pho2_trkSumPtHollowConeDR03_;};
+    float pho3_trkSumPtHollowConeDR03() const {return pho3_trkSumPtHollowConeDR03_;};
+    float pho4_trkSumPtHollowConeDR03() const {return pho4_trkSumPtHollowConeDR03_;};
+
+    float pho1_full5x5_sigmaIetaIeta() const {return pho1_full5x5_sigmaIetaIeta_;};
+    float pho2_full5x5_sigmaIetaIeta() const {return pho2_full5x5_sigmaIetaIeta_;};
+    float pho3_full5x5_sigmaIetaIeta() const {return pho3_full5x5_sigmaIetaIeta_;};
+    float pho4_full5x5_sigmaIetaIeta() const {return pho4_full5x5_sigmaIetaIeta_;};
+
     float pho1_full5x5_r9() const {return pho1_full5x5_r9_;};
     float pho2_full5x5_r9() const {return pho2_full5x5_r9_;};
     float pho3_full5x5_r9() const {return pho3_full5x5_r9_;};
@@ -139,6 +154,18 @@ namespace flashgg{
     flashgg::Photon pho2_;
     flashgg::Photon pho3_;
     flashgg::Photon pho4_;
+    float pho1_pfPhoIso03_;
+    float pho2_pfPhoIso03_;
+    float pho3_pfPhoIso03_;
+    float pho4_pfPhoIso03_;
+    float pho1_trkSumPtHollowConeDR03_;
+    float pho2_trkSumPtHollowConeDR03_;
+    float pho3_trkSumPtHollowConeDR03_;
+    float pho4_trkSumPtHollowConeDR03_;
+    float pho1_full5x5_sigmaIetaIeta_;
+    float pho2_full5x5_sigmaIetaIeta_;
+    float pho3_full5x5_sigmaIetaIeta_;
+    float pho4_full5x5_sigmaIetaIeta_;
     float pho1_MVA_;
     float pho2_MVA_;
     float pho3_MVA_;
