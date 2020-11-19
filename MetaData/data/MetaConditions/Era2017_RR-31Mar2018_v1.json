@@ -90,13 +90,9 @@
         "MC" : "JetCorrectorParametersCollection_Fall17_17Nov2017_V32_102X_MC_AK4PFchs"
     },
 
-<<<<<<< HEAD
+
     "flashggDiPhotonMVA" :
     {
-=======
-    "flashggDiPhotonMVA" : 
-    {  
->>>>>>> upstream/dev_legacy_runII
         "weightFile" : "flashgg/Taggers/data/STXSmodels/legacyDiphoModelMerged.xml",
         "version" : "xgb"
     },
@@ -273,7 +269,7 @@
   "year" : "2017"
 
     },
-    
+
     "VBFdoubleHTag":
     {
         "jetID" : "Tight2017",
