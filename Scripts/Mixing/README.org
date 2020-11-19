@@ -1,0 +1,7 @@
+* How to run mixing on condor
+
+   #+BEGIN_EXAMPLE
+    python runMixing_Condor.py  -m <Number of times you wish to produce mixing>
+    eg: python runMixing_Condor.py  -m 50
+    then, submit: condor_submit condor_job.txt 
+   #+END_EXAMPLE
