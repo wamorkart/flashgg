@@ -14,23 +14,23 @@ if __name__ == '__main__':
 
 
   parser = OptionParser()
-  parser.add_option(   "-i", "--input",     dest="input",     default="",   type="string", help="input root file" )
+  # parser.add_option(   "-i", "--input",     dest="input",     default="",   type="string", help="input root file" )
   parser.add_option(   "-m", "--max",     dest="max",     default="",   type="string", help="max" )
-  parser.add_option(   "-y", "--year",     dest="year",     default="",   type="string", help="year" )
-  parser.add_option(   "-o", "--output",     dest="output",     default="",   type="string", help="output" )
+  # parser.add_option(   "-y", "--year",     dest="year",     default="",   type="string", help="year" )
+  # parser.add_option(   "-o", "--output",     dest="output",     default="",   type="string", help="output" )
 
 
   (options, args) = parser.parse_args()
 
-  input     = options.input
+  # input     = options.input
   max     = options.max
-  year      = options.year
-  output    = options.output
+  # year      = options.year
+  # output    = options.output
 
-  print "input    =",input
+  # print "input    =",input
   print "max      =",max
-  print "year     =",year
-  print "output    =",output
+  # print "year     =",year
+  # print "output    =",output
 
 
   inputDir = os.getcwd()
@@ -84,27 +84,28 @@ queue arguments from arguments.txt
 
   script = '''#!/bin/sh -e
 
-JOBID=$1;
-INPUTDIR=$2;
-INPUTSTRING=$3;
-OUTPUTDIR=$4;
 
-cd $INPUTDIR/
 
-echo -e "evaluate"
-#eval `scramv1 ru -sh`
+INPUTEVENT=$1;
+INPUTYEAR=$2;
 
-echo -e "Compute SoB";
-# python runSoBOptimization.py -s \"${INPUTSTRING}\"
-python /afs/cern.ch/work/t/twamorka/flashgg_16aug2020/CMSSW_10_6_8/src/flashgg/Scripts/Mixing/H4GTreeMixing.py  \"${INPUTSTRING}\"
+python /afs/cern.ch/work/t/twamorka/flashgg_16aug2020/CMSSW_10_6_8/src/flashgg/Scripts/Mixing/H4GTreeMixing.py  ${INPUTEVENT} ${INPUTYEAR}
 
 echo -e "DONE";
 '''
   arguments=[]
+  year = [2016]
+  eras = ['B','C','D']
+  #year = [2016, 2017, 2018]
   # max = 30
   for i in range(1,int(max)+1):
-      arguments.append("\""+"{} {} {} {}".format(input,i,"\'"+year+"\'",output)+"\"")
+      for y in year:
+          for era in eras:
+              arguments.append("{} {} {}".format(i,y,era))
+      # arguments.append("{} {}".format(input,i))
+      # arguments.append("\""+"{} {} {}".format(input,i,"\'"+output)+"\"")
       # arguments.append("\""+"{} {} {} {}".format(input,"\'"+i+"\"",year+"\"",output)+"\"")
+
   with open("arguments.txt", "w") as args:
      args.write("\n".join(arguments))
   with open("run_script.sh", "w") as rs:

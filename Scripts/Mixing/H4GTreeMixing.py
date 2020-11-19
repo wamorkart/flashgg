@@ -12,25 +12,43 @@ import argparse
 if __name__ == '__main__':
 
 
-  parser = argparse.ArgumentParser(description='Mixing')
-  parser.add_argument(   "-i", "--inputFile",   dest="inputFile",    default="input.root",       type=str,  help="Input file" )
-  # parser.add_argument(   "-t", "--tree",  dest="tree",   default="tree",      type=str,  help="tree")
-  parser.add_argument(   "-e", "--e",  dest="e",   default=0,      type=int,  help="e")
-  # parser.add_argument(   "-i2", "--i2",  dest="i2",   default=0,      type=int,  help="p2")
-  # parser.add_argument(   "-i3", "--i3",  dest="i3",   default=0,      type=int,  help="p3")
-  # parser.add_argument(   "-i4", "--i4",  dest="i4",   default=0,      type=int,  help="p4")
-  parser.add_argument(   "-y", "--y",  dest="year",   default="2016",      type=str,  help="year")
-  parser.add_argument(   "-o", "--outputDir",  dest="outputDit",   default="",      type=str,  help="Output Dir")
+  # parser = argparse.ArgumentParser(description='Mixing')
+  # parser.add_argument(   "-i", "--inputFile",   dest="inputFile",    default="input.root",       type=str,  help="Input file" )
+  # # parser.add_argument(   "-t", "--tree",  dest="tree",   default="tree",      type=str,  help="tree")
+  # parser.add_argument(   "-e", "--e",  dest="e",   default=0,      type=int,  help="e")
+  # # parser.add_argument(   "-i2", "--i2",  dest="i2",   default=0,      type=int,  help="p2")
+  # # parser.add_argument(   "-i3", "--i3",  dest="i3",   default=0,      type=int,  help="p3")
+  # # parser.add_argument(   "-i4", "--i4",  dest="i4",   default=0,      type=int,  help="p4")
+  # # parser.add_argument(   "-y", "--y",  dest="year",   default="2016",      type=str,  help="year")
+  # # parser.add_argument(   "-o", "--outputDir",  dest="outputDir",   default="",      type=str,  help="Output Dir")
+  #
+  # options = parser.parse_args()
 
-  options = parser.parse_args()
-
+  # parser = OptionParser()
+  # parser.add_option("-i", "--inputFile",   dest="inputFile",    default="",       type=str,  help="Input file" )
+  # parser.add_option("-e", "--e",  dest="e",   default=0,      type=int,  help="e")
+  #
+  # (options, args) = parser.parse_args()
+  # print len(sys.argv)
+  # print sys.argv[1]
+  # print sys.argv[1]
+  # inputFile = sys.argv[1]
+  e = sys.argv[1]
+  year = sys.argv[2]
+  era = sys.argv[3]
   # itree = ROOT.TChain(str(options.tree))
+  print "Mixing from event: ",e
+  #print "Input file: ",'/eos/user/t/twamorka/h4g_fullRun2/withSystematics/'+str(year)+'/hadd/data_'+str(year)+'_skim.root'
   itree = ROOT.TChain('tagsDumper/trees/Data_13TeV_H4GTag_0')
-  itree.AddFile(options.inputFile)
+  # itree.AddFile(options.inputFile)
+  #itree.AddFile('/eos/user/t/twamorka/h4g_fullRun2/withSystematics/'+str(year)+'/hadd/data_'+str(year)+'_skim.root')
+  itree.AddFile('/eos/user/t/twamorka/h4g_fullRun2/withSystematics/2016/Data_NoPreselectionsApplied/hadd/data_'+str(era)+'.root')
 
   print "Total number of events to be analyzed:", itree.GetEntries()
 
-  outRoot = ROOT.TFile(options.outputDir+"/data_mix_"+str(e)+".root", "RECREATE")
+  # outRoot = ROOT.TFile(options.outputDir+"/data_mix_"+str(options.e)+".root", "RECREATE")
+  outRoot = ROOT.TFile("/eos/user/t/twamorka/h4g_fullRun2/withSystematics/2016/Data_NoPreselectionsApplied/Mixing/data_mix_"+str(era)+"_"+str(year)+"_"+str(e)+".root", "RECREATE")
+
   treeSkimmer = SkimmedTreeTools()
   otree = treeSkimmer.MakeSkimmedTree()
 
@@ -52,7 +70,7 @@ if __name__ == '__main__':
       itree.GetEntry(0)
     else :
        # print "1st photon from event#: ", options.i1
-       itree.GetEntry(evt+(options.e))
+       itree.GetEntry(evt+int(e))
 
     ObjList = [key.GetName() for key in  itree.GetListOfBranches()]
     for branch in ObjList:
@@ -66,7 +84,7 @@ if __name__ == '__main__':
       itree.GetEntry(0)
     else :
       # print "2nd photon from event#: ", options.i2
-      itree.GetEntry(evt+options.e+1)
+      itree.GetEntry(evt+int(e)+1)
 
     ObjList = [key.GetName() for key in  itree.GetListOfBranches()]
     for branch in ObjList:
@@ -81,7 +99,7 @@ if __name__ == '__main__':
       itree.GetEntry(0)
     else :
         # print "3rd photon from event#: ", options.i3
-        itree.GetEntry(evt+options.e+2)
+        itree.GetEntry(evt+int(e)+2)
 
     ObjList = [key.GetName() for key in  itree.GetListOfBranches()]
     for branch in ObjList:
@@ -97,7 +115,7 @@ if __name__ == '__main__':
       itree.GetEntry(0)
     else :
       # print "4th photon from event#: ", options.i4
-      itree.GetEntry(evt+options.e+3)
+      itree.GetEntry(evt+int(e)+3)
     ObjList = [key.GetName() for key in  itree.GetListOfBranches()]
     for branch in ObjList:
       nameToSearch1 = "pho" + str(int(dp2_p2i)+1) + "_"
@@ -177,15 +195,15 @@ if __name__ == '__main__':
     pho4_vec.append(sPhos_SCEta[3])
     pho4_vec.append(sPhos_PSV[3])
 
-    if (options.year == "2016"):
-       Pho12_presel = treeSkimmer.Preselection_2016(pho1_vec, pho2_vec)
-       Pho13_presel = treeSkimmer.Preselection_2016(pho1_vec, pho3_vec)
-       Pho14_presel = treeSkimmer.Preselection_2016(pho1_vec, pho4_vec)
-       Pho23_presel = treeSkimmer.Preselection_2016(pho2_vec, pho3_vec)
-       Pho24_presel = treeSkimmer.Preselection_2016(pho2_vec, pho4_vec)
-       Pho34_presel = treeSkimmer.Preselection_2016(pho3_vec, pho4_vec)
+    if (year == "2016"):
+        Pho12_presel = treeSkimmer.Preselection_2016(pho1_vec, pho2_vec)
+        Pho13_presel = treeSkimmer.Preselection_2016(pho1_vec, pho3_vec)
+        Pho14_presel = treeSkimmer.Preselection_2016(pho1_vec, pho4_vec)
+        Pho23_presel = treeSkimmer.Preselection_2016(pho2_vec, pho3_vec)
+        Pho24_presel = treeSkimmer.Preselection_2016(pho2_vec, pho4_vec)
+        Pho34_presel = treeSkimmer.Preselection_2016(pho3_vec, pho4_vec)
 
-    elif (options.year == "2017"):
+    elif (year == "2017"):
        Pho12_presel = treeSkimmer.Preselection_2017(pho1_vec, pho2_vec)
        Pho13_presel = treeSkimmer.Preselection_2017(pho1_vec, pho3_vec)
        Pho14_presel = treeSkimmer.Preselection_2017(pho1_vec, pho4_vec)
@@ -193,7 +211,7 @@ if __name__ == '__main__':
        Pho24_presel = treeSkimmer.Preselection_2017(pho2_vec, pho4_vec)
        Pho34_presel = treeSkimmer.Preselection_2017(pho3_vec, pho4_vec)
 
-    elif (options.year == "2018"):
+    elif (year == "2018"):
        Pho12_presel = treeSkimmer.Preselection_2018(pho1_vec, pho2_vec)
        Pho13_presel = treeSkimmer.Preselection_2018(pho1_vec, pho3_vec)
        Pho14_presel = treeSkimmer.Preselection_2018(pho1_vec, pho4_vec)
