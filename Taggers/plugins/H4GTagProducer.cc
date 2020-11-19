@@ -517,18 +517,18 @@ std::pair<int,int> photonIndices(Handle<View<flashgg::DiPhotonCandidate> > diPho
               //for (auto it = tag_obj.weightListBegin() ; it != tag_obj.weightListEnd(); it++){
               //  cout << "weight " << *it << " " << tag_obj.weight(*it) << endl;
               //}
-cout << "********************************************" << endl;
+//cout << "********************************************" << endl;
               e_veto_dipho_0 = -999;
               tmpCentralObjectWeight = -999;
               tag_obj.includeWeights( *diphoVec[preselDiPhoIndex[0]] ); // Add highest pT diphoton weights to central object weight
               tmpCentralObjectWeight = tag_obj.centralWeight(); // get central object weight
-              cout << "central weight before removing electron veto SF: " << tmpCentralObjectWeight << endl;
+              //cout << "central weight before removing electron veto SF: " << tmpCentralObjectWeight << endl;
 
               e_veto_dipho_0 = tag_obj.weight("electronVetoSFCentral"); // get electron veto SF from 0th diphoton
-              cout << "e veto dipho 0 value : " << e_veto_dipho_0 << endl;
+              //cout << "e veto dipho 0 value : " << e_veto_dipho_0 << endl;
               tag_obj.setCentralWeight(tmpCentralObjectWeight / e_veto_dipho_0); // remove electron veto of 0th pT contribution from central weight
 
-              cout << "central event weight after dividing out e veto dipho 0 : " << tag_obj.centralWeight() << endl;
+              //cout << "central event weight after dividing out e veto dipho 0 : " << tag_obj.centralWeight() << endl;
 
               // Reset electronVetoSF weights because we want weights from 4 photons here not from two photons from leading diphoton
               tag_obj.setWeight("electronVetoSFDown01sigma",1);
@@ -536,11 +536,11 @@ cout << "********************************************" << endl;
               tag_obj.setWeight("electronVetoSFUp01sigma",1);
 
 
-              cout << "printing out electronVetoSF* weights after setting explictly to 1 " << endl;
-              cout << "electronVetoSFDown01Sigma: " << tag_obj.weight("electronVetoSFDown01sigma") << endl;
-              cout << "electronVetoSFCentral : " << tag_obj.weight("electronVetoSFCentral") << endl;
-              cout << "electronVetoSFUp01Sigma: " << tag_obj.weight("electronVetoSFUp01sigma") << endl;
-              cout << "central event weight after setting electronVetoSF* weights to 1: " << tag_obj.centralWeight() << endl;
+              //cout << "printing out electronVetoSF* weights after setting explictly to 1 " << endl;
+              //cout << "electronVetoSFDown01Sigma: " << tag_obj.weight("electronVetoSFDown01sigma") << endl;
+              //cout << "electronVetoSFCentral : " << tag_obj.weight("electronVetoSFCentral") << endl;
+              //cout << "electronVetoSFUp01Sigma: " << tag_obj.weight("electronVetoSFUp01sigma") << endl;
+              //cout << "central event weight after setting electronVetoSF* weights to 1: " << tag_obj.centralWeight() << endl;
               //tag_obj.setCentralWeight(1);
               //cout << "electronVetoSFDown01Sigma: " << tag_obj.weight("electronVetoSFDown01Sigma") << endl;
               //cout << "electronVetoSFCentral : " << tag_obj.weight("electronVetoSFCentral") << endl;
@@ -556,21 +556,21 @@ cout << "********************************************" << endl;
               tag_obj.includeWeightsByLabel(*diphoVec[std::get<0>(pairs)],"electronVetoSFUp01sigma");
               tag_obj.includeWeightsByLabel(*diphoVec[std::get<1>(pairs)],"electronVetoSFUp01sigma");
 
-              cout << "trying to get electronVetoSF up and down 1 sigmas for paired diphotons" << endl;
+              //cout << "trying to get electronVetoSF up and down 1 sigmas for paired diphotons" << endl;
 
 
               // Set tag object's electronVetoSF weight equal to the four photons used in the H4G event
               //tag_obj.setWeight("electronVetoSFCentral",1);
               // check to see what setweight is doing
-              cout << "electronVetoSFDown01Sigma: " << tag_obj.weight("electronVetoSFDown01sigma") << endl;
-              cout << "electronVetoSFCentral : " << tag_obj.weight("electronVetoSFCentral") << endl;
-              cout << "electronVetoSFUp01Sigma: " << tag_obj.weight("electronVetoSFUp01sigma") << endl;
+              //cout << "electronVetoSFDown01Sigma: " << tag_obj.weight("electronVetoSFDown01sigma") << endl;
+              //cout << "electronVetoSFCentral : " << tag_obj.weight("electronVetoSFCentral") << endl;
+              //cout << "electronVetoSFUp01Sigma: " << tag_obj.weight("electronVetoSFUp01sigma") << endl;
               // check that central weight is updated
-              cout << "central event weight : " << tag_obj.centralWeight() << endl;
+              //cout << "central event weight : " << tag_obj.centralWeight() << endl;
               // check the prefire weight
-              cout << "prefireWeightUp01Sigma : " << tag_obj.weight("prefireWeightUp01sigma") << endl;
-              cout << "prefireWeightDown01Sigma : " << tag_obj.weight("prefireWeightDown01sigma") << endl;
-cout << "******************************************************* " << endl;
+              //cout << "prefireWeightUp01Sigma : " << tag_obj.weight("prefireWeightUp01sigma") << endl;
+              //cout << "prefireWeightDown01Sigma : " << tag_obj.weight("prefireWeightDown01sigma") << endl;
+//cout << "******************************************************* " << endl;
 //tag_obj.includeWeightsByLabel( *diphoVec[preselDiPhoIndex[0]] ,"PreselSF");
               //tag_obj.includeWeightsByLabel( *diphoVec[preselDiPhoIndex[0]] ,"TriggerWeight");
               //tag_obj.includeWeightsByLabel( *diphoVec[preselDiPhoIndex[0]] ,"prefireWeight",false);

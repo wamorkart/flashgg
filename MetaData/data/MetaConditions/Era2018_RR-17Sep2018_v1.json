@@ -76,7 +76,7 @@
 	    ]
         }
     },
-    "flashggDiPhotonSystematics" : "flashggDiPhotonSystematics2018_cfi",
+    "flashggDiPhotonSystematics" : "flashggDiPhotonSystematics2018LM_cfi",
 
 
     "sigmaM_M_decorr" : "flashgg/Taggers/data/diphoMVA_sigmaMoMdecorr_split_2018_Mgg100to180.root",
@@ -302,7 +302,12 @@
         "ttHKiller_liststd" : [ 85.77034272,   1.03762195,   1.83170033]
     },
 
+     "H4GTag":
+    {
+  "vertexIdMVAweightfileH4G" : "flashgg/MicroAOD/data/TMVAClassification_BDTVtxId_H4G_Total_2018.xml",
+  "year" : "2018"
 
+    },
     "PhoIdInputCorrections":
     {
 	"corrections_summary" : "flashgg/Taggers/data/PhoIdInputsCorrections/corrections_summary_2018.json",
