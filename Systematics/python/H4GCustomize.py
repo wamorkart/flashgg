@@ -455,7 +455,8 @@ class H4GCustomize():
                          variables = flashggPreselectedDiPhotonsLowMass.variables,
                          categories = flashggPreselectedDiPhotonsLowMass.categories)
         elif (cms.string(str(self.metaConditions["H4GTag"]["year"])) == "2017"):
-            from flashgg.Taggers.flashggPreselectedDiPhotons_LowMass17_cfi import flashggPreselectedDiPhotonsLowMass
+            #from flashgg.Taggers.flashggPreselectedDiPhotons_LowMass17_cfi import flashggPreselectedDiPhotonsLowMass
+            from flashgg.Taggers.flashggPreselectedDiPhotons_LowMass16_NoCuts_cfi import flashggPreselectedDiPhotonsLowMass
             self.process.flashggH4GTag.idSelection = cms.PSet(
                          rho = flashggPreselectedDiPhotonsLowMass.rho,
                          cut = flashggPreselectedDiPhotonsLowMass.cut,
@@ -463,7 +464,8 @@ class H4GCustomize():
                          categories = flashggPreselectedDiPhotonsLowMass.categories)
 
         elif (cms.string(str(self.metaConditions["H4GTag"]["year"])) == "2018"):
-            from flashgg.Taggers.flashggPreselectedDiPhotons_LowMass18_cfi import flashggPreselectedDiPhotonsLowMass
+            #from flashgg.Taggers.flashggPreselectedDiPhotons_LowMass18_cfi import flashggPreselectedDiPhotonsLowMass
+            from flashgg.Taggers.flashggPreselectedDiPhotons_LowMass16_NoCuts_cfi import flashggPreselectedDiPhotonsLowMass
             self.process.flashggH4GTag.idSelection = cms.PSet(
                          rho = flashggPreselectedDiPhotonsLowMass.rho,
                          cut = flashggPreselectedDiPhotonsLowMass.cut,
