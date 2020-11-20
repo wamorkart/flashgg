@@ -79,6 +79,12 @@ and on data:
     fggRunJobs.py --load Taggers/test/H4G_2018_Tagger/H4G_Signal.json -D -P -n 100 -d Tagger_Signal_2018_wSyst -x cmsRun Systematics/test/workspaceStd.py -q tomorrow --no-copy-proxy analysisType=lowMassAnalysis maxEvents=-1 --stage-to /eos/user/t/twamorka/h4g_fullRun2/withSystematics/2018/
     #+END_EXAMPLE
 
+*** Running on data condor with systematics ==> to produce data with no preselctions
+    #+BEGIN_EXAMPLE
+    fggRunJobs.py --load Taggers/test/H4G_2017_Tagger/H4G_Data.json -D -P -n 500 -d Tagger_Data_2017 -x cmsRun Systematics/test/workspaceStd.py -q workday --no-copy-proxy analysisType=lowMassAnalysis maxEvents=-1 --stage-to /eos/user/t/twamorka/h4g_fullRun2/withSystematics/2017/Data_NoPreselectionsApplied/ --make-light-tarball
+    fggRunJobs.py --load Taggers/test/H4G_2018_Tagger/H4G_Data.json -D -P -n 500 -d Tagger_Data_2018 -x cmsRun Systematics/test/workspaceStd.py -q workday --no-copy-proxy analysisType=lowMassAnalysis maxEvents=-1 --stage-to /eos/user/t/twamorka/h4g_fullRun2/withSystematics/2018/Data_NoPreselectionsApplied/ --make-light-tarball
+    #+END_EXAMPLE
+
 *** Running on data condor with systematics
     #+BEGIN_EXAMPLE
     fggRunJobs.py --load Taggers/test/H4G_2017_Tagger/H4G_Data1.json -D -P -n 500 -d Tagger_Data1_2017 -x cmsRun Systematics/test/workspaceStd.py -q workday --no-copy-proxy analysisType=lowMassAnalysis maxEvents=-1 --stage-to /eos/user/t/twamorka/h4g_fullRun2/withSystematics/data_2017/
