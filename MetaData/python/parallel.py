@@ -431,6 +431,7 @@ class HTCondorJob(object):
         with open(self.cfgName, "w+") as fout:
             fout.write('+JobFlavour   = "'+self.htcondorQueue+'"\n\n')
             fout.write('+OnExitHold   = ExitStatus != 0 \n\n')
+            fout.write('+AccountingGroup = "group_u_CMS.CAF.ALCA" \n\n' )
             fout.write('periodic_release =  (NumJobStarts < 4) && ((CurrentTime - EnteredCurrentStatus) > 60) \n\n')
             fout.write('getenv        = True \n')
             fout.write('input         = %s/.dasmaps/das_maps_dbs_prod.js \n' % os.environ['HOME'])

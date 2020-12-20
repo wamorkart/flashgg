@@ -84,7 +84,7 @@
         }
     },
 
-    "flashggDiPhotonSystematics" : "flashggDiPhotonSystematics2017_cfi",
+    "flashggDiPhotonSystematics" : "flashggDiPhotonSystematics2017LM_cfi",
 
 
     "sigmaM_M_decorr" : "flashgg/Taggers/data/diphoMVA_sigmaMoMdecorr_split_2017_Mgg100to180.root",
@@ -333,11 +333,17 @@
                             "f9 := superCluster.etaWidth"
                            ]
     },
+    "H4GTag":
+    {
+  "vertexIdMVAweightfileH4G" : "flashgg/MicroAOD/data/TMVAClassification_BDTVtxId_H4G_Total_2017.xml",
+  "year" : "2017"
+
+    },
 
     "L1Prefiring" :
     {
         "isRelevant" : true,
-        "applyToCentral" : false,
+        "applyToCentral" : true,
         "photonFileName" : "flashgg/Taggers/data/L1prefiring_photonpt_2017BtoF.root",
         "photonHistName" : "L1prefiring_photonpt_2017BtoF",
         "jetFileName"    : "flashgg/Taggers/data/L1prefiring_jetpt_2017BtoF.root",

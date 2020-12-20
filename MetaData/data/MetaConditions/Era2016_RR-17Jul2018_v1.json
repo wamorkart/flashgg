@@ -94,7 +94,7 @@
 
     "Ele_reco_SF_FileName" : "flashgg/Systematics/data/2016_reco-eff.json",
 
-    "flashggDiPhotonSystematics" : "flashggDiPhotonSystematics2016_cfi",
+    "flashggDiPhotonSystematics" : "flashggDiPhotonSystematics2016LM_cfi",
     
 
     "sigmaM_M_decorr" : "flashgg/Taggers/data/diphoMVA_sigmaMoMdecorr_split_2016_Mgg100to180.root",
@@ -321,11 +321,17 @@
                           "f9 := superCluster.etaWidth"
                          ]
     },
+    "H4GTag":
+    {
+  "vertexIdMVAweightfileH4G" : "flashgg/MicroAOD/data/TMVAClassification_BDTVtxId_H4G_Total_2016.xml",
+  "year" : "2016"
+
+    },
 
     "L1Prefiring" :
     {
         "isRelevant" : true,
-        "applyToCentral" : false,
+        "applyToCentral" : true,
         "photonFileName" : "flashgg/Taggers/data/L1prefiring_photonpt_2016BtoH.root",
         "photonHistName" : "L1prefiring_photonpt_2016BtoH",
         "jetFileName"    : "flashgg/Taggers/data/L1prefiring_jetpt_2016BtoH.root",

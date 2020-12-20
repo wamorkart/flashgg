@@ -482,4 +482,27 @@
 <class name="edm::RefVector<std::vector<flashgg::TagAndProbeCandidate>,flashgg::TagAndProbeCandidate,edm::refhelper::FindUsingAdvance<std::vector<flashgg::TagAndProbeCandidate>,flashgg::TagAndProbeCandidate> >"/>
 <class name="edm::Wrapper<edm::RefVector<std::vector<flashgg::TagAndProbeCandidate>,flashgg::TagAndProbeCandidate,edm::refhelper::FindUsingAdvance<std::vector<flashgg::TagAndProbeCandidate>,flashgg::TagAndProbeCandidate> > >"/>
 <class name="edm::Ptr<reco::CompositeCandidate>"/>
+<class name="flashgg::H4GTag" ClassVersion="61">
+ <version ClassVersion="61" checksum="3987893787"/>
+ <version ClassVersion="60" checksum="4129156913"/>
+ <version ClassVersion="59" checksum="2586773957"/>
+ <version ClassVersion="58" checksum="1243968625"/>
+ <version ClassVersion="57" checksum="3126033072"/>
+ <version ClassVersion="56" checksum="2222603448"/>
+ <version ClassVersion="55" checksum="690956822"/>
+ <version ClassVersion="54" checksum="1349914366"/>
+ <version ClassVersion="53" checksum="826889164"/>
+ <version ClassVersion="52" checksum="71764666"/>
+</class>
+<class name="std::vector<flashgg::H4GTag>"/>
+<class name="edm::Wrapper<std::vector<flashgg::H4GTag> >"/>
+
+<class name="flashgg::H4GCandidate" ClassVersion="54">
+ <version ClassVersion="54" checksum="1142348434"/>
+ <version ClassVersion="53" checksum="826889164"/>
+ <version ClassVersion="52" checksum="71764666"/>
+</class>
+<class name="std::vector<flashgg::H4GCandidate>"/>
+<class name="edm::Wrapper<std::vector<flashgg::H4GCandidate> >"/>
+
 </lcgdict>

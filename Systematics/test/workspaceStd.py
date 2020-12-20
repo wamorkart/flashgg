@@ -19,7 +19,7 @@ process.load("Configuration.StandardSequences.GeometryDB_cff")
 process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff")
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
-process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 1000 )
+process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 10000 )
 
 
 systlabels = [""]
@@ -193,7 +193,18 @@ customize.options.register('applyNNLOPSweight',
                            'applyNNLOPSweight'
                            )
 
-
+customize.options.register('H4GTagsOnly',
+                           False,
+                           VarParsing.VarParsing.multiplicity.singleton,
+                           VarParsing.VarParsing.varType.bool,
+                           'H4GTagsOnly'
+                           )
+customize.options.register('doH4GTag',
+                           False,
+                           VarParsing.VarParsing.multiplicity.singleton,
+                           VarParsing.VarParsing.varType.bool,
+                           'doH4GTag'
+                           )
 print "Printing defaults"
 print 'acceptance '+str(customize.acceptance)
 print 'tthTagsOnly '+str(customize.tthTagsOnly)
@@ -261,7 +272,12 @@ if customize.doDoubleHTag:
     hhc = flashgg.Systematics.doubleHCustomize.DoubleHCustomize(process, customize, customize.metaConditions)
     minimalVariables += hhc.variablesToDump()
     systematicVariables = hhc.systematicVariables()
-
+if customize.doH4GTag:
+    import flashgg.Systematics.H4GCustomize
+    h4gc = flashgg.Systematics.H4GCustomize.H4GCustomize(process, customize, customize.metaConditions)
+    minimalVariables += h4gc.variablesToDump()
+    systematicVariables = h4gc.systematicVariables()
+    dataVariables = h4gc.dataVariables()
 if customize.doStageOne:
     assert (not customize.doHTXS)
     from flashgg.Systematics.stageOneCustomize import StageOneCustomize
@@ -305,7 +321,7 @@ useEGMTools(process)
 
 # Only run systematics for signal events
 # convention: ggh vbf wzh (wh zh) tth
-signal_processes = ["ggh_","vbf_","wzh_","wh_","zh_","bbh_","thq_","thw_","tth_","ggzh_","HHTo2B2G","GluGluHToGG","VBFHToGG","VHToGG","ttHToGG","Acceptance","hh","vbfhh","qqh","ggh","tth","vh"]
+signal_processes = ["ggh_","vbf_","wzh_","wh_","zh_","bbh_","thq_","thw_","tth_","ggzh_","HHTo2B2G","GluGluHToGG","VBFHToGG","VHToGG","ttHToGG","Acceptance","hh","vbfhh","qqh","ggh","tth","vh","HToAA"]
 is_signal = reduce(lambda y,z: y or z, map(lambda x: customize.processId.count(x), signal_processes))
 
 applyL1Prefiring = customizeForL1Prefiring(process, customize.metaConditions, customize.processId)
@@ -329,40 +345,40 @@ if is_signal:
             phosystlabels.append("FNUFEE%s01sigma" % direction)
             phosystlabels.append("MCScaleGain6EB%s01sigma" % direction)
             phosystlabels.append("MCScaleGain1EB%s01sigma" % direction)
-            jetsystlabels.append("JEC%s01sigma" % direction)
-            jetsystlabels.append("JER%s01sigma" % direction)
-            jetsystlabels.append("PUJIDShift%s01sigma" % direction)
-            if customize.doGranularJEC:
-                for sourceName in customize.metaConditions['flashggJetSystematics']['listOfSources']:
-                    jetsystlabels.append("JEC%s%s01sigma" % (str(sourceName),direction))
-            if customize.metaConditions['flashggJetSystematics']['doHEMuncertainty']:
-                jetsystlabels.append("JetHEM%s01sigma" % direction)
-            metsystlabels.append("metJecUncertainty%s01sigma" % direction)
-            metsystlabels.append("metJerUncertainty%s01sigma" % direction)
-            metsystlabels.append("metPhoUncertainty%s01sigma" % direction)
-            metsystlabels.append("metUncUncertainty%s01sigma" % direction)
-            variablesToUse.append("LooseMvaSF%s01sigma[1,-999999.,999999.] := weight(\"LooseMvaSF%s01sigma\")" % (direction,direction))
+            #jetsystlabels.append("JEC%s01sigma" % direction)
+            #jetsystlabels.append("JER%s01sigma" % direction)
+            #jetsystlabels.append("PUJIDShift%s01sigma" % direction)
+            #if customize.doGranularJEC:
+                #for sourceName in customize.metaConditions['flashggJetSystematics']['listOfSources']:
+                    #jetsystlabels.append("JEC%s%s01sigma" % (str(sourceName),direction))
+            #if customize.metaConditions['flashggJetSystematics']['doHEMuncertainty']:
+                #jetsystlabels.append("JetHEM%s01sigma" % direction)
+            #metsystlabels.append("metJecUncertainty%s01sigma" % direction)
+            #metsystlabels.append("metJerUncertainty%s01sigma" % direction)
+            #metsystlabels.append("metPhoUncertainty%s01sigma" % direction)
+            #metsystlabels.append("metUncUncertainty%s01sigma" % direction)
+            #variablesToUse.append("LooseMvaSF%s01sigma[1,-999999.,999999.] := weight(\"LooseMvaSF%s01sigma\")" % (direction,direction))
             variablesToUse.append("PreselSF%s01sigma[1,-999999.,999999.] := weight(\"PreselSF%s01sigma\")" % (direction,direction))
             variablesToUse.append("electronVetoSF%s01sigma[1,-999999.,999999.] := weight(\"electronVetoSF%s01sigma\")" % (direction,direction))
             variablesToUse.append("TriggerWeight%s01sigma[1,-999999.,999999.] := weight(\"TriggerWeight%s01sigma\")" % (direction,direction))
-            variablesToUse.append("FracRVWeight%s01sigma[1,-999999.,999999.] := weight(\"FracRVWeight%s01sigma\")" % (direction,direction))
-            variablesToUse.append("MuonIDWeight%s01sigma[1,-999999.,999999.] := getObjectWeight(\"Muon%sIDWeight%s01sigma\")" % (direction,str(customize.metaConditions["MUON_ID"]),direction))
-            variablesToUse.append("ElectronIDWeight%s01sigma[1,-999999.,999999.] := getObjectWeight(\"ElectronIDWeight%s01sigma\")" % (direction,direction))
-            variablesToUse.append("ElectronRecoWeight%s01sigma[1,-999999.,999999.] := getObjectWeight(\"ElectronRecoWeight%s01sigma\")" % (direction,direction))
-            variablesToUse.append("MuonIsoWeight%s01sigma[1,-999999.,999999.] := getObjectWeight(\"Muon%sISOWeight%s01sigma\")" % (direction,str(customize.metaConditions['MUON_ISO']),direction))
-            variablesToUse.append("JetBTagCutWeight%s01sigma[1,-999999.,999999.] := getObjectWeight(\"JetBTagCutWeight%s01sigma\")" % (direction,direction))
-            variablesToUse.append("JetBTagReshapeWeight%s01sigma[1,-999999.,999999.] := getObjectWeight(\"JetBTagReshapeWeight%s01sigma\")" % (direction,direction))
+            #variablesToUse.append("FracRVWeight%s01sigma[1,-999999.,999999.] := weight(\"FracRVWeight%s01sigma\")" % (direction,direction))
+            #variablesToUse.append("MuonIDWeight%s01sigma[1,-999999.,999999.] := getObjectWeight(\"Muon%sIDWeight%s01sigma\")" % (direction,str(customize.metaConditions["MUON_ID"]),direction))
+            #variablesToUse.append("ElectronIDWeight%s01sigma[1,-999999.,999999.] := getObjectWeight(\"ElectronIDWeight%s01sigma\")" % (direction,direction))
+            #variablesToUse.append("ElectronRecoWeight%s01sigma[1,-999999.,999999.] := getObjectWeight(\"ElectronRecoWeight%s01sigma\")" % (direction,direction))
+            #variablesToUse.append("MuonIsoWeight%s01sigma[1,-999999.,999999.] := getObjectWeight(\"Muon%sISOWeight%s01sigma\")" % (direction,str(customize.metaConditions['MUON_ISO']),direction))
+            #variablesToUse.append("JetBTagCutWeight%s01sigma[1,-999999.,999999.] := getObjectWeight(\"JetBTagCutWeight%s01sigma\")" % (direction,direction))
+            #variablesToUse.append("JetBTagReshapeWeight%s01sigma[1,-999999.,999999.] := getObjectWeight(\"JetBTagReshapeWeight%s01sigma\")" % (direction,direction))
             if applyL1Prefiring:
                 variablesToUse.append("prefireWeight%s01sigma[1,-999999.,999999.] := weight(\"prefireWeight%s01sigma\")" % (direction,direction))
-            variablesToUse.append("THU_ggH_Mu%s01sigma[1,-999999.,999999.] := getTheoryWeight(\"THU_ggH_Mu%s01sigma\")" % (direction,direction))
-            variablesToUse.append("THU_ggH_Res%s01sigma[1,-999999.,999999.] := getTheoryWeight(\"THU_ggH_Res%s01sigma\")" % (direction,direction))
-            variablesToUse.append("THU_ggH_Mig01%s01sigma[1,-999999.,999999.] := getTheoryWeight(\"THU_ggH_Mig01%s01sigma\")" % (direction,direction))
-            variablesToUse.append("THU_ggH_Mig12%s01sigma[1,-999999.,999999.] := getTheoryWeight(\"THU_ggH_Mig12%s01sigma\")" % (direction,direction))
-            variablesToUse.append("THU_ggH_VBF2j%s01sigma[1,-999999.,999999.] := getTheoryWeight(\"THU_ggH_VBF2j%s01sigma\")" % (direction,direction))
-            variablesToUse.append("THU_ggH_VBF3j%s01sigma[1,-999999.,999999.] := getTheoryWeight(\"THU_ggH_VBF3j%s01sigma\")" % (direction,direction))
-            variablesToUse.append("THU_ggH_PT60%s01sigma[1,-999999.,999999.] := getTheoryWeight(\"THU_ggH_PT60%s01sigma\")" % (direction,direction))
-            variablesToUse.append("THU_ggH_PT120%s01sigma[1,-999999.,999999.] := getTheoryWeight(\"THU_ggH_PT120%s01sigma\")" % (direction,direction))
-            variablesToUse.append("THU_ggH_qmtop%s01sigma[1,-999999.,999999.] := getTheoryWeight(\"THU_ggH_qmtop%s01sigma\")" % (direction,direction))
+            #variablesToUse.append("THU_ggH_Mu%s01sigma[1,-999999.,999999.] := getTheoryWeight(\"THU_ggH_Mu%s01sigma\")" % (direction,direction))
+            #variablesToUse.append("THU_ggH_Res%s01sigma[1,-999999.,999999.] := getTheoryWeight(\"THU_ggH_Res%s01sigma\")" % (direction,direction))
+            #variablesToUse.append("THU_ggH_Mig01%s01sigma[1,-999999.,999999.] := getTheoryWeight(\"THU_ggH_Mig01%s01sigma\")" % (direction,direction))
+            #variablesToUse.append("THU_ggH_Mig12%s01sigma[1,-999999.,999999.] := getTheoryWeight(\"THU_ggH_Mig12%s01sigma\")" % (direction,direction))
+            #variablesToUse.append("THU_ggH_VBF2j%s01sigma[1,-999999.,999999.] := getTheoryWeight(\"THU_ggH_VBF2j%s01sigma\")" % (direction,direction))
+            #variablesToUse.append("THU_ggH_VBF3j%s01sigma[1,-999999.,999999.] := getTheoryWeight(\"THU_ggH_VBF3j%s01sigma\")" % (direction,direction))
+            #variablesToUse.append("THU_ggH_PT60%s01sigma[1,-999999.,999999.] := getTheoryWeight(\"THU_ggH_PT60%s01sigma\")" % (direction,direction))
+            #variablesToUse.append("THU_ggH_PT120%s01sigma[1,-999999.,999999.] := getTheoryWeight(\"THU_ggH_PT120%s01sigma\")" % (direction,direction))
+            #variablesToUse.append("THU_ggH_qmtop%s01sigma[1,-999999.,999999.] := getTheoryWeight(\"THU_ggH_qmtop%s01sigma\")" % (direction,direction))
             for r9 in ["HighR9","LowR9"]:
                 for region in ["EB","EE"]:
                     phosystlabels.append("ShowerShape%s%s%s01sigma"%(r9,region,direction))
@@ -391,7 +407,11 @@ if customize.doubleHTagsOnly:
 if customize.doDoubleHTag:
    systlabels,jetsystlabels,metsystlabels = hhc.customizeSystematics(systlabels,jetsystlabels,metsystlabels)
            
-
+if customize.H4GTagsOnly:
+    variablesToUse = minimalVariables
+    if customize.processId == "Data":
+        variablesToUse = minimalNonSignalVariables
+        variablesToUse += dataVariables
 print "--- Systematics  with independent collections ---"
 print systlabels
 print "-------------------------------------------------"
@@ -460,6 +480,8 @@ elif customize.doubleHTagsOnly:
     print tagList
     if customize.addVBFDoubleHTag and customize.addVBFDoubleHVariables:
         tag_only_variables["VBFDoubleHTag"] = hhc.vbfHHVariables()    
+elif customize.H4GTagsOnly:
+    tagList = h4gc.tagList
 elif customize.doStageOne:
     tagList = soc.tagList
 else:
@@ -615,7 +637,25 @@ if customize.tthTagsOnly:
                          process.tagsDumper)
     # Now, we put the ttH tags back in the sequence with modified systematics workflow
     modifySystematicsWorkflowForttH(process, systlabels, phosystlabels, metsystlabels, jetsystlabels)
-
+elif customize.H4GTagsOnly:
+     from flashgg.MicroAOD.flashggTkVtxMap_cfi import flashggVertexMapUnique
+     process.load("flashgg/MicroAOD/flashggTkVtxMap_cfi")
+     process.p = cms.Path(
+                          process.flashggVertexMapUnique*
+                          process.dataRequirements*
+                          process.flashggMetFilters*
+                          process.genFilter*
+                          process.flashggDifferentialPhoIdInputsCorrection*
+                          process.flashggDiPhotonSystematics*
+                          process.flashggMetSystematics*
+                          process.flashggMuonSystematics*process.flashggElectronSystematics*
+                          (process.flashggUnpackedJets*process.jetSystematicsSequence)*
+                         #  process.content*
+                          (process.flashggTagSequence*process.systematicsTagSequences)*
+                          process.flashggSystTagMerger*
+                          process.penultimateFilter*
+                          process.finalFilter*
+                          process.tagsDumper)
 else:
     process.p = cms.Path(process.dataRequirements*
                          process.flashggMetFilters*
@@ -670,7 +710,9 @@ if customize.doDoubleHTag:
     process.p.remove(process.flashggMetFilters)
     hhc.doubleHTagRunSequence(systlabels,jetsystlabels,phosystlabels)
   
-
+if customize.doH4GTag:
+    process.p.remove(process.flashggMetFilters)
+    h4gc.H4GTagRunSequence(systlabels,phosystlabels)
 
 if( not hasattr(process,"options") ): process.options = cms.untracked.PSet()
 process.options.allowUnscheduled = cms.untracked.bool(True)
@@ -687,7 +729,7 @@ print
 printSystematicInfo(process)
 
 ### Rerun microAOD sequence on top of microAODs using the parent dataset
-if customize.useParentDataset:
+if customize.useParentDataset and not customize.H4GTagsOnly:
     runRivetSequence(process, customize.metaConditions, customize.processId)
     if customize.recalculatePDFWeights and is_signal and not (customize.processId.count("th_") or customize.processId.count("bbh_") or customize.processId.count("thw_") or customize.processId.count("thq_")):
         recalculatePDFWeights(process, customize.metaConditions)
